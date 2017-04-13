@@ -1,0 +1,554 @@
+// BESTESTN.inp. Formerly BT2011.cse which was formerly QW9b4040.cse, so still has some QW9b4040 artifacts.
+// used by Top level input file 600N.cse
+
+   WfName="DRYCOLD_CSW2.csv" 		// 	current version of DRYCOLD for BESTEST. Contains Tsky using cse/czm algorithm.
+ebTolHour=.001  ebTolDay=.001 ebTolMon=.001
+wuDays=30
+nSubSteps=30
+DT=No  // No daylight savings time
+
+// dbgPrintMask = $dayofyear == 20 || $dayofyear==190 ? 8192 : 4096
+// dbgPrintMask = 4096
+// dbgPrintMask = $dayofyear == 20 || $dayofyear==190 ? 8192 : 4096				//
+//	  dbgPrintMask = $dayofyear == 337 ? 8192 : 0     // ASHWAT Debug for Dec 3	// bruce was using this line
+// dbgPrintMask = $dayofyear == 31 ? 64 : 0;									// CZM DLL debug prin control
+
+//   dbgPrintMask = $dayofyear <= 31 ? 4096 : 0 // sgdist print for January		//solar gain distrib
+     dbgPrintMask = $dayofyear == 337 ? 8192 : 0								//ASHWAT call/return
+	 elevation = 5279	//1609 m
+
+//Definitions
+// Standard orientations all of which rotate with bldgmxAZM
+#define Front 0
+#define Left  90
+#define Back  180
+#define Right 270
+
+// -DAZM= BldgAzm on command line
+//BldgAzm = AZM  // Orientation of front, Window on Back //PN changed AZM to 0 to temp. avoid Command Line input.
+  BldgAzm = 0  // Orientation of front, Window on Back
+//  windF= 1	//this was commented out. Why? The default is windF= 0.25. BRUCE? XXX
+//  grndRefl = 0.2 // default = 0.2
+
+ //------ MATERIALS section for lightweight case ------
+ MATERIAL   "Plasterboard"    matCond=0.09243   matSpHt=0.2008   matDens=59.375	  //dp=(matCond*8hr/(matSpHt*matDens*pi))^0.5[ft]= 0.138-ft=1.7-in
+ MATERIAL   "FiberQuilt"      matCond=0.02311   matSpHt=0.2008   matDens=0.75	  //dp =0.625 ft = 7.5 in
+ MATERIAL   "WoodSiding"      matCond=0.08088   matSpHt=0.2151   matDens=33.125	  //dp =0.17 ft = 2.04 in
+ MATERIAL   "TimberFloor"     matCond=0.08088   matSpHt=0.2868   matDens=40.625	  //dp =0.133 ft = 1.6 in
+ MATERIAL   "Insulation"      matCond=0.02311   matSpHt=0        matDens=0	  //dp = infinite
+ MATERIAL   "SunWallMat"      matCond=0.295     matSpHt=0.239    matDens=87.399	  //dp =0.977 ft = 11.7 in
+ MATERIAL   "OpaqueWin"       matCond=1/(1/.52817-1/WinInFilm-1/WINEXF) matSpHt=0.239   matDens=87.399			//matCond formula seems ambiguous.
+ //------ MATERIALS section for heavyweight case ------
+ MATERIAL   "ConcreteBlock"    matCond=0.2946   matSpHt=0.239    matDens=87.5	  //dp =0.189 ft = 2.27 in
+ MATERIAL   "FoamInsul"       matCond=0.02311   matSpHt=0.3346   matDens=0.625	  //dp =0.53 ft = 6.4 in
+ MATERIAL   "ConcreteSlab"    matCond=0.6528    matSpHt=0.239    matDens=87.5	  //dp =0.282 ft = 3.4 in
+
+ // ----- CONSTRUCTION section for lightweight case -----
+ CONSTRUCTION opaque_window     // air-to-air U = .528
+	    layer     lrThk=1.0      lrMat="OpaqueWin"
+
+ CONSTRUCTION lw_wall		//discretization penetration depth dp added. BRUCE
+            layer     lrThk=0.03937
+            lrMat="Plasterboard"   //x/dp = 0.29
+            layer     lrThk=0.2165
+            lrMat="FiberQuilt"     //x/dp = 0.346
+            layer     lrThk=0.02953
+            lrMat="WoodSiding"				   //x/dp = 0.174
+
+ CONSTRUCTION lw_floor
+            layer     lrThk=0.08202
+            lrMat="TimberFloor"				   //x/dp = 0.62
+            layer     lrThk=3.291
+            lrMat="Insulation"				   //x/dp = infinite
+
+ CONSTRUCTION roofcon
+            layer     lrThk=0.03937							   //x/dp = 0.29
+                      lrMat="Plasterboard"
+            layer     lrThk=0.3668							   //x/dp = 0.59
+                      lrMat="FiberQuilt"
+            layer     lrThk=0.06234
+            		  lrMat="WoodSiding"				   //x/dp = 0.37
+
+ CONSTRUCTION sunwall
+//          layer     lrThk=(0.656-(2*.295/INFILM))
+//                    lrMat="SunWallMat"
+            layer     lrThk=0.656							   //x/dp = 0.671
+                      lrMat="SunWallMat"
+
+// ----- CONSTRUCTION section for heavyweight case -----
+
+ CONSTRUCTION hw_wall
+            layer     lrThk=0.3281							   //x/dp = 1.73      XXX --> split into three layers
+                      lrMat="ConcreteBlock"
+            layer     lrThk=(0.2018-(.02311/INFILM)+(.02311/1.461))
+                      lrMat="FoamInsul"
+            layer     lrThk=0.02953   lrMat="WoodSiding"				   //x/dp = 0.174
+
+ CONSTRUCTION hw_floor
+            layer     lrThk=0.2625							   //x/dp = 0.93       XXX --> split into two layers
+                      lrMat="ConcreteSlab"
+            layer     lrThk=3.291							   //x/dp = infinite
+                      lrMat="Insulation"
+
+
+// ----- CONSTRUCTION section for R 1000 high resistance test case ---
+
+ CONSTRUCTION styro    //?
+            layer     lrThk=23       lrMat="FoamInsul"					   //x/dp = 43 !?
+
+
+// ----- GLAZETYPES --------------------------------------------------
+
+ GLAZETYPE  Best_Double
+            gtu=1/(1/.52817-1/WinInFilm-1/WINEXF)        //air-to air u = .52817 without films
+            gtSHGC=0.787
+            gtSMSO= 1
+            gtSMSC= 1
+            gtFMult=1
+            gtPySHGC=1.908287712,1.135916854,-4.28852329,2.244318725
+            gtDMSHGC=0.686/0.787
+            gtDMRBSol=0.686/0.787
+
+
+//----------------------------------------ZONE 1  ------------------------------------------------
+Zone CASE //  CASE is BESTEST case#, initially "600"
+	znArea=516.68                 //48 sq meters
+	znVol = 4576.8
+	znModel = CZM
+	znTH = HEATTEMP
+	znTD = 74		// controlls ventilation if any
+	znTC = COOLTEMP
+	znQMxH = 3400000   	//bestest says 1000 kW = 3.4 MBtuh ??
+	znQMxC = -500000
+
+	GAIN gnPower=INTGAIN gnFrRad=0.6  //gnMeter=GAINMETER  //gnEndUse=Lit
+
+  SURFACE North_Wall
+	  sfType=Wall
+	  sfCon=lw_wall
+	  sfArea=232.51
+	  sfAzm=Front
+	  sfExCnd=Ambient
+	  sfModel = forward_difference
+          sfExAbs=ABSORP
+          sfInAbs=INABSORP
+
+  SURFACE South_Wall
+	  sfType=Wall
+	  sfCon=lw_wall
+	  #ifdef OPQWIN
+             sfArea=232.51-(2*WINH*WINW)             //wall area 21.6 sq meters
+          #else
+             sfArea=232.51                           //wall area 21.6 sq meters
+          #endif
+	  sfAzm=Back
+	  sfExCnd=Ambient
+	  sfModel = forward_difference
+          sfExAbs=ABSORP
+          sfInAbs=INABSORP
+
+	#ifdef SOUTHWIN	        //this #ifdef will enclose both windows...
+           WINDOW "South_Win1"  // 	quotes?
+  		wnHeight=WINH
+  		wnWidth=WINW
+ 	 	//wnArea=WINH*WINW	// = 64.6-sf  =6-sm for 600
+  		wnMult=1
+  		wnModel=ASHWAT
+  		wnFMult= 1		// glass area/window area
+  		wnNGlz = 2
+  		wnUnfrc=0.5286		// =3 W/sm-K; was 0.4
+  		wnSHGC=0.789		// Isn't in USER Guide.      															// in QW2b4040
+  		wnDirtLoss=0
+        	wnExShd = NONE
+        	wnInShd = NONE
+
+           SHADE South_OH1
+		ohDepth=OHDPTH    // overhang depth
+		ohDistUp=ohU      //= 0.5-m; distance from top of window
+		ohExL=1.64        //= 0.5-m; distance:left edge of win to left edge of oh
+		ohExR=14.76       //= 4.5-m; distance:right edge of win to rght edge of oh
+
+                wnVfSkyDf=(sqrt((ohU+WINH)*(ohU+WINH)+ OHDPTH*OHDPTH)-sqrt(ohU*ohU+OHDPTH*OHDPTH))/(2.*WINH)
+				// PN Tests; both windows overhagns changed together: obsolete
+				// annual slr w/ wnVfSkyDf factor only,  goes from 15.76 w/o ovrhg, to 14.78 with OHDPTH=6-ft ovrhg,
+				// to 14.21 for 12-ft depth.
+				// With overhang and wnVefSkyDf factor Slr goes from 15.76 to 8.39 @ 6 ft.  plausible
+	   #IF 0      		//XXX	awaiting Chip's correcting sgDist object.
+	   SGDIST
+		sgSurf=Floor	// replacing Floor by Roof or North-Wall didn't change output--dosn't seem right.
+		sgSide=INTERIOR
+		sgFSO=1.0
+        #ENDIF
+
+	   WINDOW "South_Win2"
+		wnHeight=WINH
+		wnWidth=WINW
+		wnArea=WINH*WINW
+		wnMult=1
+		wnModel=ASHWAT
+		wnFMult= 1
+		wnNGlz = 2
+		wnUnfrc=0.5286
+		wnSHGC=0.789
+		wnDirtLoss=0
+		wnExShd = NONE
+		wnInShd = NONE
+
+	   SHADE South_OH2
+		ohDepth=OHDPTH    // overhang depth
+		ohDistUp=ohU      //= 0.5-m; distance from top of window
+		ohExL=1.64        //= 0.5-m; distance:left edge of win to left edge of oh  // from BESTEST
+		ohExR=14.76       //= 4.5-m; distance:right edge of win to rght edge of oh
+
+                wnVfSkyDf=(sqrt((ohU+WINH)*(ohU+WINH)+ OHDPTH*OHDPTH)-sqrt(ohU*ohU+OHDPTH*OHDPTH))/(2.*WINH)
+#IF 0      //XXX
+	   SGDIST
+		sgSurf=Floor
+		sgSide=INTERIOR
+		sgFSO=1.0
+#ENDIF
+	#endif //SOUTHWIN
+
+   SURFACE East_Wall
+   	sfType=Wall
+   	sfCon=lw_wall
+   	sfArea=174.38
+   	sfAzm=Left
+   	sfModel = forward_difference
+        sfExAbs=ABSORP
+        sfInAbs=INABSORP
+
+//#define EASTWESTWIN 	// east and west windows work OK; used in Std's 140 Test 620 & 630
+
+#ifdef EASTWESTWIN
+        WINDOW East_Win
+		wnHeight=WINH         //window height
+		wnWidth=WINW          //window width
+              	wnMult=1
+		wnModel=ASHWAT
+		wnFMult= 1		// Isn't in USER Guide.
+		wnNGlz = 2
+		wnUnfrc=0.5286		// =3 W/sm-K; was 0.4
+		wnSHGC=0.789		// Isn't in USER Guide.      				// in QW2b4040
+		wnDirtLoss=0
+		wnExShd = NONE
+		wnInShd = NONE
+
+		wnVfSkyDf=OHDPTH?0.3936:0.5        //view factor reduced to infinite overhang otherwise .5
+						   //[a ? b : c yields b if a is true (non-0), otherwise c] 0.3936 for what config? <--- XXX
+						   // In any case, so. wdws infinite ovhg wnVfSkyDf doesn't apply to boxed wdw case.
+
+            SHADE East_OH
+                ohDepth=OHDPTH    //overhang depth
+                ohDistUp=1.64     //distance from top of window
+                ohExL=0           //distance:left edge of win to left edge of oh
+                ohExR=0           //distance:rght edge of win to rght edge of oh
+                lfDepth=OHDPTH    //fin depth
+                lfTopUp=1.64      //distance:top of window to top of fin
+                lfDistL=0         //distance:edge of window to fin
+                lfBotUp=0.656     //distance:bottom of window to bottom of fin
+                rfDepth=OHDPTH    //fin depth
+                rfTopUp=1.64      //distance:top of window to top of fin
+                rfDistR=0         //distance:edge of window to fin
+                rfBotUp=0.656     //distance:bottom of window to bottom of fin; 0.2 m = 0.656 ft
+	#if 0	//XXX
+          SGDIST
+              sgSurf=Floor
+              sgSide=INTERIOR
+	      sgFSO=1.0
+	#endif
+ 	#endif //def EASTWESTWIN
+
+   SURFACE West_Wall
+   	sfType=Wall
+   	sfCon=lw_wall
+   	sfArea=174.38
+   	sfAzm=right
+   	sfModel = forward_difference
+        sfExAbs=ABSORP
+        sfInAbs=INABSORP
+
+	#ifdef EASTWESTWIN
+        WINDOW West_Win	//
+		wnHeight=WINH         //window height
+		wnWidth=WINW          //window width
+              	wnMult=1
+		wnModel=ASHWAT
+		wnFMult= 1		// Isn't in USER Guide.
+		wnNGlz = 2
+		wnUnfrc=0.5286		// =3 W/sm-K; was 0.4
+		wnSHGC=0.789		// Isn't in USER Guide.      // in QW2b4040
+		wnDirtLoss=0
+		wnExShd = NONE
+		wnInShd = NONE
+
+		wnVfSkyDf=OHDPTH?0.3936:0.5      //view factor reduced to infinite overhang otherwise .5  XXX
+
+            SHADE West_OH
+                ohDepth=OHDPTH    //overhang depth
+                ohDistUp=1.64     //distance from top of window
+                ohExL=0           //distance:left edge of win to left edge of oh
+                ohExR=0           //distance:rght edge of win to rght edge of oh
+                lfDepth=OHDPTH    //fin depth
+                lfTopUp=1.64      //distance:top of window to top of fin
+                lfDistL=0         //distance:edge of window to fin
+                lfBotUp=0.656     //distance:bottom of window to bottom of fin
+                rfDepth=OHDPTH    //fin depth
+                rfTopUp=1.64      //distance:top of window to top of fin
+                rfDistR=0         //distance:edge of window to fin
+                rfBotUp=0.656     //distance:bottom of window to bottom of fin; 0.2 m = 0.656 ft
+
+	#if 0	//XXX
+          SGDIST
+              sgSurf=Floor
+              sgSide=INTERIOR
+	      sgFSO=1.0
+	#endif
+ 	#endif  //def EASTWESTWIN
+
+  SURFACE Roof
+   	sfType=Ceiling
+   	sfCon=roofcon
+   	sfArea=516.68
+   	sfModel = forward_difference
+        sfExAbs=ABSORP
+        sfInAbs=INABSORP
+
+   SURFACE Floor
+	sfType=floor
+	sfCon=lw_floor	//"CarpSlabfloor"
+	sfArea=516.68
+	sfExCnd=SPECIFIEDT 			//Constant 10 C ground temperature
+	sfModel = forward_difference
+        sfExAbs=0
+        sfInAbs=INABSORP	// CHIP:
+        			// I made four runs with different Floor sfInAbs values, while keeping all other interior surfaces (except wdws)
+        			// at absorptivity sfInAbs = 0.6. With the results for 11am on Jan 4:
+
+        			// 	For sfInAbs = INABSORP (= 0.6):  		SLR = 0.0097 MBtuh   Mass = -.0066
+        			// 	For sfInAbs = 0.5:				SLR = 0.0114 MBtuh   Mass = -.0081
+        			// 	For sfInAbs = 1.0:				SLR = 0.0032 MBtuh   Mass = -.0019
+        			// 	For commented-out sfInaBS (default is 0.5):  	SLR = 0.0064 MBtuh   Mass = -.0036
+
+
+      	sfExT = 50		// 10 C ground temperature.	sfExT defined in Usrman as outdoor air temp.--is this OK to use for floor? XXX
+      				// Should we use our ground model (like Bruces' QW2b4040 input on next line) and override gnd temp to 10 C?
+      				// sfExT=(0.5954 * @weather.taDbAvg14 + 0.3850 * @weather.tgrnd + 0.0196 * @weatherFile.taDbAvgYr)  sfExH=0.5810	// Coefs for Carpeted Perim R0
+
+			#if 0	//old bestest input for reference:
+			sfType=Floor
+				sfModel=SURFTYPE
+				sfArea=516.68
+				sfCon=FLOORCON	//defined as lw_floor
+				sfExCnd=SPECIFIEDT        //Constant 10 C ground temperature
+				sfExAbs=0                 //no solar on floor
+				sfExT=50                  //10 C ground temperature
+				sfInAbs=INABSORP
+				sfInH=INFILM             //floor inside film coefficient	// needed in new BESTEST? no, doesn't apply for forward-difference
+				sfExH=100000             //floor outside film coefficient	// needed in new BESTEST? sfExH doesn't apply to forwd-diff,
+												// but is some adj of ext coeff needed?	XXX
+			#endif
+
+//----------------------------------------------- REPORTS -------------------------------------------------------------
+//		All former BESTEST air-handler and Meter reports were removed.
+//
+//
+	ALTER REPORTFILE Primary rfPageFmt = NO  // comment out to get page formatting with headers and footers.
+//Kill all the default reports except the ERR  BAW 9/27
+  Delete Report eb      // Deletes the sum of zones CNE
+//Delete Report Log     // Deletes the run log:  CSE version etc
+//Delete Report Inp     // Deletes input echo
+
+ REPORT     rpType=ZDD     rpZone=CASE			// zone data dump--reformated input echo
+
+ REPORT "Peak Heat"
+        rpType=UDT
+        rpFreq=YEAR
+        //reportcol colVal=@meter[HEATMETER].Y.dmd/3413      ColHead="Pk kW"	// Old BESTEST mthd (to get peak)
+        reportcol colVal=@Top.qhPeak*0.00029304				 ColHead="Pk kW"	// XXX Dfn of qhPeak?
+        reportcol colVal=@Top.qhPeak/1000				     ColHead="Pk kBtuh"
+
+        reportcol colVal=@Top.qhPeakM                        ColHead="Pk Month"
+        reportcol colVal=@Top.qhPeakD                        ColHead="Pk Day"
+        reportcol colVal=@Top.qhPeakH                        ColHead="Pk Hr"
+
+ REPORT "Peak Cool"
+        rpType=UDT
+        rpFreq=YEAR
+        reportcol colVal=@Top.qcPeak*0.00029304				ColHead="Pk kW"
+        reportcol colVal=@Top.qcPeak/1000					ColHead="Pk kBtuh"
+
+        reportcol colVal=@Top.qcPeakM                        ColHead="Pk Month"
+        reportcol colVal=@Top.qcPeakD                        ColHead="Pk Day"
+        reportcol colVal=@Top.qcPeakH                        ColHead="Pk Hr"
+
+ REPORT "Yr Heat & Cool"
+ 	rpType=UDT
+ 	rpFreq=Year   rpCPL=104									//  units OK
+	rpTitle="Yearly Sensible Heat & Cool (+ into the zone)"
+ 	Reportcol colVal=@znRes[CASE].Y.qhMech/1000 colHead="Hload, kBtu"  colWid=7 colDec=0
+   	Reportcol colVal=@znRes[CASE].Y.qcMech/1000 colHead="Cload, kBtu"  colWid=7 colDec=0
+ 	Reportcol colVal=@znRes[CASE].Y.qhMech*0.00029304 colHead="Hload, kWh"  colWid=7 colDec=0
+   	Reportcol colVal=@znRes[CASE].Y.qcMech*0.00029304 colHead="Cload, kWh"  colWid=7 colDec=0
+
+//MISC ZEB reports from old BESTEST.INP:
+  REPORT  rpType=ZEB  rpZone=CASE  rpFreq=Month
+  REPORT  rpType=ZEB  rpZone=CASE  rpDayBeg=Jan 4   rpDayEnd=Jan 4   rpFreq=Hour
+ // REPORT  rpType=ZEB  rpZone=CASE  rpDayBeg=Jul 26  rpDayEnd=Jul 26  rpFreq=Hour		// lines commented out until needed to reduce clutter.
+  //REPORT  rpType=ZEB  rpZone=CASE  rpDayBeg=Oct 16  rpDayEnd= Oct 16 rpFreq=Hour
+
+#if 0
+REPORT	rpType=UDT rpDayBeg=Jan 4   rpDayEnd=Jan 4   rpFreq=Hour
+		rpTitle="testwalltemp"
+ 		Reportcol colVal=@znRes[CASE].h.qhMech/1000 colHead="Hload, kBtu"  colWid=7 colDec=0
+   		Reportcol colVal=@xsurf[South_Win1].xs_sbcO.sb_tSrf colHead="TGI1out" colWid=4 colDec=1  // Glass inside surface temp, last Sub time step value!
+   		Reportcol colVal=@xsurf[Roof].xs_sbcI.sb_tSrf colHead="TroofI" colWid=4 colDec=1  //
+   		Reportcol colVal=@xsurf[Roof].xs_sbcO.sb_tSrf colHead="TroofO" colWid=4 colDec=1  //
+   		Reportcol colVal=@Top.tDbOHr    colHead="Tdb" colWid=4 colDec=1  //
+   		Reportcol colVal=@Top.tSkyHr    colHead="Tsky" colWid=4 colDec=1  //
+   		Reportcol colVal=@Top.windSpeedHr       colHead="Vwind" colWid=4 colDec=1  //
+   		Reportcol colVal=@xsurf[Roof].xs_sbcO.sb_qSrf    colHead="QroofO" colWid=4 colDec=1  //	 conduction into surface, Btuh/ft2  ; updated at end of timestep
+#endif
+#if 1
+#define REPSURF South_Wall
+REPORT	rpType=UDT rpDayBeg=Jan 4   rpDayEnd=Jan 4   rpFreq=SUBHOUR rpCPL=220								  //South_Wall
+		rpTitle= "Surface"
+ 		Reportcol colVal=@znRes[CASE].S.qhMech/1000 colHead="HloadkBtu"  colWid=8 colDec=1
+   		//Reportcol colVal=@xsurf[South_Win1].xs_sbcO.sb_tSrf colHead="TGI1out" colWid=7 colDec=1 // Glass inside surface temp, last Sub time step value!
+   		//Reportcol colVal=@xsurf[REPSURF].xs_sbcI.sb_tSrf 	colHead="TsurfI" colWid=6 colDec=1  	// most recently calculated surface temp, F
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_tSrf 	colHead="TsurfO" colWid=6 colDec=2 		// most recently calculated surface temp, F
+    	Reportcol colVal=@znRes[CASE].S.tAir 					colHead="tZone" colWid=4 colDec=1
+   		//Reportcol colVal=@Top.tDbOSh       						colHead="Tdb" colWid=6 colDec=2  		// prior subhour-end outdoor temp; [output Tdb appears 1 shstep before txa
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_txa   	colHead="txa" colWid=6 colDec=2  		// outside: current step ambient dry bulb temp; (inside: prior step zone tz)
+   		Reportcol colVal=@Top.tSkySh    						colHead="Tsky" colWid=6 colDec=2  		//	   .. end subhr, interpolated)
+   		Reportcol colVal=@Top.windSpeedSh       				colHead="Vwind" colWid=6 colDec=4  		//		.. end subhour, interpolated: for $variable and ..p.5.5, CSEmanual=>mph
+   		//Reportcol colVal=@Top.windDirDegHr      				colHead="Vdir" colWid=4 colDec=1  		//		.. end subhour, interpolated: for $variable and ..
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcI.sb_qSrf    	colHead="qSrfI" colWid=7 colDec=3	  	// conduction into surface, Btuh/ft2;   updated at end of timestep
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_qSrf  	 colHead="qSrfO" colWid=7 colDec=3	  	// conduction into surface, Btuh/ft2;   updated at end of timestep
+        Reportcol colVal=@xsurf[REPSURF].xs_sbcI.sb_hxr   	 colHead="hrSkyI" colWid=7 colDec=2  	// surface (linearized) radiative coefficient, Btuh/ft2-F; = coupling to sb_txr-->adjacent radiant temp, F; inside: prior step zone tr; outside: current step sky temp
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_hxr    	colHead="hxr" colWid=7 colDec=4  	// surface (linearized) radiative coefficient, Btuh/ft2-F; = coupling to sb_txr
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_hxa    	colHead="hxa" colWid=7 colDec=4  	// surface (linearized) radiative coefficient, Btuh/ft2-F; = coupling to sb_txr
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_txr    	colHead="txr" colWid=7 colDec=4  	// surface (linearized) radiative coefficient, Btuh/ft2-F; = coupling to sb_txr
+		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_hcNat  	colHead="hcNat" colWid=7 colDec=4   //.. natural convection coeff
+		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_hcFrc  	colHead="hcFrc" colWid=7 colDec=4   //.. forced convection coeff
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_hxa    	colHead="hcAir" colWid=10 colDec=4  	// =sb_txa
+   		//Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_hc    		colHead="ConCfRfO?" colWid=10 colDec=2  	//  same ans as sb_sbc).sb_hxa
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_hxtot    colHead="tot_h" colWid=10 colDec=3  	// overall coeff to sb_txa ?;  currently = sb_hc (11-10)
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_fAir   	colHead="fAir" colWid=10 colDec=3  	// "view factor" to radiant surround at air temp (ground, horizon)
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_fSky   	colHead="fSky" colWid=10 colDec=3  	// "view factor" to radiant surround at sky temp
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_sg   	colHead="SolGain" colWid=10 colDec=2  	// absorbed solar total, Btuh (NOT Btuh/ft2), summed from sb_sgTarg
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_frRad  	colHead="RfOfrRad" colWid=10 colDec=2  	//   re radiant to radiant temp (room radiant node or sky)
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_fcWind  	colHead="fcWind" colWid=10 colDec=4 //  re hcWind (includes roughness, unit conversion, )
+   		//Reportcol colVal=@xsurf[REPSURF].xs_Rf			  		colHead="RfRough" colWid=10 colDec=2 //  roughness factor
+   		//Reportcol colVal=@Top.tp_eaveZ		  					colHead="eaveZ" colWid=10 colDec=2 //  roughness factor
+   		Reportcol colVal=@xsurf[REPSURF].xs_sbcO.sb_txe      		colHead="Tenv" colWid=10 colDec=2  	//
+
+		//@xsurf[ <surfName> ].xs_sbcO.sb_hcNat     .. natural convection coeff
+		//@xsurf[ <surfName> ].xs_sbcO.sb_hcFrc     .. forced convection coeff
+		//@xsurf[ <surfName> ].xs_sbcO.sb_hxa                .. total  (sb_hcNat + sb_hcFrc)  (value should be unchanged from prior versions)
+#endif
+//------------------------EXPORTS------------------------------------------------------------------------
+
+ EXPORTFILE "AnnualZEB"		// produces bottom line (annual sum) of Monthly ZEB reports. Maybe good diagnostic to check if changes occured.
+        xfFileName="zeb.csv"
+        xfFileStat=APPEND	//APPEND adds this output to all the past zeb.csv outputs.
+        endExportFile
+ EXPORT
+        exExportfile="AnnualZEB"
+        exHeader=yes
+        exFooter=yes
+        exType=ZEB
+        exZone=CASE
+        //exFreq=SUBHOUR
+        exFreq=YEAR
+        endExport
+
+#ifndef FF		 //	  = #if not defined FF, thus skips reporting Heat/Cool peaks if running free floating, FF, mode.
+EXPORTFILE 	"AnnualPeaks"
+        xfFileName="pks.csv"
+        xfFileStat=APPEND
+        endExportFile
+
+EXPORT
+        exExportfile="AnnualPeaks"
+        exHeader=NO
+        exFooter=NO
+        exType=UDT
+        exFreq=YEAR
+        exBtuSf=1000000
+        exportcol colVal=@znRes[1].name
+        exportcol colVal=@Top.qhPeak*0.00029304	 		ColHead="Pk kW"		//Dfn of qcPeak?
+        exportcol colVal=@Top.qcPeakM
+        exportcol colVal=@Top.qcPeakD
+        exportcol colVal=@Top.qcPeakH
+        exportcol colVal=@Top.qcPeak*0.00029304			ColHead="Pk kW"		//Dfn of qcPeak?
+        exportcol colVal=@Top.qhPeakM
+        exportcol colVal=@Top.qhPeakD
+        exportcol colVal=@Top.qhPeakH
+        endExport
+#endif
+
+	#if defined(COMPAREFILE)
+		#include "Std140Export.inp"
+	#endif
+
+
+//--------------------------work in progress ------------------------------------
+
+#IF 0		// WORKING ON CONVERTING THIS BESTEST EXPORT ITEM
+  #if JAN4REP	//Hourly heating (+) and sensible cooling (-) loads (kWh)
+	 EXPORTFILE "Jan4Exp"
+			xfFileName=JAN4NAME
+			xfFileStat=OVERWRITE
+			endExportFile
+	 EXPORT
+			exExportfile="Jan4Exp"
+			exFreq=HOUR
+		#ifdef HOURLYTEMPS				//<--- defined in FF cases, e.g. 600FF.cse.
+			exType=ZEB
+		  #ifdef SUNZONE
+			exZone=SUNSPACE
+		  #else
+			exZone=CASE
+		  #endif
+		#else
+			//	exType=MTR			// comntd-out bcause  no MTR's allowed, but wont' run w/o exType defined.
+			//	exMeter=COOLMETER   // Not sure what was intended by these outputs that are accessed
+									// when neither SUNSPACE nor CASE are defined.
+		#endif
+		exDayBeg=Jan 4
+		exDayEnd=Jan 4
+		endExport
+  #endif
+#ENDIF
+
+
+#if 0
+	#Redefine CSEBtuSF 1000  //Hourly reports in kBtu
+ // From Bruce's 1ZONEATTIC.CIN. Runs good if comment-out l meter lines; zone balance not zero--mayb bcse infil not listed?
+ // CSE Format Conditioned Zone sensible Energy Balance.
+ //Monthly
+    Report rpBtuSf=1000 rpType=UDT rpFreq=Month   rpCPL=104
+    rpTitle="Monthly Sensible Energy Balance of the Conditioned Zone (kBtu + into the zone)"
+    Reportcol colVal=$month  colHead="mo"	  colWid=2
+    Reportcol colVal=@znRes[CASE].M.tAir colHead="Tin" colWid=4 colDec=1
+    Reportcol colVal=@znRes[CASE].M.tRad colHead="Trad" colWid=4 colDec=1
+    Reportcol colVal=@znRes[CASE].M.qSlr/CSEBtuSF colHead="Slr" colDec=0//colWid=7 colDec=0
+    //Reportcol colVal=(@znRes[CASE].M.qsIg-@meter["Bypass"].M.tot)/CSEBtuSF colHead="IntG" colDec=0
+    Reportcol colVal=@znRes[CASE].M.qCond/CSEBtuSF colHead="Cond" colDec=1//colWid=7 colDec=0	       //colDec=0
+    Reportcol colVal=@znRes[CASE].M.qMass/CSEBtuSF colHead="Surf" colDec=0//colWid=8 colDec=0
+    Reportcol colVal=@znRes[CASE].M.eqfVentHr colHead = "VntHr" colDec=0 colWid=5
+    Reportcol colVal=@znRes[CASE].M.qIz/CSEBtuSF colHead="InfVnt" colDec=0 colWid=7
+    //Reportcol colVal=@meter["Bypass"].M.tot/CSEBtuSF colHead="Bypass" colDec=0
+    Reportcol colVal=@znRes[CASE].M.qhMech/CSEBtuSF colHead="Hload" colDec=0//colWid=7
+    Reportcol colVal=@znRes[CASE].M.qcMech/CSEBtuSF colHead="Cload" colDec=0//colWid=7
+
+	Report rpBtuSf=1000 rpType=UDT rpFreq=Year   rpCPL=104		// test HERE
+	rpTitle="Yearly Sensible heating & cooling (kBtu + into the zone)"
+	//Reportcol colVal="Yr"  colHead="yr"	  colWid=2
+ 	Reportcol colVal=@znRes[CASE].Y.qhMech/CSEBtuSF colHead="Hload"  colWid=12 colDec=0
+   	Reportcol colVal=@znRes[CASE].Y.qcMech/CSEBtuSF colHead="Cload"  colWid=12 colDec=0
+
+#endif
+
+RUN
