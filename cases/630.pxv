@@ -1,0 +1,6 @@
+:case_name=>"630",
+:south_windows=>0,
+:east_west_windows=>1,
+:overhangs=>true,
+:fins=>true,
+:sgdist=>{:north=>0.053, :east=>0.025, :south=>0.053, :west=>0.025, :roof=>0.167, :floor=>0.642}

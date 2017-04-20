@@ -1,0 +1,5 @@
+:case_name=>"420",
+:ach=>0,
+:gain=>200,
+:ext_sol_abs=>0.1,
+:opaque=>true

@@ -1,0 +1,5 @@
+:case_name=>"670",
+:win_u=>3.55,
+:win_shgc=>0.866,
+:win_panes=>1,
+:sgdist=>{:north=>0.052,:east=>0.038,:south=>0.024,:west=>0.038,:roof=>0.166,:floor=>0.641}

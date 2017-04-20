@@ -1,0 +1,4 @@
+:case_name=>"810",
+:int_sol_abs=>0.1,
+:sgdist=>{:north=>0.077, :east=>0.057, :south=>0.063, :west=>0.057, :roof=>0.191, :floor=>0.243},
+:construction_mass=>"HIGH"

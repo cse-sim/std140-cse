@@ -1,0 +1,8 @@
+:case_name=>"270",
+:ach=>0,
+:gain=>0,
+:ext_sol_abs=>0.1,
+:opaque=>false,
+:cool_sp=>20,
+:int_sol_abs=>0.9,
+:sgdist=>{:north=>0.014, :east=>0.010, :south=>0.007, :west=>0.010, :roof=>0.050, :floor=>0.903}
