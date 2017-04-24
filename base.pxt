@@ -497,13 +497,14 @@ EXPORT
 
   // Convective Coefficients
 <% for surface in surfaces[0..5] %>
-  <% if ["Wall", "Roof"].include?(surface[:type]) %>
+  <% if ["Wall", "Roof", "Floor"].include?(surface[:type]) %>
   EXPORTCOL colHead="Exterior Conv. Coeff. <%= surface[:name] %> [W/m2-K]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hxa*<%= 1/u_c %>*@Top.subhrDur
   EXPORTCOL colHead="Interior Conv. Coeff. <%= surface[:name] %> [W/m2-K]" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxa*<%= 1/u_c %>*@Top.subhrDur
   <% end %>
 <% end %>
 <% for win in windows %>
-
+  EXPORTCOL colHead="Exterior Conv. Coeff. <%= win %> [W/m2-K]" colVal=@xsurf["<%= win %>"].sbcO.hxa*<%= 1/u_c %>*@Top.subhrDur
+  EXPORTCOL colHead="Interior Conv. Coeff. <%= win %> [W/m2-K]" colVal=@xsurf["<%= win %>"].sbcI.hxa*<%= 1/u_c %>*@Top.subhrDur
 <% end %>
 
 
