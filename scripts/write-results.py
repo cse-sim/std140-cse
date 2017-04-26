@@ -1,18 +1,45 @@
+print "\nInitializing Python...\n"
 import openpyxl as xl
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import timedelta, datetime, date
+import subprocess
+import re
+import mako.template as mk
+import os
 
-%matplotlib inline
+# Monkey patch for openpyxl
+def new_parse_extensions(self, element):
+  from openpyxl.descriptors.excel import ExtensionList, Extension
+  from openpyxl.xml.constants import EXT_TYPES
+  from warnings import warn
+  extLst = ExtensionList.from_tree(element)
+  for e in extLst.ext:
+    ext_type = EXT_TYPES.get(e.uri.upper(), "Unknown")
+    msg = "{0} extension ({1}) is not supported and will be removed".format(ext_type,e.uri.upper())
+    #warn(msg)
 
-wb = xl.load_workbook(filename='../reports/Sec5-2Aout-Empty.xlsx')
+xl.reader.worksheet.WorkSheetParser.parse_extensions = new_parse_extensions
+
+
+#%matplotlib inline
+
+wb = xl.load_workbook(filename='../reports/Sec5-2Aout-Template.xlsx')
 A = wb['A']
 TMPBIN = wb['TMPBIN']
 
 # Top level info
+info = subprocess.check_output("..\\CSE.exe", shell=True)
+match = re.compile('.*CSE\s+([^\s]*)\s+.*',re.S).match(info)
+if match:
+  version = match.groups()[0]
+else:
+  print "ERROR: Unknown version!"
+  version = "????"
+
 A.cell(column=3, row=61).value = "California Simulation Engine"
-A.cell(column=3, row=62).value = "0.830"
+A.cell(column=3, row=62).value = version
 A.cell(column=3, row=63).value = '{}'.format(datetime.now())
 
 row_beg = 70 # 600
@@ -77,6 +104,9 @@ for row in range(row_beg, row_end + 1):
     A.cell(column=init_col+1, row=158).value = df['Incident Solar South Wall [Wh/m2]'].sum()/1000
     A.cell(column=init_col+1, row=159).value = df['Incident Solar West Wall [Wh/m2]'].sum()/1000
 
+    # Transmitted Solar
+    A.cell(column=init_col+1, row=163).value = df['Transmitted Solar [Wh/m2]'].sum()/1000
+
     # Sky Temperature
     A.cell(column=init_col+1, row=178).value = df['Sky Temp [C]'].mean()
     idx = df['Sky Temp [C]'].idxmin()
@@ -89,6 +119,18 @@ for row in range(row_beg, row_end + 1):
     A.cell(column=init_col+7, row=178).value = df.ix[idx]['Month']
     A.cell(column=init_col+8, row=178).value = df.ix[idx]['Day']
     A.cell(column=init_col+9, row=178).value = df.ix[idx]['Hour']
+
+  if case == "660":
+    # Transmitted Solar
+    A.cell(column=init_col+1, row=164).value = df['Transmitted Solar [Wh/m2]'].sum()/1000
+
+  if case == "670":
+    # Transmitted Solar
+    A.cell(column=init_col+1, row=165).value = df['Transmitted Solar [Wh/m2]'].sum()/1000
+
+  if case == "610":
+    # Transmitted Solar
+    A.cell(column=init_col+1, row=170).value = df['Transmitted Solar [Wh/m2]'].sum()/1000
 
   if case == "600" or case == "900":
     # Monthly loads
@@ -138,6 +180,9 @@ for row in range(row_beg, row_end + 1):
       # Sky temperature
       A.cell(column=init_col+9, row=row_i).value = dfh['Sky Temp [C]'].mean()
 
+      # Transmitted Solar
+      A.cell(column=init_col+13, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
+
     dfd = df[(df['Month'] == 2) & (df['Day'] == 1)]
     for hour in range(1,25):
       dfh = dfd[dfd["Hour"] == hour]
@@ -145,6 +190,43 @@ for row in range(row_beg, row_end + 1):
 
       # Sky temperature
       A.cell(column=init_col+7, row=row_i).value = dfh['Sky Temp [C]'].mean()
+
+      # Transmitted Solar
+      A.cell(column=init_col+10, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
+
+  if case == "660":
+    dfd = df[(df['Month'] == 7) & (df['Day'] == 14)]
+    for hour in range(1,25):
+      dfh = dfd[dfd["Hour"] == hour]
+      row_i = 230 + hour - 1
+
+      # Transmitted Solar
+      A.cell(column=init_col+14, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
+
+    dfd = df[(df['Month'] == 2) & (df['Day'] == 1)]
+    for hour in range(1,25):
+      dfh = dfd[dfd["Hour"] == hour]
+      row_i = 230 + hour - 1
+
+      # Transmitted Solar
+      A.cell(column=init_col+11, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
+
+  if case == "670":
+    dfd = df[(df['Month'] == 7) & (df['Day'] == 14)]
+    for hour in range(1,25):
+      dfh = dfd[dfd["Hour"] == hour]
+      row_i = 230 + hour - 1
+
+      # Transmitted Solar
+      A.cell(column=init_col+15, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
+
+    dfd = df[(df['Month'] == 2) & (df['Day'] == 1)]
+    for hour in range(1,25):
+      dfh = dfd[dfd["Hour"] == hour]
+      row_i = 230 + hour - 1
+
+      # Transmitted Solar
+      A.cell(column=init_col+12, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
 
   # Hourly loads
   if case in col_loads:
@@ -263,5 +345,12 @@ for row in range(row_ff_beg, row_ff_end + 1):
       row_i = 262 + hour - 1
       A.cell(column=init_col+col_temps[case], row=row_i).value = dfh['Zone Temp [C]'].mean()
 
-print "Done"
 wb.save(filename='../reports/Sec5-2Aout.xlsx')
+
+with open('../reports/S140outNotes-Template.txt','r') as notes_template:
+  content = notes_template.read()
+
+with open('../reports/S140outNotes.txt','w') as notes:
+  notes.write(mk.Template(content).render(version=version))
+
+print "Done"

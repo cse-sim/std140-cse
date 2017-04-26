@@ -47,10 +47,13 @@ end
 %>
 
 wfName = "725650TMY3.epw"
-nSubSteps = 1 // 20
+nSubSteps = 10
 DT = No
 bldgAzm = <%= orientation %>
 terrainClass = 2
+wuDays = 30
+skyModel = ANISOTROPIC
+skyModelLW = BERDAHLMARTIN
 
 // Constructions
 
@@ -217,6 +220,9 @@ ZONE "Main Zone"
   znQMxC = <%= -1000000*w_btu %>
 <% end %>
   infAC = <%= ach %>
+  znFloorZ = 0.0
+  znCeilingHt = <%= height %>
+  znEaveZ = <%= height %>
 
   GAIN "Internal Gain"
     gnPower = <%= gain*w_btu %>
@@ -233,6 +239,7 @@ surfaces = [
   {:name=>"Floor",:type=>"Floor",:area=>floor_area,:windows=>0,:sgdist=>sgdist[:floor]}
 ]
 windows = []
+window_area = 0.0
 %>
 
 <% for surface in surfaces %>
@@ -269,8 +276,11 @@ windows = []
   <% end %>
 
   <% for win in (1..surface[:windows]) %>
-    <% window_name = surface[:name] + " Window " + win.to_s %>
-    <% windows << window_name %>
+    <%
+    window_name = surface[:name] + " Window " + win.to_s
+    windows << window_name
+    window_area += win_height*win_width
+    %>
     <% if !opaque %>
 
     WINDOW "<%= window_name %>"
@@ -356,6 +366,9 @@ ZONE "Sun Zone"
   znArea = <%= ss_area %>
   znVol = <%= ss_vol %>
   infAC = <%= ach %>
+  znFloorZ = 0.0
+  znCeilingHt = <%= height %>
+  znEaveZ = <%= height %>
 
   <% for surface in surfaces[-5..-1] %>
   SURFACE "<%= surface[:name] %>"
@@ -493,7 +506,9 @@ EXPORT
 <% end %>
 
   // Transmitted Solar
-  EXPORTCOL colHead="Transmitted Solar [Wh]" colVal=@znRes["Main Zone"].S.qSlr/<%= w_btu %>
+<% if window_area > 0.0 %>
+  EXPORTCOL colHead="Transmitted Solar [Wh/m2]" colVal=@znRes["Main Zone"].S.qSlr*<%= m2_ft2/(w_btu*window_area) %>
+<% end %>
 
   // Convective Coefficients
 <% for surface in surfaces[0..5] %>
@@ -507,7 +522,7 @@ EXPORT
   EXPORTCOL colHead="Interior Conv. Coeff. <%= win %> [W/m2-K]" colVal=@xsurf["<%= win %>"].sbcI.hxa*<%= 1/u_c %>*@Top.subhrDur
 <% end %>
 
-
+/*
 EXPORTFILE "Results"
   xfFileName = "..\\Results.csv"
   xfFileStat = APPEND
@@ -536,5 +551,5 @@ EXPORT
   EXPORTCOL colHead="Peak Cooling [Hour]" colVal=@Top.qcPeakH
 
   DELETE EXPORTFILE Primary
-
+*/
 RUN

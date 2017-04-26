@@ -34,7 +34,7 @@ def sim(c)
   output_dir = 'output/' + file_base
 
   src = [output_dir + '/in.cse']
-  target = [output_dir + '/in.rep', output_dir + '/DETAILED.csv', output_dir + '/RESULTS.csv']
+  target = [output_dir + '/in.rep', output_dir + '/DETAILED.csv']
 
   success = nil
   if !(FileUtils.uptodate?(target[0], src)) or !(FileUtils.uptodate?(target[1], src))
@@ -50,19 +50,40 @@ def sim(c)
   return success
 end
 
+def write_report()
+  src = Dir['output/*/DETAILED.csv']
+  target = ['reports/Sec5-2Aout.xlsx', 'reports/S140outNotes.txt']
+  puts "\n================="
+  puts "     REPORTS     "
+  puts "=================\n"
+  success = nil
+  if !(FileUtils.uptodate?(target[0], src)) or !(FileUtils.uptodate?(target[1], src))
+    Dir.chdir('scripts'){
+      success = system(%Q|python write-results.py|)
+    }
+  else
+    puts "\n  ...report already up-to-date."
+    success = true
+  end
+  return success
+end
+
 task :sim, [:filter] do |t, args|
   args.with_defaults(:filter=>'*')
   cases = Dir['cases/' + args.filter + '.*']
   for c in cases
-    if (compose(c))
-      if !sim(c)
-        puts "\nSimulation failed..."
-        exit
-      end
-    else
-      puts "\nComposition failed..."
+    if !compose(c)
+      puts "\nERROR: Composition failed..."
       exit
     end
+    if !sim(c)
+      puts "\nERROR: Simulation failed..."
+      exit
+    end
+  end
+  if !write_report()
+    puts "\nERROR: Failed to generate reports..."
+    exit
   end
 end
 
