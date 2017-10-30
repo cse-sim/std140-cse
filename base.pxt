@@ -4,7 +4,6 @@
   parameter "east_west_windows", :default=>0
   parameter "overhangs", :default=>false
   parameter "fins", :default=>false
-  parameter "sgdist", :default=>{:north=>0.053, :east=>0.038, :south=>0.027, :west=>0.038, :roof=>0.167, :floor=>0.642}
   parameter "construction_mass", :default=>"LOW" # LOW | LOW-EFF | HIGH
   parameter "orientation", :default=>0.0
   parameter "gain", :default=>200 # W
@@ -106,6 +105,26 @@ MATERIAL "Common Wall"
   matCond = <%= 0.510*k_c %>
   matSpHt = <%= 1000*cp_c %>
   matDens = <%= 1400*rho_c %>
+
+<% if opaque %>
+Material "Opaque Pane"
+  matCond = <%= 1.00*k_c %>
+  matSpHt = <%= 750*cp_c %>
+  matDens = <%= 2470*rho_c %>
+  matThk = <%= 0.003048*m_ft %>
+
+Material "Air Gap"
+  matCond = <%= 0.024069*k_c %>
+  matSpHt = <%= 1006.103271*cp_c %>
+  matDens = <%= 1.292498*rho_c %>
+  matThk = <%= 0.012*m_ft %>
+
+CONSTRUCTION "Opaque Window"
+  LAYER lrMat="Opaque Pane"
+  LAYER lrMat="Air Gap"
+  LAYER lrMat="Opaque Pane"
+
+<% end %>
 
 <% if construction_mass == "LOW" %>
 
@@ -213,6 +232,7 @@ ZONE "Main Zone"
   znModel = CZM
   znArea = <%= floor_area %>
   znVol = <%= zone_vol %>
+  znCAir = <%= 0.24*0.077*zone_vol %>
 <% if !ff %>
   znTH = select( $hour > 7 && $hour <= 23, <%= c_f(heat_sp) %>, default <%= c_f(heat_sb) %>)
   znQMxH = <%= 1000000*w_btu %>
@@ -231,12 +251,12 @@ ZONE "Main Zone"
 <%
 # Surfaces
 surfaces = [
-  {:name=>"North Wall",:type=>"Wall",:area=>width*height,:azm=>0,:windows=>0,:sgdist=>sgdist[:north]},
-  {:name=>"East Wall",:type=>"Wall",:area=>depth*height,:azm=>90,:windows=>east_west_windows,:sgdist=>sgdist[:east]},
-  {:name=>"South Wall",:type=>"Wall",:area=>width*height,:azm=>180,:windows=>south_windows,:sgdist=>sgdist[:south]},
-  {:name=>"West Wall",:type=>"Wall",:area=>depth*height,:azm=>270,:windows=>east_west_windows,:sgdist=>sgdist[:west]},
-  {:name=>"Roof",:type=>"Roof",:area=>floor_area,:windows=>0,:sgdist=>sgdist[:roof]},
-  {:name=>"Floor",:type=>"Floor",:area=>floor_area,:windows=>0,:sgdist=>sgdist[:floor]}
+  {:name=>"North Wall",:type=>"Wall",:area=>width*height,:azm=>0,:windows=>0},
+  {:name=>"East Wall",:type=>"Wall",:area=>depth*height,:azm=>90,:windows=>east_west_windows},
+  {:name=>"South Wall",:type=>"Wall",:area=>width*height,:azm=>180,:windows=>south_windows},
+  {:name=>"West Wall",:type=>"Wall",:area=>depth*height,:azm=>270,:windows=>east_west_windows},
+  {:name=>"Roof",:type=>"Roof",:area=>floor_area,:windows=>0},
+  {:name=>"Floor",:type=>"Floor",:area=>floor_area,:windows=>0}
 ]
 windows = []
 window_area = 0.0
@@ -268,11 +288,11 @@ window_area = 0.0
     sfExRf = 1.67
   <% if h_ext %>
     sfExHcModel = INPUT
-    sfExHcMult = <%= h_ext[sym] %>
+    sfExHcMult = <%= h_ext[sym]*u_c %>
   <% end %>
   <% if h_int %>
     sfInHcModel = INPUT
-    sfInHcMult = <%= h_int[sym] %>
+    sfInHcMult = <%= h_int[sym]*u_c %>
   <% end %>
 
   <% for win in (1..surface[:windows]) %>
@@ -297,11 +317,11 @@ window_area = 0.0
       wnINShd = NONE
       <% if h_ext %>
         wnExHcModel = INPUT
-        wnExHcMult = <%= h_ext[:window] %>
+        wnExHcMult = <%= h_ext[:window]*u_c %>
       <% end %>
       <% if h_int %>
         wnInHcModel = INPUT
-        wnInHcMult = <%= h_int[:window] %>
+        wnInHcMult = <%= h_int[:window]*u_c %>
       <% end %>
       <% if overhangs or fins %>
       SHADE
@@ -328,15 +348,12 @@ window_area = 0.0
           <% end %>
         <% end %>
       <% end %>
-      <% for surf in surfaces %>
-      SGDIST sgSurf="<%= surf[:name] %>" sgFSO=<%= surf[:sgdist] %>
-      <% end %>
     <% else %>
     DOOR  "<%= window_name %>"
       drArea = <%= win_height*win_width %>
-      drModel = QUICK
+      drModel = forward_difference
       drExRf = 1.0
-      drU = <%= 1/(0.19200 + 0.00305*2 )*u_c %>
+      drCon = "Opaque Window"
       drExAbs = <%= ext_sol_abs %>
       drInAbs = <%= int_sol_abs %>
       drExEpsLW = <%= ext_lw_abs %>
@@ -355,11 +372,11 @@ ALTER ZONE "Main Zone"
 
   <%
   # Sun Zone surfaces
-  surfaces << {:name=>"Sun East Wall",:type=>"Wall",:area=>ss_depth*height,:azm=>90,:windows=>0,:sgdist=>0.02}
-  surfaces << {:name=>"Sun South Wall",:type=>"Wall",:area=>width*height,:azm=>180,:windows=>2,:sgdist=>0.03}
-  surfaces << {:name=>"Sun West Wall",:type=>"Wall",:area=>ss_depth*height,:azm=>270,:windows=>0,:sgdist=>0.02}
-  surfaces << {:name=>"Sun Roof",:type=>"Roof",:area=>ss_area,:windows=>0,:sgdist=>0.05}
-  surfaces << {:name=>"Sun Floor",:type=>"Floor",:area=>ss_area,:windows=>0,:sgdist=>0.6}
+  surfaces << {:name=>"Sun East Wall",:type=>"Wall",:area=>ss_depth*height,:azm=>90,:windows=>0}
+  surfaces << {:name=>"Sun South Wall",:type=>"Wall",:area=>width*height,:azm=>180,:windows=>2}
+  surfaces << {:name=>"Sun West Wall",:type=>"Wall",:area=>ss_depth*height,:azm=>270,:windows=>0}
+  surfaces << {:name=>"Sun Roof",:type=>"Roof",:area=>ss_area,:windows=>0}
+  surfaces << {:name=>"Sun Floor",:type=>"Floor",:area=>ss_area,:windows=>0}
   %>
 ZONE "Sun Zone"
   znModel = CZM
@@ -432,10 +449,6 @@ ZONE "Sun Zone"
           <% end %>
         <% end %>
       <% end %>
-      <% for surf in surfaces[-5..-1] %>
-      SGDIST sgSurf="<%= surf[:name] %>" sgFSO=<%= surf[:sgdist] %>
-      <% end %>
-      SGDIST sgSurf="South Wall" sgFSO=0.2
     <% end %>
   <% end %>
 
@@ -513,13 +526,13 @@ EXPORT
   // Convective Coefficients
 <% for surface in surfaces[0..5] %>
   <% if ["Wall", "Roof", "Floor"].include?(surface[:type]) %>
-  EXPORTCOL colHead="Exterior Conv. Coeff. <%= surface[:name] %> [W/m2-K]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hxa*<%= 1/u_c %>*@Top.subhrDur
-  EXPORTCOL colHead="Interior Conv. Coeff. <%= surface[:name] %> [W/m2-K]" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxa*<%= 1/u_c %>*@Top.subhrDur
+  EXPORTCOL colHead="Exterior Conv. Coeff. <%= surface[:name] %> [W/m2-K]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hxa*<%= 1/u_c %>
+  EXPORTCOL colHead="Interior Conv. Coeff. <%= surface[:name] %> [W/m2-K]" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxa*<%= 1/u_c %>
   <% end %>
 <% end %>
 <% for win in windows %>
-  EXPORTCOL colHead="Exterior Conv. Coeff. <%= win %> [W/m2-K]" colVal=@xsurf["<%= win %>"].sbcO.hxa*<%= 1/u_c %>*@Top.subhrDur
-  EXPORTCOL colHead="Interior Conv. Coeff. <%= win %> [W/m2-K]" colVal=@xsurf["<%= win %>"].sbcI.hxa*<%= 1/u_c %>*@Top.subhrDur
+  EXPORTCOL colHead="Exterior Conv. Coeff. <%= win %> [W/m2-K]" colVal=@xsurf["<%= win %>"].sbcO.hxa*<%= 1/u_c %>
+  EXPORTCOL colHead="Interior Conv. Coeff. <%= win %> [W/m2-K]" colVal=@xsurf["<%= win %>"].sbcI.hxa*<%= 1/u_c %>
 <% end %>
 
 /*

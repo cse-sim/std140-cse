@@ -85,16 +85,16 @@ for row in range(row_beg, row_end + 1):
   # Annual loads
   A.cell(column=init_col+1, row=row).value = df['Heating Load [Wh]'].sum()/1000000
   A.cell(column=init_col+2, row=row).value = df['Cooling Load [Wh]'].sum()/1000000
-  idx = df['Heating Load [Wh]'].idxmax()
-  A.cell(column=init_col+3, row=row).value = df.ix[idx]['Heating Load [Wh]']/1000/timestep
-  A.cell(column=init_col+4, row=row).value = df.ix[idx]['Month']
-  A.cell(column=init_col+5, row=row).value = df.ix[idx]['Day']
-  A.cell(column=init_col+6, row=row).value = df.ix[idx]['Hour']
-  idx = df['Cooling Load [Wh]'].idxmax()
-  A.cell(column=init_col+7, row=row).value = df.ix[idx]['Cooling Load [Wh]']/1000/timestep
-  A.cell(column=init_col+8, row=row).value = df.ix[idx]['Month']
-  A.cell(column=init_col+9, row=row).value = df.ix[idx]['Day']
-  A.cell(column=init_col+10, row=row).value = df.ix[idx]['Hour']
+  idx = df.groupby(['Month','Day','Hour']).mean()['Heating Load [Wh]'].idxmax()
+  A.cell(column=init_col+3, row=row).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Heating Load [Wh]']/1000/timestep
+  A.cell(column=init_col+4, row=row).value = idx[0]
+  A.cell(column=init_col+5, row=row).value = idx[1]
+  A.cell(column=init_col+6, row=row).value = idx[2]
+  idx = df.groupby(['Month','Day','Hour']).mean()['Cooling Load [Wh]'].idxmax()
+  A.cell(column=init_col+7, row=row).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Cooling Load [Wh]']/1000/timestep
+  A.cell(column=init_col+8, row=row).value = idx[0]
+  A.cell(column=init_col+9, row=row).value = idx[1]
+  A.cell(column=init_col+10, row=row).value = idx[2]
 
   if case == "600":
     # Solar Incidence
@@ -109,16 +109,16 @@ for row in range(row_beg, row_end + 1):
 
     # Sky Temperature
     A.cell(column=init_col+1, row=178).value = df['Sky Temp [C]'].mean()
-    idx = df['Sky Temp [C]'].idxmin()
-    A.cell(column=init_col+2, row=178).value = df.ix[idx]['Sky Temp [C]']
-    A.cell(column=init_col+3, row=178).value = df.ix[idx]['Month']
-    A.cell(column=init_col+4, row=178).value = df.ix[idx]['Day']
-    A.cell(column=init_col+5, row=178).value = df.ix[idx]['Hour']
-    idx = df['Sky Temp [C]'].idxmax()
-    A.cell(column=init_col+6, row=178).value = df.ix[idx]['Sky Temp [C]']
-    A.cell(column=init_col+7, row=178).value = df.ix[idx]['Month']
-    A.cell(column=init_col+8, row=178).value = df.ix[idx]['Day']
-    A.cell(column=init_col+9, row=178).value = df.ix[idx]['Hour']
+    idx = df.groupby(['Month','Day','Hour']).mean()['Sky Temp [C]'].idxmin()
+    A.cell(column=init_col+2, row=178).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Sky Temp [C]']
+    A.cell(column=init_col+3, row=178).value = idx[0]
+    A.cell(column=init_col+4, row=178).value = idx[1]
+    A.cell(column=init_col+5, row=178).value = idx[2]
+    idx = df.groupby(['Month','Day','Hour']).mean()['Sky Temp [C]'].idxmax()
+    A.cell(column=init_col+6, row=178).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Sky Temp [C]']
+    A.cell(column=init_col+7, row=178).value = idx[0]
+    A.cell(column=init_col+8, row=178).value = idx[1]
+    A.cell(column=init_col+9, row=178).value = idx[2]
 
   if case == "660":
     # Transmitted Solar
@@ -143,14 +143,14 @@ for row in range(row_beg, row_end + 1):
         dfm = df[df['Month'] == month]
         A.cell(column=init_col+col_offset+1, row=189+month).value = dfm['Heating Load [Wh]'].sum()/1000
         A.cell(column=init_col+col_offset+2, row=189+month).value = dfm['Cooling Load [Wh]'].sum()/1000
-        idx = dfm['Heating Load [Wh]'].idxmax()
-        A.cell(column=init_col+col_offset+3, row=189+month).value = dfm.ix[idx]['Heating Load [Wh]']/1000/timestep
-        A.cell(column=init_col+col_offset+4, row=189+month).value = dfm.ix[idx]['Day']
-        A.cell(column=init_col+col_offset+5, row=189+month).value = dfm.ix[idx]['Hour']
-        idx = dfm['Cooling Load [Wh]'].idxmax()
-        A.cell(column=init_col+col_offset+6, row=189+month).value = dfm.ix[idx]['Cooling Load [Wh]']/1000/timestep
-        A.cell(column=init_col+col_offset+7, row=189+month).value = dfm.ix[idx]['Day']
-        A.cell(column=init_col+col_offset+8, row=189+month).value = dfm.ix[idx]['Hour']
+        idx = dfm.groupby(['Month','Day','Hour']).mean()['Heating Load [Wh]'].idxmax()
+        A.cell(column=init_col+col_offset+3, row=189+month).value = dfm.groupby(['Month','Day','Hour']).mean().loc[idx]['Heating Load [Wh]']/1000/timestep
+        A.cell(column=init_col+col_offset+4, row=189+month).value = idx[1]
+        A.cell(column=init_col+col_offset+5, row=189+month).value = idx[2]
+        idx = dfm.groupby(['Month','Day','Hour']).mean()['Cooling Load [Wh]'].idxmax()
+        A.cell(column=init_col+col_offset+6, row=189+month).value = dfm.groupby(['Month','Day','Hour']).mean().loc[idx]['Cooling Load [Wh]']/1000/timestep
+        A.cell(column=init_col+col_offset+7, row=189+month).value = idx[1]
+        A.cell(column=init_col+col_offset+8, row=189+month).value = idx[2]
 
   # Hourly outputs (misc.)
   if case == "600":
@@ -261,48 +261,48 @@ for row in range(row_beg, row_end + 1):
         # Exterior
         A.cell(column=init_col+col_offset+1, row=row_i).value = (df['Exterior Conv. Coeff. ' + surf + ' [W/m2-K]'] * (df['Heating Load [Wh]'] + df['Cooling Load [Wh]'])).sum()/(df['Heating Load [Wh]'].sum() + df['Cooling Load [Wh]'].sum())
         if case == "600":
-          idx = df['Exterior Conv. Coeff. ' + surf + ' [W/m2-K]'].idxmax()
-          A.cell(column=init_col+col_offset+1, row=row_i+10).value = df.ix[idx]['Exterior Conv. Coeff. ' + surf + ' [W/m2-K]']
-          A.cell(column=init_col+col_offset+2, row=row_i+10).value = df.ix[idx]['Month']
-          A.cell(column=init_col+col_offset+3, row=row_i+10).value = df.ix[idx]['Day']
-          A.cell(column=init_col+col_offset+4, row=row_i+10).value = df.ix[idx]['Hour']
+          idx = df.groupby(['Month','Day','Hour']).mean()['Exterior Conv. Coeff. ' + surf + ' [W/m2-K]'].idxmax()
+          A.cell(column=init_col+col_offset+1, row=row_i+10).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Exterior Conv. Coeff. ' + surf + ' [W/m2-K]']
+          A.cell(column=init_col+col_offset+2, row=row_i+10).value = idx[0]
+          A.cell(column=init_col+col_offset+3, row=row_i+10).value = idx[1]
+          A.cell(column=init_col+col_offset+4, row=row_i+10).value = idx[2]
 
-          idx = df['Exterior Conv. Coeff. ' + surf + ' [W/m2-K]'].idxmin()
-          A.cell(column=init_col+col_offset+1, row=row_i+20).value = df.ix[idx]['Exterior Conv. Coeff. ' + surf + ' [W/m2-K]']
-          A.cell(column=init_col+col_offset+2, row=row_i+20).value = df.ix[idx]['Month']
-          A.cell(column=init_col+col_offset+3, row=row_i+20).value = df.ix[idx]['Day']
-          A.cell(column=init_col+col_offset+4, row=row_i+20).value = df.ix[idx]['Hour']
+          idx = df.groupby(['Month','Day','Hour']).mean()['Exterior Conv. Coeff. ' + surf + ' [W/m2-K]'].idxmin()
+          A.cell(column=init_col+col_offset+1, row=row_i+20).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Exterior Conv. Coeff. ' + surf + ' [W/m2-K]']
+          A.cell(column=init_col+col_offset+2, row=row_i+20).value = idx[0]
+          A.cell(column=init_col+col_offset+3, row=row_i+20).value = idx[1]
+          A.cell(column=init_col+col_offset+4, row=row_i+20).value = idx[2]
 
         # Interior
         A.cell(column=init_col+col_offset+1, row=row_i+30).value = (df['Interior Conv. Coeff. ' + surf + ' [W/m2-K]'] * (df['Heating Load [Wh]'] + df['Cooling Load [Wh]'])).sum()/(df['Heating Load [Wh]'].sum() + df['Cooling Load [Wh]'].sum())
         if case == "600":
-          idx = df['Interior Conv. Coeff. ' + surf + ' [W/m2-K]'].idxmax()
-          A.cell(column=init_col+col_offset+1, row=row_i+40).value = df.ix[idx]['Interior Conv. Coeff. ' + surf + ' [W/m2-K]']
-          A.cell(column=init_col+col_offset+2, row=row_i+40).value = df.ix[idx]['Month']
-          A.cell(column=init_col+col_offset+3, row=row_i+40).value = df.ix[idx]['Day']
-          A.cell(column=init_col+col_offset+4, row=row_i+40).value = df.ix[idx]['Hour']
+          idx = df.groupby(['Month','Day','Hour']).mean()['Interior Conv. Coeff. ' + surf + ' [W/m2-K]'].idxmax()
+          A.cell(column=init_col+col_offset+1, row=row_i+40).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Interior Conv. Coeff. ' + surf + ' [W/m2-K]']
+          A.cell(column=init_col+col_offset+2, row=row_i+40).value = idx[0]
+          A.cell(column=init_col+col_offset+3, row=row_i+40).value = idx[1]
+          A.cell(column=init_col+col_offset+4, row=row_i+40).value = idx[2]
 
-          idx = df['Interior Conv. Coeff. ' + surf + ' [W/m2-K]'].idxmin()
-          A.cell(column=init_col+col_offset+1, row=row_i+50).value = df.ix[idx]['Interior Conv. Coeff. ' + surf + ' [W/m2-K]']
-          A.cell(column=init_col+col_offset+2, row=row_i+50).value = df.ix[idx]['Month']
-          A.cell(column=init_col+col_offset+3, row=row_i+50).value = df.ix[idx]['Day']
-          A.cell(column=init_col+col_offset+4, row=row_i+50).value = df.ix[idx]['Hour']
+          idx = df.groupby(['Month','Day','Hour']).mean()['Interior Conv. Coeff. ' + surf + ' [W/m2-K]'].idxmin()
+          A.cell(column=init_col+col_offset+1, row=row_i+50).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Interior Conv. Coeff. ' + surf + ' [W/m2-K]']
+          A.cell(column=init_col+col_offset+2, row=row_i+50).value = idx[0]
+          A.cell(column=init_col+col_offset+3, row=row_i+50).value = idx[1]
+          A.cell(column=init_col+col_offset+4, row=row_i+50).value = idx[2]
 
         row_i += 1
 
   if case == "960":
     # Sun Zone free-float
     A.cell(column=init_col+1, row=136).value = df['Sun Zone Temp [C]'].mean()
-    idx = df['Sun Zone Temp [C]'].idxmin()
-    A.cell(column=init_col+2, row=136).value = df.ix[idx]['Sun Zone Temp [C]']
-    A.cell(column=init_col+3, row=136).value = df.ix[idx]['Month']
-    A.cell(column=init_col+4, row=136).value = df.ix[idx]['Day']
-    A.cell(column=init_col+5, row=136).value = df.ix[idx]['Hour']
-    idx = df['Sun Zone Temp [C]'].idxmax()
-    A.cell(column=init_col+6, row=136).value = df.ix[idx]['Sun Zone Temp [C]']
-    A.cell(column=init_col+7, row=136).value = df.ix[idx]['Month']
-    A.cell(column=init_col+8, row=136).value = df.ix[idx]['Day']
-    A.cell(column=init_col+9, row=136).value = df.ix[idx]['Hour']
+    idx = df.groupby(['Month','Day','Hour']).mean()['Sun Zone Temp [C]'].idxmin()
+    A.cell(column=init_col+2, row=136).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Sun Zone Temp [C]']
+    A.cell(column=init_col+3, row=136).value = idx[0]
+    A.cell(column=init_col+4, row=136).value = idx[1]
+    A.cell(column=init_col+5, row=136).value = idx[2]
+    idx = df.groupby(['Month','Day','Hour']).mean()['Sun Zone Temp [C]'].idxmax()
+    A.cell(column=init_col+6, row=136).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Sun Zone Temp [C]']
+    A.cell(column=init_col+7, row=136).value = idx[0]
+    A.cell(column=init_col+8, row=136).value = idx[1]
+    A.cell(column=init_col+9, row=136).value = idx[2]
 
 
 # free-float cases
@@ -311,16 +311,16 @@ for row in range(row_ff_beg, row_ff_end + 1):
   print "  " + case
   df = pd.read_csv('../output/' + case + '/DETAILED.csv')
   A.cell(column=init_col+1, row=row).value = df['Zone Temp [C]'].mean()
-  idx = df['Zone Temp [C]'].idxmin()
-  A.cell(column=init_col+2, row=row).value = df.ix[idx]['Zone Temp [C]']
-  A.cell(column=init_col+3, row=row).value = df.ix[idx]['Month']
-  A.cell(column=init_col+4, row=row).value = df.ix[idx]['Day']
-  A.cell(column=init_col+5, row=row).value = df.ix[idx]['Hour']
-  idx = df['Zone Temp [C]'].idxmax()
-  A.cell(column=init_col+6, row=row).value = df.ix[idx]['Zone Temp [C]']
-  A.cell(column=init_col+7, row=row).value = df.ix[idx]['Month']
-  A.cell(column=init_col+8, row=row).value = df.ix[idx]['Day']
-  A.cell(column=init_col+9, row=row).value = df.ix[idx]['Hour']
+  idx = df.groupby(['Month','Day','Hour']).mean()['Zone Temp [C]'].idxmin()
+  A.cell(column=init_col+2, row=row).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Zone Temp [C]']
+  A.cell(column=init_col+3, row=row).value = idx[0]
+  A.cell(column=init_col+4, row=row).value = idx[1]
+  A.cell(column=init_col+5, row=row).value = idx[2]
+  idx = df.groupby(['Month','Day','Hour']).mean()['Zone Temp [C]'].idxmax()
+  A.cell(column=init_col+6, row=row).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Zone Temp [C]']
+  A.cell(column=init_col+7, row=row).value = idx[0]
+  A.cell(column=init_col+8, row=row).value = idx[1]
+  A.cell(column=init_col+9, row=row).value = idx[2]
 
   if case == "900FF":
     # Hourly annual temperatures
