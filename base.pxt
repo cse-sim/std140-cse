@@ -114,7 +114,7 @@ Material "Opaque Pane"
   matThk = <%= 0.003048*m_ft %>
 
 Material "Air Gap"
-  matCond = <%= 0.024069*k_c %>
+  matCond = <%= 5.208*0.012*k_c %>
   matSpHt = <%= 1006.103271*cp_c %>
   matDens = <%= 1.292498*rho_c %>
   matThk = <%= 0.012*m_ft %>
@@ -239,6 +239,7 @@ ZONE "Main Zone"
   znTC = <%= c_f(cool_sp) %>
   znQMxC = <%= -1000000*w_btu %>
 <% end %>
+  znHcAirX = 0.0 // Remove +4.8 ACH assumed for non-RSYS zones
   infAC = <%= ach %>
   znFloorZ = 0.0
   znCeilingHt = <%= height %>
@@ -316,14 +317,18 @@ window_area = 0.0
       wnExShd = NONE
       wnINShd = NONE
       <% if h_ext %>
-        wnExHcModel = INPUT
-        wnExHcMult = <%= h_ext[:window]*u_c %>
+      wnExHcModel = INPUT
+      wnExHcMult = <%= h_ext[:window]*u_c %>
       <% end %>
       <% if h_int %>
-        wnInHcModel = INPUT
-        wnInHcMult = <%= h_int[:window]*u_c %>
+      wnInHcModel = INPUT
+      wnInHcMult = <%= h_int[:window]*u_c %>
       <% end %>
       <% if overhangs or fins %>
+        <% if overhangs %>
+      wnVfSkyDf= <%= (Math.sqrt((overhang_height +  win_height)**2 + overhang_depth**2) - Math.sqrt(overhang_height**2 + overhang_depth**2))/(2*win_height) %>
+        <% end %>
+
       SHADE
         ohDepth = <%= overhang_depth %>
         ohDistUp = <%= overhang_height %>
@@ -348,6 +353,7 @@ window_area = 0.0
           <% end %>
         <% end %>
       <% end %>
+      //SGDIST sgSurf="Floor" sgFSO=1.0
     <% else %>
     DOOR  "<%= window_name %>"
       drArea = <%= win_height*win_width %>
