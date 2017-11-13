@@ -51,7 +51,7 @@ def sim(c)
 end
 
 def write_report()
-  src = Dir['output/*/DETAILED.csv']
+  src = Dir['output/*/DETAILED.csv'] + ["scripts/write-results.py", "reports/S140outNotes-Template.txt"]
   target = ['reports/Sec5-2Aout.xlsx', 'reports/S140outNotes.txt']
   puts "\n================="
   puts "     REPORTS     "

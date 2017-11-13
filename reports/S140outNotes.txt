@@ -107,7 +107,9 @@ NOTE 2 - Fenestration Model
 
 2.2.2 wnModel = ASHWAT
       Physical Meaning: Layer-by-layer representation of the window panes with
-      gap convection, radiation.
+      gap convection, radiation. Representations are selected from a library to
+      best match user-entered U-factor and SHGC. The matching library entry is
+      then modified to produce the same U-factor and SHGC as input by the user.
 
 2.3 Setting or Capability Used: wnModel = ASHWAT
 
@@ -221,12 +223,13 @@ CONTENT: This section shall describe non-specified inputs used to perform
 the tests.  Use of non-specified inputs shall be permitted only for the
 following specified sections relating to the following topics:
 
-* Alternative exterior surface coefficients in Sections 5.2.1.9.2, 5.2.3.1.4.1,
-  5.2.3.3.2, and 5.3.1.8
-* Alternative interior surface coefficients in Sections 5.2.1.10.2, 5.2.3.1.4.2,
+* Alternative exterior surface coefficients in Sections 5.2.1.9.3, 5.2.3.1.4.3,
+  and 5.2.3.3.2
+* Alternative interior surface coefficients in Sections 5.2.1.10.3, 5.2.3.1.4.4,
   5.2.3.2.2, and 5.3.1.9
 * Alternative interior solar distribution fractions in Sections 5.2.1.12,
-  5.2.2.1.2.2, 5.2.2.1.6.2, 5.2.2.2.7.4, 5.2.3.9.3, 5.2.3.10.2, and 5.2.3.12.2
+  5.2.2.1.2.2, 5.2.2.1.6.2, 5.2.2.1.7.2, 5.2.2.2.7.4, 5.2.3.9.3, 5.2.3.10.2,
+  and 5.2.3.12.2
 * Air density given at specific altitudes for the space cooling and space
   heating equipment cases in Sections 5.3.1.4.3, 5.3.3.4.3, and 5.4.1.4.3.
 

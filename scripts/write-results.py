@@ -38,7 +38,7 @@ else:
   print "ERROR: Unknown version!"
   version = "????"
 
-A.cell(column=3, row=61).value = "California Simulation Engine"
+A.cell(column=3, row=61).value = "CSE"
 A.cell(column=3, row=62).value = version
 A.cell(column=3, row=63).value = '{}'.format(datetime.now())
 
@@ -48,26 +48,48 @@ row_ff_beg = 130 # 600FF
 row_ff_end = 135 # 980FF
 init_col = 2 # 'B'
 
-col_loads = {
+col_cold_loads = {
   "600": 1,
-  "660": 2,
-  "670": 3,
-  "680": 4,
-  "685": 5,
-  "695": 6,
-  "900": 7,
-  "980": 8,
-  "985": 9,
-  "995": 10
+  "640": 2,
+  "660": 3,
+  "670": 4,
+  "680": 5,
+  "685": 6,
+  "695": 7,
+  "900": 8,
+  "940": 9,
+  "980": 10,
+  "985": 11,
+  "995": 12
+}
+
+col_hot_loads = {
+  "600": 13,
+  "660": 14,
+  "670": 15,
+  "680": 16,
+  "685": 17,
+  "695": 18,
+  "900": 19,
+  "980": 20,
+  "985": 21,
+  "995": 22
+}
+
+col_loads_max = col_hot_loads["995"]
+
+col_cond_temps = {
+  "640": col_loads_max + 1,
+  "940": col_loads_max + 2
 }
 
 col_temps = {
-  "600FF": 21,
-  "900FF": 22,
-  "650FF": 23,
-  "950FF": 24,
-  "680FF": 25,
-  "980FF": 26
+  "600FF": 1,
+  "900FF": 2,
+  "650FF": 3,
+  "950FF": 4,
+  "680FF": 5,
+  "980FF": 6
 }
 
 d_month = [31,28,31,30,31,30,31,31,30,31,30,31]
@@ -167,6 +189,9 @@ for row in range(row_beg, row_end + 1):
       # Sky temperature
       A.cell(column=init_col+8, row=row_i).value = dfh['Sky Temp [C]'].mean()
 
+      # Transmitted Solar
+      A.cell(column=init_col+13, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
+
     dfd = df[(df['Month'] == 7) & (df['Day'] == 14)]
     for hour in range(1,25):
       dfh = dfd[dfd["Hour"] == hour]
@@ -181,7 +206,7 @@ for row in range(row_beg, row_end + 1):
       A.cell(column=init_col+9, row=row_i).value = dfh['Sky Temp [C]'].mean()
 
       # Transmitted Solar
-      A.cell(column=init_col+13, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
+      A.cell(column=init_col+16, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
 
     dfd = df[(df['Month'] == 2) & (df['Day'] == 1)]
     for hour in range(1,25):
@@ -195,13 +220,21 @@ for row in range(row_beg, row_end + 1):
       A.cell(column=init_col+10, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
 
   if case == "660":
-    dfd = df[(df['Month'] == 7) & (df['Day'] == 14)]
+    dfd = df[(df['Month'] == 5) & (df['Day'] == 4)]
     for hour in range(1,25):
       dfh = dfd[dfd["Hour"] == hour]
       row_i = 230 + hour - 1
 
       # Transmitted Solar
       A.cell(column=init_col+14, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
+
+    dfd = df[(df['Month'] == 7) & (df['Day'] == 14)]
+    for hour in range(1,25):
+      dfh = dfd[dfd["Hour"] == hour]
+      row_i = 230 + hour - 1
+
+      # Transmitted Solar
+      A.cell(column=init_col+17, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
 
     dfd = df[(df['Month'] == 2) & (df['Day'] == 1)]
     for hour in range(1,25):
@@ -212,13 +245,21 @@ for row in range(row_beg, row_end + 1):
       A.cell(column=init_col+11, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
 
   if case == "670":
-    dfd = df[(df['Month'] == 7) & (df['Day'] == 14)]
+    dfd = df[(df['Month'] == 5) & (df['Day'] == 4)]
     for hour in range(1,25):
       dfh = dfd[dfd["Hour"] == hour]
       row_i = 230 + hour - 1
 
       # Transmitted Solar
       A.cell(column=init_col+15, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
+
+    dfd = df[(df['Month'] == 7) & (df['Day'] == 14)]
+    for hour in range(1,25):
+      dfh = dfd[dfd["Hour"] == hour]
+      row_i = 230 + hour - 1
+
+      # Transmitted Solar
+      A.cell(column=init_col+18, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
 
     dfd = df[(df['Month'] == 2) & (df['Day'] == 1)]
     for hour in range(1,25):
@@ -229,22 +270,31 @@ for row in range(row_beg, row_end + 1):
       A.cell(column=init_col+12, row=row_i).value = dfh['Transmitted Solar [Wh/m2]'].sum()
 
   # Hourly loads
-  if case in col_loads:
+  if case in col_cold_loads:
     dfd = df[(df['Month'] == 2) & (df['Day'] == 1)]
 
     for hour in range(1,25):
       dfh = dfd[dfd["Hour"] == hour]
       row_i = 262 + hour - 1
 
-      A.cell(column=init_col+col_loads[case], row=row_i).value = (dfh['Heating Load [Wh]'].sum() - dfh['Cooling Load [Wh]'].sum())/1000
+      A.cell(column=init_col+col_cold_loads[case], row=row_i).value = (dfh['Heating Load [Wh]'].sum() - dfh['Cooling Load [Wh]'].sum())/1000
 
+  if case in col_hot_loads:
     dfd = df[(df['Month'] == 7) & (df['Day'] == 14)]
 
     for hour in range(1,25):
       dfh = dfd[dfd["Hour"] == hour]
       row_i = 262 + hour - 1
 
-      A.cell(column=init_col+col_loads[case]+10, row=row_i).value = (dfh['Heating Load [Wh]'].sum() - dfh['Cooling Load [Wh]'].sum())/1000
+      A.cell(column=init_col+col_hot_loads[case], row=row_i).value = (dfh['Heating Load [Wh]'].sum() - dfh['Cooling Load [Wh]'].sum())/1000
+
+  if case in col_cond_temps:
+    dfd = df[(df['Month'] == 2) & (df['Day'] == 1)]
+
+    for hour in range(1,25):
+      dfh = dfd[dfd["Hour"] == hour]
+      row_i = 262 + hour - 1
+      A.cell(column=init_col+col_cond_temps[case], row=row_i).value = dfh['Zone Temp [C]'].mean()
 
   if case in ["600", "200"]:
       # Convection
@@ -342,7 +392,7 @@ for row in range(row_ff_beg, row_ff_end + 1):
 
     for hour in range(1,25):
       dfh = dfd[dfd["Hour"] == hour]
-      row_i = 262 + hour - 1
+      row_i = 294 + hour - 1
       A.cell(column=init_col+col_temps[case], row=row_i).value = dfh['Zone Temp [C]'].mean()
 
 wb.save(filename='../reports/Sec5-2Aout.xlsx')
