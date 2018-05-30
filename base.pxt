@@ -43,10 +43,14 @@ u_c = q_c/k_r
 def c_f(c)
   return c*9/5.0 + 32.0
 end
+
+# Internal use
+nsteps = 10
+
 %>
 
 wfName = "725650TMY3.epw"
-nSubSteps = 10
+nSubSteps = <%= nsteps %>
 DT = No
 bldgAzm = <%= orientation %>
 terrainClass = 2
@@ -114,7 +118,7 @@ Material "Opaque Pane"
   matThk = <%= 0.003048*m_ft %>
 
 Material "Air Gap"
-  matCond = <%= 5.208*0.012*k_c %>
+  matCond = <%= 0.0625*k_c %>
   matSpHt = <%= 1006.103271*cp_c %>
   matDens = <%= 1.292498*rho_c %>
   matThk = <%= 0.012*m_ft %>
@@ -234,7 +238,7 @@ ZONE "Main Zone"
   znVol = <%= zone_vol %>
   znCAir = <%= 0.24*0.077*zone_vol %>
 <% if !ff %>
-  znTH = select( $hour > 7 && $hour <= 23, <%= c_f(heat_sp) %>, default <%= c_f(heat_sb) %>)
+  znTH = select( $hour == 8, <%= c_f(heat_sb) %> + ($subhour/<%= nsteps %>.0)*<%= c_f(heat_sp) - c_f(heat_sb) %> , $hour > 8 && $hour <= 23, <%= c_f(heat_sp) %>, default <%= c_f(heat_sb) %>)
   znQMxH = <%= 1000000*w_btu %>
   znTC = <%= c_f(cool_sp) %>
   znQMxC = <%= -1000000*w_btu %>
@@ -502,7 +506,7 @@ EXPORT
   EXPORTCOL colHead="Month" colVal=$month
   EXPORTCOL colHead="Day" colVal=$dayOfMonth
   EXPORTCOL colHead="Hour" colVal=$hour
-  EXPORTCOL colHead="Subhour" colVal=@Top.iSubhr
+  EXPORTCOL colHead="Subhour" colVal=$subhour
   EXPORTCOL colHead="Outdoor Temp [C]" colVal=($tDbOSh - 32)*<%= 1/k_r %>
   EXPORTCOL colHead="Sky Temp [C]" colVal=(@Top.tSkySh - 32)*<%= 1/k_r %>
   EXPORTCOL colHead="Zone Temp [C]" colVal=(@znRes["Main Zone"].S.tAir - 32)*<%= 1/k_r %>

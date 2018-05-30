@@ -102,7 +102,7 @@ for row in range(row_beg, row_end + 1):
   print "  " + case
   df = pd.read_csv('../output/' + case + '/DETAILED.csv')
 
-  timestep = 1.0/(df['Subhour'].max() + 1)
+  timestep = 1.0/(df['Subhour'].max())
 
   # Annual loads
   A.cell(column=init_col+1, row=row).value = df['Heating Load [Wh]'].sum()/1000000
@@ -296,17 +296,22 @@ for row in range(row_beg, row_end + 1):
       row_i = 262 + hour - 1
       A.cell(column=init_col+col_cond_temps[case], row=row_i).value = dfh['Zone Temp [C]'].mean()
 
-  if case in ["600", "200"]:
+  if case in ["600", "200", "670"]:
       # Convection
       row_i = 501
 
       if case == "600":
         col_offset = 0
-      else:
+      elif case == "200":
         col_offset = 7
+      else:
+        col_offset = 10
 
       ## Load weighted average
       for surf in ['South Wall Window 1','Roof','Floor','North Wall','East Wall','West Wall','South Wall']:
+
+        if case == "670" and surf == "Roof":
+            break
 
         # Exterior
         A.cell(column=init_col+col_offset+1, row=row_i).value = (df['Exterior Conv. Coeff. ' + surf + ' [W/m2-K]'] * (df['Heating Load [Wh]'] + df['Cooling Load [Wh]'])).sum()/(df['Heating Load [Wh]'].sum() + df['Cooling Load [Wh]'].sum())
