@@ -47,6 +47,8 @@ end
 # Internal use
 nsteps = 10
 
+tarp_conv = false
+
 %>
 
 wfName = "725650TMY3.epw"
@@ -57,6 +59,9 @@ terrainClass = 2
 wuDays = 30
 skyModel = ANISOTROPIC
 skyModelLW = BERDAHLMARTIN
+<% if tarp_conv %>
+hConvMod = No
+<% end %>
 
 // Constructions
 
@@ -291,13 +296,38 @@ window_area = 0.0
     sfExEpsLW = <%= ext_lw_abs %>
     sfInEpsLW = <%= int_lw_abs %>
     sfExRf = 1.67
-  <% if h_ext %>
-    sfExHcModel = INPUT
-    sfExHcMult = <%= h_ext[sym]*u_c %>
+  <% if surface[:name] == "South Wall" and sunspace %>
+    <% if h_int %>
+      sfExHcModel = INPUT
+      sfExHcMult = <%= h_int[sym]*u_c %>
+    <% else %>
+      <% if tarp_conv %>
+        sfExHcModel = TARP
+      <% else %>
+        sfExHcModel = UNIFIED
+      <% end %>
+    <% end %>
+  <% else %>
+    <% if h_ext %>
+      sfExHcModel = INPUT
+      sfExHcMult = <%= h_ext[sym]*u_c %>
+    <% else %>
+      <% if tarp_conv %>
+        sfExHcModel = DOE2
+      <% else %>
+        sfExHcModel = UNIFIED
+      <% end %>
+    <% end %>
   <% end %>
   <% if h_int %>
     sfInHcModel = INPUT
     sfInHcMult = <%= h_int[sym]*u_c %>
+  <% else %>
+    <% if tarp_conv %>
+      sfInHcModel = TARP
+    <% else %>
+      sfInHcModel = UNIFIED
+    <% end %>
   <% end %>
 
   <% for win in (1..surface[:windows]) %>
@@ -418,6 +448,13 @@ ZONE "Sun Zone"
     sfExEpsLW = <%= ext_lw_abs %>
     sfInEpsLW = <%= int_lw_abs %>
     sfExRf = 1.67
+  <% if tarp_conv %>
+    sfExHcModel = DOE2
+    sfInHcModel = TARP
+  <% else %>
+    sfExHcModel = UNIFIED
+    sfInHcModel = UNIFIED
+  <% end %>
 
     <% for win in (1..surface[:windows]) %>
       <% window_name = surface[:name] + " Window " + win.to_s %>
