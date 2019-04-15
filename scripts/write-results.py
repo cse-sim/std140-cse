@@ -1,4 +1,4 @@
-print "\nInitializing Python...\n"
+print("\nInitializing Python...\n")
 import openpyxl as xl
 import pandas as pd
 import numpy as np
@@ -9,20 +9,6 @@ import re
 import mako.template as mk
 import os
 
-# Monkey patch for openpyxl
-def new_parse_extensions(self, element):
-  from openpyxl.descriptors.excel import ExtensionList, Extension
-  from openpyxl.xml.constants import EXT_TYPES
-  from warnings import warn
-  extLst = ExtensionList.from_tree(element)
-  for e in extLst.ext:
-    ext_type = EXT_TYPES.get(e.uri.upper(), "Unknown")
-    msg = "{0} extension ({1}) is not supported and will be removed".format(ext_type,e.uri.upper())
-    #warn(msg)
-
-xl.reader.worksheet.WorkSheetParser.parse_extensions = new_parse_extensions
-
-
 #%matplotlib inline
 
 wb = xl.load_workbook(filename='../reports/Sec5-2Aout-Template.xlsx')
@@ -30,12 +16,12 @@ A = wb['A']
 TMPBIN = wb['TMPBIN']
 
 # Top level info
-info = subprocess.check_output("..\\CSE.exe", shell=True)
+info = str(subprocess.check_output("..\\CSE.exe", shell=True))
 match = re.compile('.*CSE\s+([^\s]*)\s+.*',re.S).match(info)
 if match:
   version = match.groups()[0]
 else:
-  print "ERROR: Unknown version!"
+  print("ERROR: Unknown version!")
   version = "????"
 
 A.cell(column=3, row=61).value = "CSE"
@@ -94,12 +80,12 @@ col_temps = {
 
 d_month = [31,28,31,30,31,30,31,31,30,31,30,31]
 
-print "Proccessing case: "
+print("Proccessing case: ")
 
 # Non-free-float cases
 for row in range(row_beg, row_end + 1):
   case = str(A.cell(column=init_col, row=row).value)
-  print "  " + case
+  print("  " + case)
   df = pd.read_csv('../output/' + case + '/DETAILED.csv')
 
   timestep = 1.0/(df['Subhour'].max())
@@ -363,7 +349,7 @@ for row in range(row_beg, row_end + 1):
 # free-float cases
 for row in range(row_ff_beg, row_ff_end + 1):
   case = str(A.cell(column=init_col, row=row).value)
-  print "  " + case
+  print("  " + case)
   df = pd.read_csv('../output/' + case + '/DETAILED.csv')
   A.cell(column=init_col+1, row=row).value = df['Zone Temp [C]'].mean()
   idx = df.groupby(['Month','Day','Hour']).mean()['Zone Temp [C]'].idxmin()
@@ -408,4 +394,4 @@ with open('../reports/S140outNotes-Template.txt','r') as notes_template:
 with open('../reports/S140outNotes.txt','w') as notes:
   notes.write(mk.Template(content).render(version=version))
 
-print "Done"
+print("Done")
