@@ -143,6 +143,13 @@ NOTE 3 - Convection Model
       Physical Meaning: Constant coefficients from the ASHRAE Handbook of
       Fundamentals.
 
+3.2.8 *HcModel = DOE2
+      Physical Meaning: Convection correlation developed for DOE2 
+      (Combination of MoWiTT and TARP correlations).
+
+3.2.9 *HcModel = TARP
+      Physical Meaning: Convection correlation developed for TARP.
+
 3.3 Setting or Capability Used: *HcModel = UNIFIED
     (note: INPUT used for constant cases 450, 460, 470)
 

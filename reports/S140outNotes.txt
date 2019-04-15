@@ -44,7 +44,7 @@ Information for Item 8 shall be permitted, but is not required.
 
 2. SOFTWARE NAME: California Simulation Engine (CSE)
 
-3. SOFTWARE VERSION (unique software version identifier): 0.851.0
+3. SOFTWARE VERSION (unique software version identifier): 0.861.1
 
 4. OPERATING SYSTEM REQUIREMENTS: Windows XP and later
 
@@ -142,6 +142,13 @@ NOTE 3 - Convection Model
 3.2.7 *HcModel = ASHRAE
       Physical Meaning: Constant coefficients from the ASHRAE Handbook of
       Fundamentals.
+
+3.2.8 *HcModel = DOE2
+      Physical Meaning: Convection correlation developed for DOE2 
+      (Combination of MoWiTT and TARP correlations).
+
+3.2.9 *HcModel = TARP
+      Physical Meaning: Convection correlation developed for TARP.
 
 3.3 Setting or Capability Used: *HcModel = UNIFIED
     (note: INPUT used for constant cases 450, 460, 470)
