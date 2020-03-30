@@ -11,12 +11,13 @@ import os
 
 #%matplotlib inline
 
-wb = xl.load_workbook(filename='../reports/Sec5-2Aout-Template.xlsx')
+tests = 'section-5'
+wb = xl.load_workbook(filename='../../reports/' + tests + '/Sec5-2Aout-Template.xlsx')
 A = wb['A']
 TMPBIN = wb['TMPBIN']
 
 # Top level info
-info = str(subprocess.check_output("..\\CSE.exe", shell=True))
+info = str(subprocess.check_output("..\\..\\CSE.exe", shell=True))
 match = re.compile('.*CSE\s+([^\s]*)\s+.*',re.S).match(info)
 if match:
   version = match.groups()[0]
@@ -86,7 +87,7 @@ print("Proccessing case: ")
 for row in range(row_beg, row_end + 1):
   case = str(A.cell(column=init_col, row=row).value)
   print("  " + case)
-  df = pd.read_csv('../output/' + case + '/DETAILED.csv')
+  df = pd.read_csv('../../output/' + tests + '/' + case + '/DETAILED.csv')
 
   timestep = 1.0/(df['Subhour'].max())
 
@@ -350,7 +351,7 @@ for row in range(row_beg, row_end + 1):
 for row in range(row_ff_beg, row_ff_end + 1):
   case = str(A.cell(column=init_col, row=row).value)
   print("  " + case)
-  df = pd.read_csv('../output/' + case + '/DETAILED.csv')
+  df = pd.read_csv('../../output/' + tests + '/' + case + '/DETAILED.csv')
   A.cell(column=init_col+1, row=row).value = df['Zone Temp [C]'].mean()
   idx = df.groupby(['Month','Day','Hour']).mean()['Zone Temp [C]'].idxmin()
   A.cell(column=init_col+2, row=row).value = df.groupby(['Month','Day','Hour']).mean().loc[idx]['Zone Temp [C]']
@@ -386,12 +387,12 @@ for row in range(row_ff_beg, row_ff_end + 1):
       row_i = 294 + hour - 1
       A.cell(column=init_col+col_temps[case], row=row_i).value = dfh['Zone Temp [C]'].mean()
 
-wb.save(filename='../reports/Sec5-2Aout.xlsx')
+wb.save(filename='../../reports/' + tests + '/Sec5-2Aout.xlsx')
 
-with open('../reports/S140outNotes-Template.txt','r') as notes_template:
+with open('../../reports/' + tests + '/S140outNotes-Template.txt','r') as notes_template:
   content = notes_template.read()
 
-with open('../reports/S140outNotes.txt','w') as notes:
+with open('../../reports/' + tests + '/S140outNotes.txt','w') as notes:
   notes.write(mk.Template(content).render(version=version))
 
 print("Done")

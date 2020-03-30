@@ -1,26 +1,26 @@
 require 'fileutils'
 
-def compose(c)
+def compose(c, tests)
   file_base = File.basename(c,".*")
 
-  output_dir = 'output/' + file_base
+  output_dir = 'output/' + tests + '/' + file_base
   #Create output directory
   unless File.directory?(output_dir)
     FileUtils.mkdir_p(output_dir)
   end
 
-  src = ['base.pxt', 'CSE.exe', 'DRYCOLD_CSW2.csv', c]
+  src = ['base-#{tests}.pxt', 'CSE.exe', 'DRYCOLD_CSW2.csv', c]
   target = output_dir + '/in.cse'
 
   puts "================="
   puts "Running case " + file_base + ":"
   puts "=================\n"
 
-  # Compose with params
+  # Compose with Modelkit
   success = nil
   if !(FileUtils.uptodate?(target, src))
     puts "\ncomposing...\n\n"
-    success = system(%Q|params compose -f "#{c}" -o "#{output_dir + '/in.cse'}"  base.pxt|)
+    success = system(%Q|modelkit template-compose -f "#{c}" -o "#{output_dir + '/in.cse'}"  base-#{tests}.pxt|)
   else
     puts "  ...input already up-to-date."
     success = true
@@ -28,10 +28,10 @@ def compose(c)
   return success
 end
 
-def sim(c)
+def sim(c, tests)
   file_base = File.basename(c,".*")
 
-  output_dir = 'output/' + file_base
+  output_dir = 'output/' + tests + '/' + file_base
 
   src = [output_dir + '/in.cse']
   target = [output_dir + '/in.rep', output_dir + '/DETAILED.csv']
@@ -40,7 +40,7 @@ def sim(c)
   if !(FileUtils.uptodate?(target[0], src)) or !(FileUtils.uptodate?(target[1], src))
     puts "\nsimulating..."
     Dir.chdir(output_dir){
-      success = system(%Q|..\\..\\CSE.exe in.cse|)
+      success = system(%Q|..\\..\\..\\CSE.exe in.cse|)
     }
     puts "\n"
   else
@@ -50,15 +50,17 @@ def sim(c)
   return success
 end
 
-def write_report()
-  src = Dir['output/*/DETAILED.csv'] + ["scripts/write-results.py", "reports/S140outNotes-Template.txt"]
-  target = ['reports/Sec5-2Aout.xlsx', 'reports/S140outNotes.txt']
+def write_report(tests)
+  src = Dir['output/#{tests}/*/DETAILED.csv'] + ["scripts/#{tests}/write-results.py", "reports/#{tests}/S140outNotes-Template.txt"]
+  if tests == 'section-5'
+    target = ['reports/#{tests}/Sec5-2Aout.xlsx', 'reports/#{tests}/S140outNotes.txt']
+  end
   puts "\n================="
   puts "     REPORTS     "
   puts "=================\n"
   success = nil
   if !(FileUtils.uptodate?(target[0], src)) or !(FileUtils.uptodate?(target[1], src))
-    Dir.chdir('scripts'){
+    Dir.chdir('scripts/' + tests){
       success = system(%Q|python write-results.py|)
     }
   else
@@ -69,19 +71,20 @@ def write_report()
 end
 
 task :sim, [:filter] do |t, args|
-  args.with_defaults(:filter=>'*')
-  cases = Dir['cases/' + args.filter + '.*']
+  args.with_defaults(:filter=>'section-5')
+  tests = args.fetch(:filter) # 'section-5', 'weather-drivers'
+  cases = Dir['cases/' + tests + '/*.*']
   for c in cases
-    if !compose(c)
+    if !compose(c, tests)
       puts "\nERROR: Composition failed..."
       exit
     end
-    if !sim(c)
+    if !sim(c, tests)
       puts "\nERROR: Simulation failed..."
       exit
     end
   end
-  if !write_report()
+  if !write_report(tests)
     puts "\nERROR: Failed to generate reports..."
     exit
   end
