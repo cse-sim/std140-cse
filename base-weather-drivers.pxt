@@ -1,0 +1,241 @@
+<%#INTERFACE
+  parameter "case_name"
+  parameter "weather_file"
+  parameter "elevation", :default=>0.0
+  parameter "ground_reflectance", :default=>0
+%>
+
+<%
+# Unit Conversions
+m_ft = 3.28084
+miles_ft = 5280
+miles_m = miles_ft/m_ft
+m2_ft2 = m_ft*m_ft
+m3_ft3 = m2_ft2*m_ft
+h_min = 60.0
+min_sec = 60.0
+h_sec = h_min*min_sec
+k_c = 0.5781759824
+rho_c = 0.062428
+cp_c = 0.000239
+w_btu = 3.412
+k_r = 9/5.0
+q_c = w_btu/m2_ft2
+inch_mg_mbar = 33.8639
+
+# Internal use
+nsteps = 10
+
+# hypotenuse of sloped wall surfaces
+slope = ((1.15**2) + (2**2))**0.5
+
+# hypotenuse of angled vertical wall surfaces
+angled_width = ((2**2) + (2**2))**0.5
+%>
+
+<%
+# map case_name to requested days to generate outputs for
+reports = [
+  {:case=>"WD100",:days=>["MAY 4", "JUL 14", "SEP 6"]},
+  {:case=>"WD200",:days=>["MAY 24", "AUG 26"]},
+  {:case=>"WD300",:days=>["FEB 7", "AUG 13"]},
+  {:case=>"WD400",:days=>["JAN 24", "JUL 1"]},
+  {:case=>"WD500",:days=>["MAR 1", "SEP 14"]},
+  {:case=>"WD600",:days=>["MAY 4", "JUL 14", "SEP 6"]}
+]
+%>
+
+wfName = "weather/weather-drivers/<%= weather_file %>"
+nSubSteps = <%= nsteps %>
+DT = No
+bldgAzm = 0
+elevation = <%= elevation*m_ft %>
+terrainClass = 2
+wuDays = 30
+skyModel = ANISOTROPIC
+skyModelLW = BERDAHLMARTIN
+
+// Constructions
+
+MATERIAL "Plasterboard"
+  matCond = <%= 0.16*k_c %>
+  matSpHt = <%= 840*cp_c %>
+  matDens = <%= 950*rho_c %>
+
+CONSTRUCTION "Exterior Surface"
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.012*m_ft %>
+
+<%
+# Dimensions
+height = (2.7+1.15)*m_ft
+floor_area = ((8*4)+(4*2)+(2*2))*m2_ft2
+zone_vol = floor_area*2.7*m_ft+((4*4*2.7)+3*(0.5*4*2*1.15)+2*(0.5*2*0.5*2*1.15))*m3_ft3
+%>
+
+// Zone
+ZONE "Main Zone"
+  znModel = CZM
+  znArea = <%= floor_area %>
+  znVol = <%= zone_vol %>
+  znCAir = <%= 0.24*0.077*zone_vol %>
+  znHcAirX = 0.0 // Remove +4.8 ACH assumed for non-RSYS zones
+  infAC = 0.0
+  znFloorZ = 0.0
+  znCeilingHt = <%= height %>
+  znEaveZ = <%= height %>
+
+<%
+# Surfaces
+surfaces = [
+  {:name=>"Horizontal Roof",:type=>"Roof",:area=>4*4*m2_ft2},
+  {:name=>"South Vertical Wall",:type=>"Wall",:area=>4*2.7*m2_ft2,:azm=>180,:tilt=>90},
+  {:name=>"East Vertical Wall",:type=>"Wall",:area=>4*2.7*m2_ft2,:azm=>90,:tilt=>90},
+  {:name=>"North Vertical Wall",:type=>"Wall",:area=>((8*2.7)+(4*1.15)+(2*1.15))*m2_ft2,:azm=>0,:tilt=>90},
+  {:name=>"West Vertical Wall",:type=>"Wall",:area=>4*2.7*m2_ft2,:azm=>270,:tilt=>90},
+  {:name=>"Southeast Vertical Wall",:type=>"Wall",:area=>angled_width*2.7*m2_ft2,:azm=>135,:tilt=>90},
+  {:name=>"Southwest Vertical Wall",:type=>"Wall",:area=>angled_width*2.7*m2_ft2,:azm=>225,:tilt=>90},
+  {:name=>"East Sloped Roof",:type=>"Roof",:area=>4*slope*m2_ft2,:azm=>90,:tilt=>30},
+  {:name=>"South Sloped Roof",:type=>"Roof",:area=>4*slope*m2_ft2,:azm=>180,:tilt=>30},
+  {:name=>"West Sloped Roof",:type=>"Roof",:area=>4*slope*m2_ft2,:azm=>270,:tilt=>30},
+  {:name=>"Southwest Sloped Roof",:type=>"Roof",:area=>0.5*angled_width*slope*m2_ft2,:azm=>225,:tilt=>30},
+  {:name=>"Southeast Sloped Roof",:type=>"Roof",:area=>0.5*angled_width*slope*m2_ft2,:azm=>135,:tilt=>30},
+  {:name=>"Floor",:type=>"Floor",:area=>((8*4)+(4*2)+(2*2))*m2_ft2}
+]
+%>
+
+<% for surface in surfaces %>
+  SURFACE "<%= surface[:name] %>"
+    sfCon = "Exterior Surface"
+  <% if surface[:tilt]  %>
+    sfTilt = <%= surface[:tilt] %>
+  <% end %>
+  <% if surface[:type] == "Wall" %>
+    <% sym = :wall %>
+    sfType = Wall
+    sfAzm = <%= surface[:azm] %>
+  <% elsif surface[:type] == "Roof" %>
+    <% sym = :roof %>
+    sfType = Ceiling
+    <% if surface[:azm]  %>
+    sfAzm = <%= surface[:azm] %>
+    <% end %>
+  <% elsif surface[:type] == "Floor" %>
+    <% sym = :floor %>
+    sfType = Floor
+  <% end %>
+    sfArea = <%= surface[:area] %>
+    sfExCnd = Ambient
+    sfModel = forward_difference
+    sfExRf = 1.67
+
+<% end %>
+
+// Output
+DELETE REPORT EB
+DELETE REPORT INP
+DELETE REPORT LOG
+DELETE REPORT ERR
+REPORT  rpType=ZEB  rpZone="Main Zone"  rpFreq=Month
+
+EXPORTFILE "Subhourly"
+  xfFileName = "Subhourly.csv"
+  xfFileStat = OVERWRITE
+
+<% for report in reports %>
+  <% if case_name == report[:case] %>
+    <% for day in report[:days] %>
+EXPORT
+  exExportfile = "Subhourly"
+  exHeader = ColumnsOnly
+  exFooter = No
+  exType = UDT
+  exFreq = SUBHOUR
+  exDayBeg = <%= day %>
+  exDayEnd = <%= day %>
+
+  EXPORTCOL colHead="Month" colVal=$month
+  EXPORTCOL colHead="Day" colVal=$dayOfMonth
+  EXPORTCOL colHead="Hour" colVal=$hour
+  EXPORTCOL colHead="Subhour" colVal=$subhour
+
+  // Weather Data
+  EXPORTCOL colHead="Outdoor Dry Bulb Temp [C]" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
+//  EXPORTCOL colHead="Outdoor Relative Humidity [%]" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
+
+  // Incident Solar
+      <% for surface in surfaces[0..9] %>
+        <% if ["Wall", "Roof"].include?(surface[:type]) %>
+  EXPORTCOL colHead="Incident Solar <%= surface[:name] %> [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.tot*<%= 1/q_c %>*@Top.subhrDur
+  EXPORTCOL colHead="Incident Beam Solar <%= surface[:name] %> [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.bm*<%= 1/q_c %>*@Top.subhrDur
+  EXPORTCOL colHead="Incident Diffuse Solar <%= surface[:name] %> [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.df*<%= 1/q_c %>*@Top.subhrDur
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+EXPORTFILE "Hourly"
+  xfFileName = "Hourly.csv"
+  xfFileStat = OVERWRITE
+
+<% for report in reports %>
+  <% if case_name == report[:case] %>
+    <% for day in report[:days] %>
+EXPORT
+  exExportfile = "Hourly"
+  exHeader = ColumnsOnly
+  exFooter = No
+  exType = UDT
+  exFreq = HOUR
+  exDayBeg = <%= day %>
+  exDayEnd = <%= day %>
+
+  EXPORTCOL colHead="Month" colVal=$month
+  EXPORTCOL colHead="Day" colVal=$dayOfMonth
+  EXPORTCOL colHead="Hour" colVal=$hour
+
+  // Weather Data
+  EXPORTCOL colHead="Dry Bulb [C]" colVal=(@Top.tDbOHr - 32)*<%= 1/k_r %>
+//  EXPORTCOL colHead="Relative Humidity [%]" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
+  EXPORTCOL colHead="Dewpoint [C]" colVal=(@weather.taDp - 32)*<%= 1/k_r %>
+  EXPORTCOL colHead="Humidity Ratio [-]" colVal=@Top.wOHr
+  EXPORTCOL colHead="Wet Bulb [C]" colVal=(@Top.tWbOHr - 32)*<%= 1/k_r %>
+  EXPORTCOL colHead="Wind Speed [m/s]" colVal=(@Top.windSpeedHr)*<%= miles_m/h_sec %>
+  EXPORTCOL colHead="Wind Direction [deg]" colVal=@Top.windDirDegHr
+  EXPORTCOL colHead="Station Pressure [mbar]" colVal=@Top.presAtm*<%= inch_mg_mbar %>
+  EXPORTCOL colHead="Total Cloud Cover [tenths of sky]" colVal=@weather.cldCvr
+//  EXPORTCOL colHead="Opaque Cloud Cover [tenths of sky]" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
+  EXPORTCOL colHead="Sky Temp [C]" colVal=(@Top.tSkyHr - 32)*<%= 1/k_r %>
+    <% end %>
+  <% end %>
+<% end %>
+
+/*
+// Use to generate a CSV of location data
+EXPORTFILE "Location"
+  xfFileName = "..\\Location.csv"
+  xfFileStat = APPEND
+
+EXPORT
+ 	exExportfile = "Location"
+  exHeader = NO // Columns only
+  exFooter = NO
+  exType = UDT
+  exFreq = YEAR
+  EXPORTCOL colHead="Run Timestamp" colVal=@Top.runDateTime
+  EXPORTCOL colHead="Case" colVal="<%= case_name %>"
+
+  // Location
+  EXPORTCOL colHead="Weather File Latitude [deg]" colVal=@weatherFile.lat
+  EXPORTCOL colHead="TOP Latitude [deg]" colVal=@top.latitude
+  EXPORTCOL colHead="Weather File Longitude [deg]" colVal=@weatherFile.lon
+  EXPORTCOL colHead="TOP Longitude [deg]" colVal=@top.longitude
+  EXPORTCOL colHead="Weather File Time Zone [hr]" colVal=@weatherFile.tz
+  EXPORTCOL colHead="TOP Time Zone [hr]" colVal=@top.timeZone
+  EXPORTCOL colHead="Weather File Elevation [feet]" colVal=@weatherFile.elev
+  EXPORTCOL colHead="TOP Elevation [feet]" colVal=@top.elevation
+
+// Confirmed that weather data and TOP data are equal
+*/
+  DELETE EXPORTFILE Primary
+RUN

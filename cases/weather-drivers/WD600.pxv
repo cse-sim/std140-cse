@@ -1,0 +1,4 @@
+:case_name=>"WD600",
+:weather_file=>"725650.epw",
+:elevation=>1650, # set in meters here, converted to feet in base-weather-drivers.pxt
+:ground_reflectance=>0.2

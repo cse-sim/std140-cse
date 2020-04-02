@@ -1,0 +1,3 @@
+:case_name=>"WD300",
+:weather_file=>"855740.epw",
+:elevation=>474 # set in meters here, converted to feet in base-weather-drivers.pxt
