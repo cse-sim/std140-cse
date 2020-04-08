@@ -75,16 +75,16 @@ ZONE "Main Zone"
 <%
 # Surfaces
 surfaces = [
-  {:name=>"Horizontal Roof",:type=>"Roof",:area=>4*4*m2_ft2},
-  {:name=>"South Vertical Wall",:type=>"Wall",:area=>4*2.7*m2_ft2,:azm=>180,:tilt=>90},
-  {:name=>"East Vertical Wall",:type=>"Wall",:area=>4*2.7*m2_ft2,:azm=>90,:tilt=>90},
-  {:name=>"North Vertical Wall",:type=>"Wall",:area=>((8*2.7)+(4*1.15)+(2*1.15))*m2_ft2,:azm=>0,:tilt=>90},
-  {:name=>"West Vertical Wall",:type=>"Wall",:area=>4*2.7*m2_ft2,:azm=>270,:tilt=>90},
-  {:name=>"Southeast Vertical Wall",:type=>"Wall",:area=>angled_width*2.7*m2_ft2,:azm=>135,:tilt=>90},
-  {:name=>"Southwest Vertical Wall",:type=>"Wall",:area=>angled_width*2.7*m2_ft2,:azm=>225,:tilt=>90},
-  {:name=>"East Sloped Roof",:type=>"Roof",:area=>4*slope*m2_ft2,:azm=>90,:tilt=>30},
-  {:name=>"South Sloped Roof",:type=>"Roof",:area=>4*slope*m2_ft2,:azm=>180,:tilt=>30},
-  {:name=>"West Sloped Roof",:type=>"Roof",:area=>4*slope*m2_ft2,:azm=>270,:tilt=>30},
+  {:name=>"Horizontal Roof",:type=>"Roof",:area=>4*4*m2_ft2, :report_name=>"Horizontal"},
+  {:name=>"South Vertical Wall",:type=>"Wall",:area=>4*2.7*m2_ft2,:azm=>180,:tilt=>90, :report_name=>"S Azimuth and 90° Slope"},
+  {:name=>"East Vertical Wall",:type=>"Wall",:area=>4*2.7*m2_ft2,:azm=>90,:tilt=>90, :report_name=>"E Azimuth and 90° Slope"},
+  {:name=>"North Vertical Wall",:type=>"Wall",:area=>((8*2.7)+(4*1.15)+(2*1.15))*m2_ft2,:azm=>0,:tilt=>90, :report_name=>"N Azimuth and 90° Slope"},
+  {:name=>"West Vertical Wall",:type=>"Wall",:area=>4*2.7*m2_ft2,:azm=>270,:tilt=>90, :report_name=>"W Azimuth and 90° Slope"},
+  {:name=>"Southeast Vertical Wall",:type=>"Wall",:area=>angled_width*2.7*m2_ft2,:azm=>135,:tilt=>90, :report_name=>"45° E of S Azimuth and 90° Slope"},
+  {:name=>"Southwest Vertical Wall",:type=>"Wall",:area=>angled_width*2.7*m2_ft2,:azm=>225,:tilt=>90, :report_name=>"45° W of S Azimuth and 90° Slope"},
+  {:name=>"East Sloped Roof",:type=>"Roof",:area=>4*slope*m2_ft2,:azm=>90,:tilt=>30, :report_name=>"E Azimuth and 30° from H Slope"},
+  {:name=>"South Sloped Roof",:type=>"Roof",:area=>4*slope*m2_ft2,:azm=>180,:tilt=>30, :report_name=>"S Azimuth and 30° from H Slope"},
+  {:name=>"West Sloped Roof",:type=>"Roof",:area=>4*slope*m2_ft2,:azm=>270,:tilt=>30, :report_name=>"W Azimuth and 30° from H Slope"},
   {:name=>"Southwest Sloped Roof",:type=>"Roof",:area=>0.5*angled_width*slope*m2_ft2,:azm=>225,:tilt=>30},
   {:name=>"Southeast Sloped Roof",:type=>"Roof",:area=>0.5*angled_width*slope*m2_ft2,:azm=>135,:tilt=>30},
   {:name=>"Floor",:type=>"Floor",:area=>((8*4)+(4*2)+(2*2))*m2_ft2}
@@ -144,15 +144,19 @@ EXPORT
   EXPORTCOL colHead="Subhour" colVal=$subhour
 
   // Weather Data
-  EXPORTCOL colHead="Outdoor Dry Bulb Temp [C]" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
-//  EXPORTCOL colHead="Outdoor Relative Humidity [%]" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
+  EXPORTCOL colHead="Dry Bulb Temperature (C)" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
+//  EXPORTCOL colHead="Relative Humidity [%]" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
 
   // Incident Solar
-      <% for surface in surfaces[0..9] %>
-        <% if ["Wall", "Roof"].include?(surface[:type]) %>
-  EXPORTCOL colHead="Incident Solar <%= surface[:name] %> [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.tot*<%= 1/q_c %>*@Top.subhrDur
-  EXPORTCOL colHead="Incident Beam Solar <%= surface[:name] %> [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.bm*<%= 1/q_c %>*@Top.subhrDur
-  EXPORTCOL colHead="Incident Diffuse Solar <%= surface[:name] %> [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.df*<%= 1/q_c %>*@Top.subhrDur
+<% for surface in surfaces[0..9] %>
+  <% if surface[:report_name] == "Horizontal" %>
+  EXPORTCOL colHead="Total <%= surface[:report_name] %> Radiation (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.tot*<%= 1/q_c %>*@Top.subhrDur
+  EXPORTCOL colHead="Beam <%= surface[:report_name] %> Radiation (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.bm*<%= 1/q_c %>*@Top.subhrDur
+  EXPORTCOL colHead="Diffuse <%= surface[:report_name] %> Radiation (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.df*<%= 1/q_c %>*@Top.subhrDur
+  <% else %>
+  EXPORTCOL colHead="Total Radiation on <%= surface[:report_name] %> (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.tot*<%= 1/q_c %>*@Top.subhrDur
+  EXPORTCOL colHead="Total Beam Radiation on <%= surface[:report_name] %> (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.bm*<%= 1/q_c %>*@Top.subhrDur
+  EXPORTCOL colHead="Total Diffuse Radiation on <%= surface[:report_name] %> (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.df*<%= 1/q_c %>*@Top.subhrDur
   <% end %>
 <% end %>
 
@@ -174,17 +178,17 @@ EXPORT
   EXPORTCOL colHead="Hour" colVal=$hour
 
   // Weather Data
-  EXPORTCOL colHead="Dry Bulb [C]" colVal=(@Top.tDbOHr - 32)*<%= 1/k_r %>
+  EXPORTCOL colHead="Dry Bulb Temperature (C)" colVal=(@Top.tDbOHr - 32)*<%= 1/k_r %>
 //  EXPORTCOL colHead="Relative Humidity [%]" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
-  EXPORTCOL colHead="Dewpoint [C]" colVal=(@weather.taDp - 32)*<%= 1/k_r %>
-  EXPORTCOL colHead="Humidity Ratio [-]" colVal=@Top.wOHr
-  EXPORTCOL colHead="Wet Bulb [C]" colVal=(@Top.tWbOHr - 32)*<%= 1/k_r %>
-  EXPORTCOL colHead="Wind Speed [m/s]" colVal=(@Top.windSpeedHr)*<%= miles_m/h_sec %>
-  EXPORTCOL colHead="Wind Direction [deg]" colVal=@Top.windDirDegHr
-  EXPORTCOL colHead="Station Pressure [mbar]" colVal=@Top.presAtm*<%= inch_mg_mbar %>
-  EXPORTCOL colHead="Total Cloud Cover [tenths of sky]" colVal=@weather.cldCvr
+  EXPORTCOL colHead="Dewpoint Temperature (C)" colVal=(@weather.taDp - 32)*<%= 1/k_r %>
+  EXPORTCOL colHead="Humidity Ratio (kg moisture/kg dry air)" colVal=@Top.wOHr
+  EXPORTCOL colHead="Wet Bulb Temperature (C)" colVal=(@Top.tWbOHr - 32)*<%= 1/k_r %>
+  EXPORTCOL colHead="Windspeed (m/s)" colVal=(@Top.windSpeedHr)*<%= miles_m/h_sec %>
+  EXPORTCOL colHead="Wind Direction (degrees from North)" colVal=@Top.windDirDegHr
+  EXPORTCOL colHead="Station Pressure (mbar)" colVal=@Top.presAtm*<%= inch_mg_mbar %>
+  EXPORTCOL colHead="Total Cloud Cover (tenths of sky)" colVal=@weather.cldCvr
 //  EXPORTCOL colHead="Opaque Cloud Cover [tenths of sky]" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
-  EXPORTCOL colHead="Sky Temp [C]" colVal=(@Top.tSkyHr - 32)*<%= 1/k_r %>
+  EXPORTCOL colHead="Sky Temperature (C)" colVal=(@Top.tSkyHr - 32)*<%= 1/k_r %>
 
 /*
 // Use to generate a CSV of location data
