@@ -34,7 +34,11 @@ def sim(c, tests)
   output_dir = 'output/' + tests + '/' + file_base
 
   src = [output_dir + '/in.cse']
+  if tests == 'section-5'
   target = [output_dir + '/in.rep', output_dir + '/DETAILED.csv']
+  elsif tests == 'weather-drivers'
+  target = [output_dir + '/in.rep', output_dir + '/HOURLY.csv']
+  end
 
   success = nil
   if !(FileUtils.uptodate?(target[0], src)) or !(FileUtils.uptodate?(target[1], src))
@@ -54,6 +58,8 @@ def write_report(tests)
   src = Dir['output/#{tests}/*/DETAILED.csv'] + ["scripts/#{tests}/write-results.py", "reports/#{tests}/S140outNotes-Template.txt"]
   if tests == 'section-5'
     target = ['reports/#{tests}/Sec5-2Aout.xlsx', 'reports/#{tests}/S140outNotes.txt']
+  elsif tests == 'weather-drivers'
+    target = ['reports/#{tests}/WeatherDriversResultsSubmittal.xlsx', 'reports/#{tests}/S140outNotes.txt']
   end
   puts "\n================="
   puts "     REPORTS     "

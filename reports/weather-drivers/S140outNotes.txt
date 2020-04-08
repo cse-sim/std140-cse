@@ -1,0 +1,271 @@
+MODELING NOTES FOR ASHRAE STANDARD 140
+
+
+===============================================================================
+INTRODUCTION
+===============================================================================
+This document shall include supplemental information about the ASHRAE Standard
+140 tests performed.  One S140outNotes document shall be provided for each
+set of tests (e.g., one for the building thermal and fabric load tests of
+Sections 5.2.1, 5.2.2, and 5.2.3, one for the space cooling equipment analytical
+verification tests of Sections 5.3.1 and 5.3.2, etc.)  The types of information
+listed below shall be provided in this document, each in a separate section:
+
+A. Software Information
+B. Alternative Modeling Methods
+C. Equivalent Modeling Methods
+D. Non-Specified Inputs
+E. Omitted Test Cases and Results
+F. Changes Made to Source Code for the Purpose of Running the Tests, where
+   Such Changes are not Available in Publicly Released Versions of the Software
+G. Anomalous Results.
+
+Notes in this document shall be limited to the topics shown above.  Notes must
+be factual and objective and shall only refer to the software being tested.
+Notes shall not refer to any other software program.
+
+INFORMATIVE NOTE: Text at the start of each section describes the content of
+the section for the reader and provides instructions for supplying the content.
+Sample notes are provided in a separate document (S140outNotes_Examples.TXT).
+
+
+===============================================================================
+A. SOFTWARE INFORMATION
+===============================================================================
+CONTENT: This section shall include reference information for the software -
+the vendor, name and version of the software plus operating system and computer
+hardware requirements.
+
+INSTRUCTIONS: Information for items 1 through 7 below shall be provided.
+Information for Item 8 shall be permitted, but is not required.
+
+
+1. SOFTWARE VENDOR: The CSE Authors
+
+2. SOFTWARE NAME: California Simulation Engine (CSE)
+
+3. SOFTWARE VERSION (unique software version identifier): 0.868.1
+
+4. OPERATING SYSTEM REQUIREMENTS: Windows XP and later
+
+5. APPROX HARD DISK SPACE REQUIRED FOR INSTALLATION: 2 MB
+
+6. MINIMUM RAM REQUIRED FOR SOFTWARE OPERATION: 64 MB
+
+7. MINIMUM DISPLAY MONITOR REQUIREMENTS: (none)
+
+8. OTHER HARDWARE OR SOFTWARE-RELATED REQUIREMENTS:
+
+INFORMATIVE NOTE: Item 8 can be used to supply additional, relevant information.
+
+
+===============================================================================
+B. REPORT BLOCK FOR ALTERNATIVE MODELING METHODS
+===============================================================================
+CONTENT: If the software being tested provides alternative modeling methods or
+algorithms for performing the tests, this section shall describe modeling
+methods used for the tests.
+
+INSTRUCTIONS:  If alternative modeling methods are applicable, a separate note
+for each alternative modeling method or algorithm situation shall be provided.
+The standard format shown below and a separate number and title for each note
+shall be applied.  If alternative modeling methods are not applicable, specify
+"NONE" in place of the information below.
+
+
+NOTE 1 - Sky Model
+---------------------------------------------------------
+1.1 Describe the Effect Being Simulated:
+    Sky model for diffuse solar radiation.
+
+1.2 Optional Settings or Modeling Capabilities:
+
+1.2.1 skyModel = ISOTROPIC
+      Physical Meaning: Traditional isotropic sky model.
+
+1.2.2 skyModel = ANISOTROPIC
+      Physical Meaning: Hay anisotropic model.
+
+1.3 Setting or Capability Used: skyModel = ANISOTROPIC
+
+NOTE 2 - Sky Temperature Model
+---------------------------------------------------------
+2.1 Describe the Effect Being Simulated:
+    Sky temperature model for exterior long wave radiation exchange.
+
+2.2 Optional Settings or Modeling Capabilities:
+
+2.2.1 skyModelLW = BERDAHLMARTIN
+      Physical Meaning: Berdahl-Martin model (Sky temperature depends on dew
+      point, cloud cover, and hour).
+
+2.2.2 skyModelLW = DRYBULB
+      Physical Meaning: Sky temperature is the same as outdoor dry-bulb.
+
+2.2.2 skyModelLW = BLAST
+      Physical Meaning: Blast model (Sky temperature depends on outdoor
+      dry-bulb).
+
+2.2.2 skyModelLW = DEFAULT
+      Physical Meaning: Default (Sky temperature taken from weather file if
+      available. If not, use Berdahl-Martin model)
+
+2.3 Setting or Capability Used: skyModelLW = BERDAHLMARTIN
+
+===============================================================================
+C. REPORT BLOCK FOR EQUIVALENT MODELING METHODS
+===============================================================================
+CONTENT: This section shall describe equivalent modeling methods used to perform
+the tests.  When the software does not model an effect exactly as stated in the
+Standard or does not permit the input values required, equivalent modeling
+methods shall be permitted to perform the test.
+
+INSTRUCTIONS:  If equivalent modeling methods are applied, a separate note for
+each instance of equivalent modeling shall be provided.  The standard format
+shown below and a separate number and title for each note shall be applied. If
+equivalent modeling methods are not applicable, specify "NONE" in place of the
+information below.
+
+
+NONE
+
+===============================================================================
+D. REPORT BLOCK FOR USE OF NON-SPECIFIED INPUTS
+===============================================================================
+CONTENT: This section shall describe non-specified inputs used to perform
+the tests.  Use of non-specified inputs shall be permitted only for the
+following specified sections relating to the following topics:
+
+* Interior combined radiative and convective surface coefficients in Sections
+  5.2.1.10, 5.2.3.2.2, and 5.3.1.9
+* Interior solar distribution in Sections 5.2.1.12, 5.2.2.1.2.2, 5.2.2.2.7.4,
+  5.2.3.9.3, 5.2.3.10.2, and 5.2.3.12.2
+* Air density given at specific altitudes for the space cooling and space
+  heating equipment cases in Sections 5.3.1.4.3, 5.3.3.4.3, and 5.4.1.4.3.
+
+
+INSTRUCTIONS:  If non-specified inputs are applied, a separate note for each use
+of non-specified inputs shall be provided.  The standard format shown below and
+a separate number and title for each note shall be applied. If non-specified
+inputs are not applied, specify "NONE" in place of the information below.
+
+
+NONE
+
+===============================================================================
+
+
+
+===============================================================================
+E. REPORT BLOCK FOR OMITTED TEST CASES AND RESULTS
+===============================================================================
+CONTENT: This section shall describe test cases that were omitted and/or
+individual results of test cases that were omitted along with the reason for
+the omission.
+
+INSTRUCTIONS:  If test cases were omitted, a separate note to describe each
+type of omission shall be provided. The standard format shown below and a
+separate number and title for each note shall be applied.  If there are no
+omitted test cases, specify "NONE" in place of the information below.
+
+
+NOTE 1 - Relative Humidity
+-------------------------------------------------------------------------------
+1.1 List the Case(s) where Results Were Omitted, and which Results Were Omitted
+    for the Case(s):
+    WD100: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
+    WD200: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
+    WD300: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
+    WD400: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
+    WD500: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
+    WD600: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
+
+1.2 Explanation for Omitting the Test Case(s) Results:
+    The program does not allow output of outdoor air relative humidity (only zone air
+    relative humidity).
+
+NOTE 2 - Opaque Cloud Cover
+-------------------------------------------------------------------------------
+1.1 List the Case(s) where Results Were Omitted, and which Results Were Omitted
+    for the Case(s):
+    WD100: Hourly opaque cloud cover [6.x.1.2]
+    WD200: Hourly opaque cloud cover [6.x.1.2]
+    WD300: Hourly opaque cloud cover [6.x.1.2]
+    WD400: Hourly opaque cloud cover [6.x.1.2]
+    WD500: Hourly opaque cloud cover [6.x.1.2]
+    WD600: Hourly opaque cloud cover [6.x.1.2]
+
+1.2 Explanation for Omitting the Test Case(s) Results:
+    The program does not allow output of opaque cloud cover (only total cloud cover).
+
+
+===============================================================================
+F. REPORT BLOCK FOR CHANGES TO SOURCE CODE FOR THE PURPOSE OF RUNNING THE
+   TESTS, WHERE SUCH CHANGES ARE NOT AVAILABLE IN PUBLICLY RELEASED VERSIONS OF
+   THE SOFTWARE.
+===============================================================================
+CONTENT: This section shall describe changes to software source code made to
+allow the software to run a test, where such changes are not available in a
+publicly released version of the software.
+
+INFORMATIVE NOTE: This section addresses special situations where a change to
+source code is necessary to activate a feature or permit inputs needed for
+a test when these features are not available in the publicly released version
+of the software.
+
+INSTRUCTIONS:  If changes to the source code for the purpose of running a test
+are applied, separate notes to describe each source code modification shall be
+provided. The standard format shown below and a separate number and title for
+each note shall be applied. If changes to source code are not applied, specify
+"NONE" in place of the information below.
+
+NONE
+
+
+===============================================================================
+G. REPORT BLOCK FOR ANOMALOUS RESULTS
+===============================================================================
+CONTENT: Describing anomalous results shall be permitted, but is not required.
+If anomalous test results are described, this section shall be used.
+
+INSTRUCTIONS:  If anomalous test results are described, each type of anomalous
+result shall be described in a separate note.  The standard format shown below
+and a separate number and title for each note item shall be applied. If
+anomalous results are not discussed, it shall be permitted to specify "NONE" in
+place of the information below.
+
+
+NOTE 1 - Station Pressure
+-------------------------------------------------------------------------------
+1.1 Test Case(s) and Specific Results from the Case(s) which are Anomalous:
+    WD100: Hourly station pressure [6.x.1.2]
+    WD200: Hourly station pressure [6.x.1.2]
+    WD300: Hourly station pressure [6.x.1.2]
+    WD400: Hourly station pressure [6.x.1.2]
+    WD500: Hourly station pressure [6.x.1.2]
+    WD600: Hourly station pressure [6.x.1.2]
+
+
+1.2 Explanation of Reason for the Anomalous Results:
+    The program uses elevation of the building site to calculate a fixed station pressure
+    and air density.
+
+NOTE 2 - Hourly Solar Radiation on Surfaces
+-------------------------------------------------------------------------------
+2.1 Test Case(s) and Specific Results from the Case(s) which are Anomalous:
+    WD100: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
+    WD200: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
+    WD300: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
+    WD400: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
+    WD500: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
+    WD600: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
+
+
+2.2 Explanation of Reason for the Anomalous Results:
+    The program only generates these outputs at subhour levels. As such, the sum totals
+    requested each hour will be identical to those requested in Section 6.x.1.3 for the
+    horizontal roof surface.
+
+===============================================================================
+<END OF DOCUMENT>
+===============================================================================
