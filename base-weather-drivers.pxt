@@ -33,18 +33,6 @@ slope = ((1.15**2) + (2**2))**0.5
 angled_width = ((2**2) + (2**2))**0.5
 %>
 
-<%
-# map case_name to requested days to generate outputs for
-reports = [
-  {:case=>"WD100",:days=>["MAY 4", "JUL 14", "SEP 6"]},
-  {:case=>"WD200",:days=>["MAY 24", "AUG 26"]},
-  {:case=>"WD300",:days=>["FEB 7", "AUG 13"]},
-  {:case=>"WD400",:days=>["JAN 24", "JUL 1"]},
-  {:case=>"WD500",:days=>["MAR 1", "SEP 14"]},
-  {:case=>"WD600",:days=>["MAY 4", "JUL 14", "SEP 6"]}
-]
-%>
-
 wfName = "weather/weather-drivers/<%= weather_file %>"
 nSubSteps = <%= nsteps %>
 DT = No
@@ -141,17 +129,14 @@ EXPORTFILE "Subhourly"
   xfFileName = "Subhourly.csv"
   xfFileStat = OVERWRITE
 
-<% for report in reports %>
-  <% if case_name == report[:case] %>
-    <% for day in report[:days] %>
 EXPORT
   exExportfile = "Subhourly"
   exHeader = ColumnsOnly
   exFooter = No
   exType = UDT
   exFreq = SUBHOUR
-  exDayBeg = <%= day %>
-  exDayEnd = <%= day %>
+  exDayBeg = JAN 1
+  exDayEnd = DEC 31
 
   EXPORTCOL colHead="Month" colVal=$month
   EXPORTCOL colHead="Day" colVal=$dayOfMonth
@@ -168,9 +153,6 @@ EXPORT
   EXPORTCOL colHead="Incident Solar <%= surface[:name] %> [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.tot*<%= 1/q_c %>*@Top.subhrDur
   EXPORTCOL colHead="Incident Beam Solar <%= surface[:name] %> [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.bm*<%= 1/q_c %>*@Top.subhrDur
   EXPORTCOL colHead="Incident Diffuse Solar <%= surface[:name] %> [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.df*<%= 1/q_c %>*@Top.subhrDur
-        <% end %>
-      <% end %>
-    <% end %>
   <% end %>
 <% end %>
 
@@ -178,17 +160,14 @@ EXPORTFILE "Hourly"
   xfFileName = "Hourly.csv"
   xfFileStat = OVERWRITE
 
-<% for report in reports %>
-  <% if case_name == report[:case] %>
-    <% for day in report[:days] %>
 EXPORT
   exExportfile = "Hourly"
   exHeader = ColumnsOnly
   exFooter = No
   exType = UDT
   exFreq = HOUR
-  exDayBeg = <%= day %>
-  exDayEnd = <%= day %>
+  exDayBeg = JAN 1
+  exDayEnd = DEC 31
 
   EXPORTCOL colHead="Month" colVal=$month
   EXPORTCOL colHead="Day" colVal=$dayOfMonth
@@ -206,9 +185,6 @@ EXPORT
   EXPORTCOL colHead="Total Cloud Cover [tenths of sky]" colVal=@weather.cldCvr
 //  EXPORTCOL colHead="Opaque Cloud Cover [tenths of sky]" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
   EXPORTCOL colHead="Sky Temp [C]" colVal=(@Top.tSkyHr - 32)*<%= 1/k_r %>
-    <% end %>
-  <% end %>
-<% end %>
 
 /*
 // Use to generate a CSV of location data
