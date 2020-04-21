@@ -181,7 +181,7 @@ NOTE 1 - Relative Humidity
     WD600: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
 
 1.2 Explanation for Omitting the Test Case(s) Results:
-    The program does not allow output of outdoor air relative humidity (only zone air
+    The program does not currently allow output of outdoor air relative humidity (only zone air
     relative humidity).
 
 NOTE 2 - Opaque Cloud Cover
@@ -196,7 +196,7 @@ NOTE 2 - Opaque Cloud Cover
     WD600: Hourly opaque cloud cover [6.x.1.2]
 
 1.2 Explanation for Omitting the Test Case(s) Results:
-    The program does not allow output of opaque cloud cover (only total cloud cover).
+    The program does not currently allow output of opaque cloud cover (only total cloud cover).
 
 
 ===============================================================================
@@ -247,7 +247,7 @@ NOTE 1 - Station Pressure
 
 
 1.2 Explanation of Reason for the Anomalous Results:
-    The program uses elevation of the building site to calculate a fixed station pressure
+    The program currently uses elevation of the building site to calculate a fixed station pressure
     and air density.
 
 NOTE 2 - Hourly Solar Radiation on Surfaces
@@ -262,7 +262,7 @@ NOTE 2 - Hourly Solar Radiation on Surfaces
 
 
 2.2 Explanation of Reason for the Anomalous Results:
-    The program only generates these outputs at subhour levels. As such, the sum totals
+    The program currently only generates these outputs at subhour levels. As such, the sum totals
     requested each hour will be identical to those requested in Section 6.x.1.3 for the
     horizontal roof surface.
 

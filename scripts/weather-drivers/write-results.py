@@ -229,12 +229,12 @@ for col in range(annual_init_col, annual_end_col + 1):
 
 
 
-wb.save(filename='../../reports/' + tests + '/WeatherDriversResultsSubmittal.xlsx')
+wb.save(filename='../../reports/' + tests + '/WeatherDriversResultsSubmittal_CSE.xlsx')
 
 with open('../../reports/' + tests + '/S140outNotes-Template.txt','r') as notes_template:
   content = notes_template.read()
 
-with open('../../reports/' + tests + '/S140outNotes.txt','w') as notes:
+with open('../../reports/' + tests + '/S140outNotes_CSE.txt','w') as notes:
   notes.write(mk.Template(content).render(version=version))
 
 print("Done")
