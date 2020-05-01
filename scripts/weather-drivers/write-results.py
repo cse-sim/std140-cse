@@ -149,7 +149,7 @@ for col in range(annual_init_col, annual_end_col + 1):
   # Annual sums for incident solar radiation on surfaces
   i = 0
   while i < len(col_surfaces):
-    Sheet1.cell(column = col, row = row + 5 + i).value = df_subhourly[col_surfaces[i]].sum()
+    Sheet1.cell(column = col, row = row + 5 + i).value = df_subhourly[col_surfaces[i]].sum()*timestep # multiply by timestep to convert 'W/m2' to 'Wh/m2'
     i += 1
 
   # Hourly Outputs
@@ -171,9 +171,9 @@ for col in range(annual_init_col, annual_end_col + 1):
           for hour in range(1, 25):
             df_hour_shr = df_day_shr[df_day_shr['Hour'] == hour]
             row_i = hourly_row_beg + hour - 1
-            Sheet1.cell(column = hourly_init_col, row = row_i).value = df_hour_shr[col_surfaces[i - 1]].sum()
+            Sheet1.cell(column = hourly_init_col, row = row_i).value = df_hour_shr[col_surfaces[i - 1]].sum()*timestep # multiply by timestep to convert 'W/m2' to 'Wh/m2'
             if i < 4:
-              Sheet1.cell(column = hourly_init_col, row = row_i + 8871 - 339).value = df_hour_shr[col_surfaces[i - 1]].sum() # copy sum to final rows asking for subhourly integration of horizontal roof radiation
+              Sheet1.cell(column = hourly_init_col, row = row_i + 8871 - 339).value = df_hour_shr[col_surfaces[i - 1]].sum()*timestep # copy sum to final rows asking for subhourly integration of horizontal roof radiation
           hourly_row_beg += 26
         hourly_init_col += 1
     else:

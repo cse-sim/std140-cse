@@ -42,6 +42,7 @@ terrainClass = 2
 wuDays = 30
 skyModel = ANISOTROPIC
 skyModelLW = BERDAHLMARTIN
+grndRefl = <%= ground_reflectance %>
 
 // Constructions
 
@@ -150,13 +151,13 @@ EXPORT
   // Incident Solar
 <% for surface in surfaces[0..9] %>
   <% if surface[:report_name] == "Horizontal" %>
-  EXPORTCOL colHead="Total <%= surface[:report_name] %> Radiation (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.tot*<%= 1/q_c %>*@Top.subhrDur
-  EXPORTCOL colHead="Beam <%= surface[:report_name] %> Radiation (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.bm*<%= 1/q_c %>*@Top.subhrDur
-  EXPORTCOL colHead="Diffuse <%= surface[:report_name] %> Radiation (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.df*<%= 1/q_c %>*@Top.subhrDur
+  EXPORTCOL colHead="Total <%= surface[:report_name] %> Radiation (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.tot*<%= 1/q_c %>
+  EXPORTCOL colHead="Beam <%= surface[:report_name] %> Radiation (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.bm*<%= 1/q_c %>
+  EXPORTCOL colHead="Diffuse <%= surface[:report_name] %> Radiation (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.df*<%= 1/q_c %>
   <% else %>
-  EXPORTCOL colHead="Total Radiation on <%= surface[:report_name] %> (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.tot*<%= 1/q_c %>*@Top.subhrDur
-  EXPORTCOL colHead="Total Beam Radiation on <%= surface[:report_name] %> (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.bm*<%= 1/q_c %>*@Top.subhrDur
-  EXPORTCOL colHead="Total Diffuse Radiation on <%= surface[:report_name] %> (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.df*<%= 1/q_c %>*@Top.subhrDur
+  EXPORTCOL colHead="Total Radiation on <%= surface[:report_name] %> (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.tot*<%= 1/q_c %>
+  EXPORTCOL colHead="Total Beam Radiation on <%= surface[:report_name] %> (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.bm*<%= 1/q_c %>
+  EXPORTCOL colHead="Total Diffuse Radiation on <%= surface[:report_name] %> (Wh/m2)" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.df*<%= 1/q_c %>
   <% end %>
 <% end %>
 
