@@ -207,28 +207,6 @@ for col in range(annual_init_col, annual_end_col + 1):
     else:
       subhourly_init_col = subhourly_init_col + len(report_days[key])
 
-  # Subhourly Outputs - Hourly sums of instantaneous timestep values
-  # subhourly_init_col = 2 # 'WD100' for May 4
-  # for key in report_days:
-  #   if case == key:
-  #     for day in report_days[key]:
-  #       subhourly_row_beg = 8871 # First block of subhourly outputs for total horizontal radiation after inserting empty rows
-  #       df_day_shr = df_subhourly[(df_subhourly['Month'] == day[0]) & (df_subhourly['Day'] == day[1])]
-  #       for i in range(1, len(col_surfaces[0..2])): # iterate over first three surface radiation subhourly outputs
-  #         for hour in range(1, 25):
-  #           df_hour_shr = df_day_shr[df_day_shr['Hour'] == hour]
-  #           for subhour in range(1, 11): # 10 timesteps each hour
-  #               df_subhour_shr = df_hour_shr[df_hour_shr['Subhour'] == subhour]
-  #               row_i = hourly_row_beg + (hour - 1)*10 + subhour - 1
-  #               # print(" row_i: {}".format(row_i))
-  #               Sheet1.cell(column = subhourly_init_col, row = row_i).value = df_subhour_shr[col_subhourly[i - 1]].mean()
-  #         subhourly_row_beg += 26
-  #       hourly_init_col += 1
-  #   else:
-  #     hourly_init_col = hourly_init_col + len(report_days[key])
-
-
-
 wb.save(filename='../../reports/' + tests + '/WeatherDriversResultsSubmittal_CSE.xlsx')
 
 with open('../../reports/' + tests + '/S140outNotes-Template.txt','r') as notes_template:
