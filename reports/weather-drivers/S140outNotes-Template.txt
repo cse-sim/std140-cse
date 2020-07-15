@@ -112,6 +112,7 @@ NOTE 2 - Sky Temperature Model
 
 2.3 Setting or Capability Used: skyModelLW = BERDAHLMARTIN
 
+
 ===============================================================================
 C. REPORT BLOCK FOR EQUIVALENT MODELING METHODS
 ===============================================================================
@@ -128,6 +129,7 @@ information below.
 
 
 NONE
+
 
 ===============================================================================
 D. REPORT BLOCK FOR USE OF NON-SPECIFIED INPUTS
@@ -152,9 +154,6 @@ inputs are not applied, specify "NONE" in place of the information below.
 
 NONE
 
-===============================================================================
-
-
 
 ===============================================================================
 E. REPORT BLOCK FOR OMITTED TEST CASES AND RESULTS
@@ -169,34 +168,30 @@ separate number and title for each note shall be applied.  If there are no
 omitted test cases, specify "NONE" in place of the information below.
 
 
-NOTE 1 - Relative Humidity
+NOTE 1 - Omitted Subhourly Results
 -------------------------------------------------------------------------------
 1.1 List the Case(s) where Results Were Omitted, and which Results Were Omitted
     for the Case(s):
-    WD100: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
-    WD200: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
-    WD300: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
-    WD400: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
-    WD500: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
-    WD600: Annual [6.x.1.1], hourly [6.x.1.2], and subhourly [6.x.1.3] relative humidity
+    All Cases: Relative humidity (%) [6.x.1]
+    All Cases: Opaque cloud cover (tenths of sky) [6.x.1]
 
 1.2 Explanation for Omitting the Test Case(s) Results:
     The program does not currently allow output of outdoor air relative humidity (only zone air
-    relative humidity).
+    relative humidity). The program does not currently allow output of opaque cloud cover (only
+    total cloud cover).
 
-NOTE 2 - Opaque Cloud Cover
+NOTE 2 - Results Submitted at Hourly Frequency
 -------------------------------------------------------------------------------
-1.1 List the Case(s) where Results Were Omitted, and which Results Were Omitted
+2.1 List the Case(s) where Results Were Omitted, and which Results Were Omitted
     for the Case(s):
-    WD100: Hourly opaque cloud cover [6.x.1.2]
-    WD200: Hourly opaque cloud cover [6.x.1.2]
-    WD300: Hourly opaque cloud cover [6.x.1.2]
-    WD400: Hourly opaque cloud cover [6.x.1.2]
-    WD500: Hourly opaque cloud cover [6.x.1.2]
-    WD600: Hourly opaque cloud cover [6.x.1.2]
+    All Cases: Dewpoint temperature (C) [6.x.1]
+    All Cases: Wind direction (degrees from north) [6.x.1]
+    All Cases: Station pressure (mbar) [6.x.1]
+    All Cases: Total cloud cover (tenths of sky) [6.x.1]
 
-1.2 Explanation for Omitting the Test Case(s) Results:
-    The program does not currently allow output of opaque cloud cover (only total cloud cover).
+2.2 Explanation for Omitting the Test Case(s) Results:
+    The program does not currently allow output of these results at subhourly frequency (only
+    hourly frequency).
 
 
 ===============================================================================
@@ -219,6 +214,7 @@ provided. The standard format shown below and a separate number and title for
 each note shall be applied. If changes to source code are not applied, specify
 "NONE" in place of the information below.
 
+
 NONE
 
 
@@ -238,33 +234,12 @@ place of the information below.
 NOTE 1 - Station Pressure
 -------------------------------------------------------------------------------
 1.1 Test Case(s) and Specific Results from the Case(s) which are Anomalous:
-    WD100: Hourly station pressure [6.x.1.2]
-    WD200: Hourly station pressure [6.x.1.2]
-    WD300: Hourly station pressure [6.x.1.2]
-    WD400: Hourly station pressure [6.x.1.2]
-    WD500: Hourly station pressure [6.x.1.2]
-    WD600: Hourly station pressure [6.x.1.2]
-
+    All Cases: Station pressure (mbar) [6.x.1]
 
 1.2 Explanation of Reason for the Anomalous Results:
     The program currently uses elevation of the building site to calculate a fixed station pressure
     and air density.
 
-NOTE 2 - Hourly Solar Radiation on Surfaces
--------------------------------------------------------------------------------
-2.1 Test Case(s) and Specific Results from the Case(s) which are Anomalous:
-    WD100: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
-    WD200: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
-    WD300: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
-    WD400: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
-    WD500: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
-    WD600: Sum of total, beam, and diffuse solar radiation incident on each surface [6.x.1.2]
-
-
-2.2 Explanation of Reason for the Anomalous Results:
-    The program currently only generates these outputs at subhour levels. As such, the sum totals
-    requested each hour will be identical to those requested in Section 6.x.1.3 for the
-    horizontal roof surface.
 
 ===============================================================================
 <END OF DOCUMENT>

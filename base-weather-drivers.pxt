@@ -146,7 +146,16 @@ EXPORT
 
   // Weather Data
   EXPORTCOL colHead="Dry Bulb Temperature (C)" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
-//  EXPORTCOL colHead="Relative Humidity [%]" colVal=(@Top.tDbOSh - 32)*<%= 1/k_r %>
+//  EXPORTCOL colHead="Relative Humidity [%]" not calculated by CSE, only zone air RH
+//  EXPORTCOL colHead="Dewpoint Temperature (C)" colVal=(@weather.taDp - 32)*<%= 1/k_r %> no probe(s) at subhourly frequency
+  EXPORTCOL colHead="Humidity Ratio (kg moisture/kg dry air)" colVal=@Top.wOSh
+  EXPORTCOL colHead="Wet Bulb Temperature (C)" colVal=(@Top.tWbOSh - 32)*<%= 1/k_r %>
+  EXPORTCOL colHead="Windspeed (m/s)" colVal=(@Top.windSpeedSh)*<%= miles_m/h_sec %>
+//  EXPORTCOL colHead="Wind Direction (degrees from North)" colVal=@Top.windDirDegHr no probe(s) at subhourly frequency
+//  EXPORTCOL colHead="Station Pressure (mbar)" colVal=@Top.presAtm*<%= inch_mg_mbar %> no probe(s) at subhourly frequency
+//  EXPORTCOL colHead="Total Cloud Cover (tenths of sky)" colVal=@weather.cldCvr no probe(s) at subhourly frequency
+//  EXPORTCOL colHead="Opaque Cloud Cover [tenths of sky]" not calculated by CSE, only total cloud cover
+  EXPORTCOL colHead="Sky Temperature (C)" colVal=(@Top.tSkySh - 32)*<%= 1/k_r %>
 
   // Incident Solar
 <% for surface in surfaces[0..9] %>
