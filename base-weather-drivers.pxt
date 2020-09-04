@@ -201,6 +201,12 @@ EXPORT
 //  EXPORTCOL colHead="Opaque Cloud Cover (tenths of sky)" not calculated by CSE, only total cloud cover
   EXPORTCOL colHead="Sky Temperature (C)" colVal=(@Top.tSkyHr - 32)*<%= 1/k_r %>
 
+  // Incident Solar
+  EXPORTCOL colHead="Beam Horiz. Solar $radBeam (W/m2)" colVal=$radBeam*<%= 1/q_c %>
+  EXPORTCOL colHead="Beam Horiz. Solar @weather.bmrad (W/m2)" colVal=@weather.bmrad*<%= 1/q_c %>
+  EXPORTCOL colHead="Diffuse Horiz. Solar $radDiff (W/m2)" colVal=$radDiff*<%= 1/q_c %>
+  EXPORTCOL colHead="Diffuse Horiz. Solar @weather.dfrad (W/m2)" colVal=@weather.dfrad*<%= 1/q_c %>
+
 /*
 // Use to generate a CSV of location data
 EXPORTFILE "Location"
@@ -228,5 +234,53 @@ EXPORT
 
 // Confirmed that weather data and TOP data are equal
 */
+
+// Use to generate a CSV of test probes for hourly horizontal solar gains
+EXPORTFILE "Hourly Horizontal Solar Test"
+  xfFileName = "Hourly Horizontal Solar Test.csv"
+
+EXPORT
+ 	exExportfile = "Hourly Horizontal Solar Test"
+  exHeader = YES
+  exFooter = NO
+  exType = UDT
+  exFreq = HOUR
+  exDayBeg = JAN 1
+  exDayEnd = JAN 1
+
+  EXPORTCOL colHead="Month" colVal=$month
+  EXPORTCOL colHead="Day" colVal=$dayOfMonth
+  EXPORTCOL colHead="Hour" colVal=$hour
+
+  // Weather File Probe
+  EXPORTCOL colHead="@weather.bmrad (W/m2)" colVal=@weather.bmrad*<%= 1/q_c %>
+  EXPORTCOL colHead="$radBeam (W/m2)" colVal=$radBeam*<%= 1/q_c %>
+  EXPORTCOL colHead="@weather.dfrad (W/m2)" colVal=@weather.dfrad*<%= 1/q_c %>
+  EXPORTCOL colHead="$radDiff (W/m2)" colVal=$radDiff*<%= 1/q_c %>
+
+// Use to generate a CSV of test probes for subhourly horizontal solar gains
+EXPORTFILE "Subhourly Horizontal Solar Test"
+  xfFileName = "Subhourly Horizontal Solar Test.csv"
+
+EXPORT
+ 	exExportfile = "Subhourly Horizontal Solar Test"
+  exHeader = YES
+  exFooter = NO
+  exType = UDT
+  exFreq = SUBHOUR
+  exDayBeg = JAN 1
+  exDayEnd = JAN 1
+
+  EXPORTCOL colHead="Month" colVal=$month
+  EXPORTCOL colHead="Day" colVal=$dayOfMonth
+  EXPORTCOL colHead="Hour" colVal=$hour
+  EXPORTCOL colHead="Subhour" colVal=$subhour
+
+  // Weather File Probe
+  EXPORTCOL colHead="@top.radBeamShAv (W/m2)" colVal=@top.radBeamShAv*<%= 1/q_c %>
+  EXPORTCOL colHead="@top.radDiffShAv (W/m2)" colVal=@top.radDiffShAv*<%= 1/q_c %>
+  EXPORTCOL colHead="@xsurf[Horiz. Roof].sbcO.sgTarg.bm (W/m2)" colVal=@xsurf["Horizontal Roof"].sbcO.sgTarg.bm*<%= 1/q_c %>
+  EXPORTCOL colHead="@xsurf[Horiz. Roof].sbcO.sgTarg.df (W/m2)" colVal=@xsurf["Horizontal Roof"].sbcO.sgTarg.df*<%= 1/q_c %>
+
   DELETE EXPORTFILE Primary
 RUN
