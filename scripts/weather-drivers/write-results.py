@@ -29,7 +29,7 @@ else:
 # Program Info sheet
 Sheet1.cell(column = 2, row = 3).value = "California Simulation Engine" # Program Name:
 Sheet1.cell(column = 2, row = 4).value = "v{}".format(version) # Program Version:
-Sheet1.cell(column = 2, row = 5).value = "2020-07-16" # Program Version Release Date:
+Sheet1.cell(column = 2, row = 5).value = "2020-08-31" # Program Version Release Date:
 Sheet1.cell(column = 2, row = 6).value = "CSE" # Program Name for Tables and Charts (short):
 Sheet1.cell(column = 2, row = 7).value = "Big Ladder Software" # Modeler Organization:
 Sheet1.cell(column = 2, row = 8).value = "BLS" # Modeler Organization for Tables and Charts (short):
