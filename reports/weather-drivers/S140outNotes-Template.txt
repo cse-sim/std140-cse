@@ -172,26 +172,11 @@ NOTE 1 - Omitted Subhourly Results
 -------------------------------------------------------------------------------
 1.1 List the Case(s) where Results Were Omitted, and which Results Were Omitted
     for the Case(s):
-    All Cases: Relative humidity (%) [6.x.1]
     All Cases: Opaque cloud cover (tenths of sky) [6.x.1]
 
 1.2 Explanation for Omitting the Test Case(s) Results:
-    The program does not currently allow output of outdoor air relative humidity (only zone air
-    relative humidity). The program does not currently allow output of opaque cloud cover (only
+    The program does not currently allow output of opaque cloud cover (only
     total cloud cover).
-
-NOTE 2 - Results Submitted at Hourly Frequency
--------------------------------------------------------------------------------
-2.1 List the Case(s) where Results Were Omitted, and which Results Were Omitted
-    for the Case(s):
-    All Cases: Dewpoint temperature (C) [6.x.1]
-    All Cases: Wind direction (degrees from north) [6.x.1]
-    All Cases: Station pressure (mbar) [6.x.1]
-    All Cases: Total cloud cover (tenths of sky) [6.x.1]
-
-2.2 Explanation for Omitting the Test Case(s) Results:
-    The program does not currently allow output of these results at subhourly frequency (only
-    hourly frequency).
 
 
 ===============================================================================
@@ -231,7 +216,7 @@ anomalous results are not discussed, it shall be permitted to specify "NONE" in
 place of the information below.
 
 
-NOTE 1 - Station Pressure
+NOTE 1 - Constant Station Pressure
 -------------------------------------------------------------------------------
 1.1 Test Case(s) and Specific Results from the Case(s) which are Anomalous:
     All Cases: Station pressure (mbar) [6.x.1]
@@ -239,6 +224,16 @@ NOTE 1 - Station Pressure
 1.2 Explanation of Reason for the Anomalous Results:
     The program currently uses elevation of the building site to calculate a fixed station pressure
     and air density.
+
+NOTE 2 - Hourly Results
+-------------------------------------------------------------------------------
+2.1 Test Case(s) and Specific Results from the Case(s) which are Anomalous:
+    All Cases: Wind Direction (degrees from North) [6.x.1]
+    All Cases: Total Cloud Cover (tenths of sky) [6.x.1]
+
+2.2 Explanation of Reason for the Anomalous Results:
+    The program currently calculates wind direction and total cloud cover each hour, which is reported for 
+    all subhours within the hour.
 
 
 ===============================================================================
