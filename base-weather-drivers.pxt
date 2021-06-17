@@ -3,6 +3,7 @@
   parameter "weather_file"
   parameter "elevation", :default=>0.0
   parameter "ground_reflectance", :default=>0
+  parameter "solar_interpolation_method", :default=>"TRNSYS" # method to interpolate subhourly solar radiation from weather file
 %>
 
 <%
@@ -24,7 +25,7 @@ q_c = w_btu/m2_ft2
 inch_mg_mbar = 33.8639
 
 # Internal use
-nsteps = 10
+nsteps = 1
 
 # hypotenuse of sloped wall surfaces
 slope = ((1.15**2) + (2**2))**0.5
@@ -43,6 +44,7 @@ wuDays = 30
 skyModel = ANISOTROPIC
 skyModelLW = BERDAHLMARTIN
 grndRefl = <%= ground_reflectance %>
+slrInterpMeth = <%= solar_interpolation_method %> // only available in CSE v0.892.0 or later
 
 // Constructions
 
@@ -235,18 +237,33 @@ EXPORT
 // Confirmed that weather data and TOP data are equal
 */
 
+<%
+# Specific days to compare outputs to all participating tools
+reporting = [
+  {:case=>"WD100",:days=>["MAY 4", "JUL 14", "SEP 6"]},
+  {:case=>"WD200",:days=>["MAY 24", "AUG 26"]},
+  {:case=>"WD300",:days=>["FEB 7", "AUG 13"]},
+  {:case=>"WD400",:days=>["JAN 24", "JUL 1"]},
+  {:case=>"WD500",:days=>["MAR 1", "SEP 14"]},
+  {:case=>"WD600",:days=>["MAY 4", "JUL 14", "SEP 6"]},
+]
+
+for report in reporting
+  if report[:case] == case_name
+    for day in report[:days]
+%>
 // Use to generate a CSV of test probes for hourly horizontal solar gains
-EXPORTFILE "Hourly Horizontal Solar Test"
-  xfFileName = "Hourly Horizontal Solar Test.csv"
+EXPORTFILE "Hourly Horiz Solar <%= case_name %> <%= day %>"
+  xfFileName = "Hourly Horiz Solar <%= case_name %> <%= day %>.csv"
 
 EXPORT
- 	exExportfile = "Hourly Horizontal Solar Test"
+ 	exExportfile = "Hourly Horiz Solar <%= case_name %> <%= day %>"
   exHeader = YES
   exFooter = NO
   exType = UDT
   exFreq = HOUR
-  exDayBeg = JAN 1
-  exDayEnd = JAN 1
+  exDayBeg = <%= day %>
+  exDayEnd = <%= day %>
 
   EXPORTCOL colHead="Month" colVal=$month
   EXPORTCOL colHead="Day" colVal=$dayOfMonth
@@ -259,17 +276,17 @@ EXPORT
   EXPORTCOL colHead="$radDiff (W/m2)" colVal=$radDiff*<%= 1/q_c %>
 
 // Use to generate a CSV of test probes for subhourly horizontal solar gains
-EXPORTFILE "Subhourly Horizontal Solar Test"
-  xfFileName = "Subhourly Horizontal Solar Test.csv"
+EXPORTFILE "Subhourly Horiz Solar <%= case_name %> <%= day %>"
+  xfFileName = "Subhourly Horiz Solar <%= case_name %> <%= day %>.csv"
 
 EXPORT
- 	exExportfile = "Subhourly Horizontal Solar Test"
+ 	exExportfile = "Subhourly Horiz Solar <%= case_name %> <%= day %>"
   exHeader = YES
   exFooter = NO
   exType = UDT
   exFreq = SUBHOUR
-  exDayBeg = JAN 1
-  exDayEnd = JAN 1
+  exDayBeg = <%= day %>
+  exDayEnd = <%= day %>
 
   EXPORTCOL colHead="Month" colVal=$month
   EXPORTCOL colHead="Day" colVal=$dayOfMonth
@@ -281,6 +298,12 @@ EXPORT
   EXPORTCOL colHead="@top.radDiffShAv (W/m2)" colVal=@top.radDiffShAv*<%= 1/q_c %>
   EXPORTCOL colHead="@xsurf[Horiz. Roof].sbcO.sgTarg.bm (W/m2)" colVal=@xsurf["Horizontal Roof"].sbcO.sgTarg.bm*<%= 1/q_c %>
   EXPORTCOL colHead="@xsurf[Horiz. Roof].sbcO.sgTarg.df (W/m2)" colVal=@xsurf["Horizontal Roof"].sbcO.sgTarg.df*<%= 1/q_c %>
+
+<%
+    end
+  end
+end
+%>
 
   DELETE EXPORTFILE Primary
 RUN
