@@ -1,0 +1,12 @@
+name: Test
+
+on: push
+
+jobs:
+  test-std140:
+    name: Test std140
+    steps:
+      - name: Checkout
+        uses: action/checkout@1
+      - name: Run-test
+        run: rake
