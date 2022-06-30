@@ -12,10 +12,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set up Ruby 2.6         # Install ruby
+      - name: Set up Ruby 2.0        # Install ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: 2.6.x   
+          ruby-version: 2.0.0   
       # Install modelkit
       - name: Setup python anaconda       # Install Python
         uses: actions/setup-python@v3
