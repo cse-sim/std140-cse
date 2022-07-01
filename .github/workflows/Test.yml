@@ -17,7 +17,10 @@ jobs:
         with:
           ruby-version: '2.0' # Not needed with a .ruby-version file
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      # Install modelkit
+      - name: Install modelkit  # Install modelkit
+        uses: supercaracal/go-mod-dl-action@v1
+        with:
+          url: https://download.bigladdersoftware.com/?ref=modelkit-catalyst-0.5.0.exe
       - name: Setup python anaconda       # Install Python
         uses: actions/setup-python@v3
         with:
