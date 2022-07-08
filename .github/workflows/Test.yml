@@ -17,10 +17,11 @@ jobs:
         with:
           ruby-version: '2.0' # Not needed with a .ruby-version file
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Install modelkit  # Install modelkit
-        uses: engineerd/configurator@v0.0.8
-      #   url: https://download.bigladdersoftware.com/?ref=modelkit-catalyst-0.5.0.exe
-      #    pathInArchive: modelkit-catalyst.exe
+      - uses: engineerd/configurator@v0.0.8
+        with:
+          name: Install modelkit  # Install modelkit
+          url: https://download.bigladdersoftware.com/?ref=modelkit-catalyst-0.5.0.exe
+          pathInArchive: modelkit-catalyst.exe
       #- name: Setup python anaconda       # Install Python
       #  uses: actions/setup-python@v3
       #  with:
