@@ -17,27 +17,27 @@ jobs:
         with:
           ruby-version: '2.0' # Not needed with a .ruby-version file
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Install modelkit  # Install modelkit
-        uses: supercaracal/go-mod-dl-action@v1
-        with:
-          url: https://download.bigladdersoftware.com/?ref=modelkit-catalyst-0.5.0.exe
-      - name: Setup python anaconda       # Install Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.10
-      - name: Add conda to system path
-        run: |
+      #- name: Install modelkit  # Install modelkit
+      #  uses: supercaracal/go-mod-dl-action@v1
+      #  with:
+      #    url: https://download.bigladdersoftware.com/?ref=modelkit-catalyst-0.5.0.exe
+      #- name: Setup python anaconda       # Install Python
+      #  uses: actions/setup-python@v3
+      #  with:
+      #    python-version: 3.10
+      #- name: Add conda to system path
+      #  run: |
           # $CONDA is an environment variable pointing to the root of the miniconda directory
-          echo $CONDA/bin >> $GITHUB_PATH
+      #    echo $CONDA/bin >> $GITHUB_PATH
       # Install: pip install openpyxl
-      - name: Install Openpyxl
-        uses: BSFishy/pip-action@v1
-        with:
-          packages: openpyxl
-      - name: Run-test
-        run: rake
-      - name: Upload executable artifiact
-        uses: actions/upload-artifact@v2.2.4
-        with:
-          name: 
-          path: 
+      #- name: Install Openpyxl
+      #  uses: BSFishy/pip-action@v1
+      #  with:
+      #    packages: openpyxl
+      #- name: Run-test
+      #  run: rake
+      #- name: Upload executable artifiact
+      #  uses: actions/upload-artifact@v2.2.4
+      #  with:
+      #    name: 
+      #    path: 
