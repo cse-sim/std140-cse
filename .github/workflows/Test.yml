@@ -12,29 +12,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set up Ruby 2.0        # Install ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.0' # Not needed with a .ruby-version file
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Setup python anaconda       # Install Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.10
-      - name: Add conda to system path
-        run: |
-          # $CONDA is an environment variable pointing to the root of the miniconda directory
-          echo $CONDA/bin >> $GITHUB_PATH
-      - name: Install Openpyxl   # Install: pip install openpyxl
-        uses: BSFishy/pip-action@v1
-        with:
-          packages: openpyxl
-      #- name: Install modelkit  # Install modelkit
-      #  uses: engineerd/configurator@v0.0.8
-      #  with:
-      #    name: modelkit
-      #    url: https://download.bigladdersoftware.com/?ref=modelkit-catalyst-0.5.0.exe
-      #    pathInArchive: $GITHUB_PATH/modelkit-catalyst.exe
+      # - name: Set up Ruby 2.0        # Install ruby
+      #   uses: ruby/setup-ruby@v1
+      #   with:
+      #     ruby-version: '2.0' # Not needed with a .ruby-version file
+      #     bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      # - name: Setup python anaconda       # Install Python
+      #   uses: actions/setup-python@v3
+      #   with:
+      #     python-version: 3.10
+      # - name: Add conda to system path
+      #   run: |
+      #     # $CONDA is an environment variable pointing to the root of the miniconda directory
+      #     echo $CONDA/bin >> $GITHUB_PATH
+      # - name: Install Openpyxl   # Install: pip install openpyxl
+      #   uses: BSFishy/pip-action@v1
+      #   with:
+      #     packages: openpyxl
+      - name: Install modelkit  # Install modelkit
+       uses: engineerd/configurator@v0.0.8
+       with:
+         name: modelkit
+         url: https://download.bigladdersoftware.com/?ref=modelkit-catalyst-0.5.0.exe
+         pathInArchive: $GITHUB_PATH/modelkit-catalyst.exe
       
       
       #- name: Run-test
