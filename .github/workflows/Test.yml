@@ -15,7 +15,8 @@ jobs:
       - name: Install modelkit  # Install modelkit
         run: |
           curl https://download.bigladdersoftware.com/cache/afb830f08cb302fd30260b4199105e4041682834/modelkit-catalyst-0.5.0.exe --output modelkit.exe
-          modelkit.exe
+          dir
+          modelkit
       # - name: Set up Ruby 2.0        # Install ruby
       #   uses: ruby/setup-ruby@v1
       #   with:
