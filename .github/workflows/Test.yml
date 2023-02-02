@@ -14,9 +14,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Install modelkit  # Install modelkit
         run: |
-          curl https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe --output ./modelkit-installer.exe
+          curl https://download.bigladdersoftware.com/?ref=modelkit-catalyst-latest-win --output ./modelkit-installer.exe
           modelkit-installer.exe /VERYSILENT
           modelkit --help
+      # https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe
       # - name: Set up Ruby 2.0        # Install ruby
       #   uses: ruby/setup-ruby@v1
       #   with:
