@@ -17,9 +17,12 @@ jobs:
           curl https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe --output ./modelkit-installer.exe
           mkdir modelkit-folder
           modelkit-installer.exe /VERYSILENT /DIR=./modelkit-folder/
-          copy modelkit-folder\bin\modelkit.bat .
-          dir
-          modelkit.bat template-compose
+      - name: Add modelkit to path
+        run: echo "${HOME}/modelkit-folder/bin/modelkit.bat" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Test path
+        run: |
+          PATH
+          $GITHUB_PATH
       - name: Run-test
         run: rake
       #cd modelkit-folder
