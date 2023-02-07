@@ -20,6 +20,7 @@ jobs:
           PATH
           dir
           cd modelkit-folder
+          cd bin
           dir
       # modelkit --help
       # https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe
