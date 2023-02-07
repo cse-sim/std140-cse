@@ -19,7 +19,7 @@ jobs:
           modelkit-installer.exe /VERYSILENT /DIR=./modelkit-folder/
           copy modelkit-folder\bin\modelkit.bat .
           dir
-          modelkit -h
+          modelkit
       - name: Run-test
         run: rake
       #cd modelkit-folder
