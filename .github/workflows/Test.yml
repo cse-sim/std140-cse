@@ -18,17 +18,16 @@ jobs:
           mkdir modelkit-folder
           modelkit-installer.exe /VERYSILENT /DIR=./modelkit-folder/
           copy modelkit-folder/bin/modelkit.bat ./modelkit.bat
-        # PATH
           dir
-        #cd modelkit-folder
+      - name: Run-test
+        run: rake
+      #cd modelkit-folder
         #cd bin
         #dir
         #modelkit.bat --help
       # modelkit --help
       # https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe
       # https://download.bigladdersoftware.com/?ref=modelkit-catalyst-latest-win
-      - name: Run-test
-        run: rake
       #- name: Upload executable artifiact
       #  uses: actions/upload-artifact@v2.2.4
       #  with:
