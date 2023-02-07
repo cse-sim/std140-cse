@@ -22,6 +22,7 @@ jobs:
           cd modelkit-folder
           cd bin
           dir
+          modelkit.bat --help
       # modelkit --help
       # https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe
       # https://download.bigladdersoftware.com/?ref=modelkit-catalyst-latest-win
