@@ -20,7 +20,7 @@ def compose(c, tests)
   success = nil
   if !(FileUtils.uptodate?(target, src))
     puts "\ncomposing...\n\n"
-    success = system(%Q|modelkit.bat template-compose -f "#{c}" -o "#{output_dir + '/in.cse'}"  base-#{tests}.pxt|)
+    success = system(%Q|./modelkit.bat template-compose -f "#{c}" -o "#{output_dir + '/in.cse'}"  base-#{tests}.pxt|)
   else
     puts "  ...input already up-to-date."
     success = true
