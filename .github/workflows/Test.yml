@@ -19,7 +19,7 @@ jobs:
           modelkit-installer.exe /VERYSILENT /DIR=./modelkit-folder/
           copy .\modelkit-folder\bin\modelkit.bat .
           echo "$GITHUB_PATH"
-          echo "$HOME\modelkit.bat" >> $GITHUB_PATH
+          echo "$HOME/modelkit.bat" >> $GITHUB_PATH
       # - name: Add modelkit to path
       #   run: echo "${HOME}/modelkit-folder/bin/modelkit.bat" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - name: Test path
