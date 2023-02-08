@@ -22,7 +22,7 @@ jobs:
       - name: Test path
         run: |
           PATH
-          $GITHUB_PATH
+      # $GITHUB_PATH
       - name: Run-test
         run: rake
       #cd modelkit-folder
