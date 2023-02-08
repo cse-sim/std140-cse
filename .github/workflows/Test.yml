@@ -18,13 +18,14 @@ jobs:
           mkdir modelkit-folder
           modelkit-installer.exe /VERYSILENT /DIR=./modelkit-folder/
           copy .\modelkit-folder\bin\modelkit.bat .
+          "${HOME}\modelkit.bat" >> $env:GITHUB_PATH
       # - name: Add modelkit to path
       #   run: echo "${HOME}/modelkit-folder/bin/modelkit.bat" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - name: Test path
         run: |
           PATH
           dir
-          echo ${GITHUB_PATH}
+          echo "{HOME}"
       # $GITHUB_PATH
       - name: Run-test
         run: rake
