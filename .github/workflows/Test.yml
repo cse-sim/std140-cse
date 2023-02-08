@@ -24,6 +24,7 @@ jobs:
         run: |
           PATH
           dir
+          echo ${GITHUB_PATH}
       # $GITHUB_PATH
       - name: Run-test
         run: rake
