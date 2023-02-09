@@ -28,7 +28,8 @@ jobs:
           dir
           echo "$GITHUB_PATH"
       - name: Run-test
+        shell: cmd
         run: |
-          modelkit
+          ./modelkit.bat
           rake
       
