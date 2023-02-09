@@ -23,14 +23,10 @@ jobs:
           modelkit-installer.exe /VERYSILENT /DIR=./modelkit-folder/
           copy .\modelkit-folder\bin\modelkit.bat .
           echo "$HOME/modelkit.bat" >> $GITHUB_PATH
-      - name: Test path
-        run: |
-          PATH
-          dir
-          echo "$GITHUB_PATH"
-      - name: Run-test
+      - name: Run rake test
         shell: cmd
         run: |
+          dir /q
           modelkit.bat
           rake
       
