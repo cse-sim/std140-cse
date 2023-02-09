@@ -24,8 +24,8 @@ jobs:
         run: |
           dir /q
           dir modelkit-folder\bin /q
-          dir ../..
-          modelkit.bat
+          dir ..\..
+          .\modelkit-folder\bin\modelkit.bat --help
           rake
       # - name: Install ruby
       #   uses: ruby/setup-ruby@v1
