@@ -18,7 +18,7 @@ jobs:
           mkdir modelkit-folder
           modelkit-installer.exe /SP- /VERYSILENT /DIR=./modelkit-folder/
           copy .\modelkit-folder\bin\modelkit.bat .
-          echo "$HOME\modelkit-folder\bin\modelkit.bat" >> $GITHUB_PATH
+          echo "$HOME\modelkit-folder\bin" >> $GITHUB_PATH
       - name: Run rake test
         shell: cmd
         run: |
