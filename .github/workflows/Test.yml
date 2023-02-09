@@ -22,7 +22,7 @@ jobs:
       - name: Run rake test
         shell: cmd
         run: |
-          echo $PATH
+          PATH
           modelkit --help
           rake
       # - name: Install ruby
