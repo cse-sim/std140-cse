@@ -20,7 +20,7 @@ jobs:
       - name: Add modelkit to path
         run: |
           echo "$env:GITHUB_PATH"
-          "$env:HOMEPATH/modelkit-folder/bin" >> $env:GITHUB_PATH
+          "$env:HOMEPATH\modelkit-folder\bin" >> $env:GITHUB_PATH
       - name: Run rake test
         run: |
           echo $env:GITHUB_PATH
