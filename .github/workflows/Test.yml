@@ -19,17 +19,8 @@ jobs:
           .\modelkit-installer.exe /SP- /VERYSILENT /DIR=.\modelkit-folder
       - name: Add modelkit to path
         run: |
-          echo "${{ github.workspace }}"
           "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
       - name: Run rake test
         run: |
-          echo $env:HOMEPATH
-          echo $env:GITHUB_PATH
-          echo $env:path
-          modelkit --help
+          dir .\output\section-5\195
           rake
-      # copy .\modelkit-folder\bin\modelkit.bat .
-      # - name: Install ruby
-      #   uses: ruby/setup-ruby@v1
-      #   with:
-      #     ruby-version: '3.0'
