@@ -22,8 +22,4 @@ jobs:
           "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
       - name: Run rake test
         run: |
-          dir 
-          dir .\output\
-          dir .\output\section-5\
-          dir .\output\section-5\195
           rake
