@@ -23,7 +23,6 @@ jobs:
           "$env:HOMEPATH/modelkit-folder/bin" >> $env:GITHUB_PATH
       - name: Run rake test
         run: |
-          PATH
           modelkit --help
           rake
       # copy .\modelkit-folder\bin\modelkit.bat .
