@@ -19,10 +19,11 @@ jobs:
           .\modelkit-installer.exe /SP- /VERYSILENT /DIR=.\modelkit-folder
       - name: Add modelkit to path
         run: |
-          echo "$env:GITHUB_PATH"
-          "$env:HOMEPATH\modelkit-folder\bin" >> $env:GITHUB_PATH
+          echo "${{ github.env }}"
+          "${{ github.env }}/modelkit-folder/bin" >> $env:GITHUB_PATH
       - name: Run rake test
         run: |
+          echo $env:HOMEPATH
           echo $env:GITHUB_PATH
           echo $env:path
           modelkit --help
