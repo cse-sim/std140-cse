@@ -15,7 +15,6 @@ jobs:
       - name: Install modelkit  # Install modelkit
         run: |
           curl https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe --output ./modelkit-installer.exe
-          mkdir modelkit-folder
           .\modelkit-installer.exe /SP- /VERYSILENT /DIR=.\modelkit-folder
       - name: Add modelkit to path
         run: |
@@ -23,6 +22,7 @@ jobs:
       - name: Test modelkit help
         run: |
           echo $env:path
+          dir
           dir "${{ github.workspace }}\modelkit-folder"
           dir "${{ github.workspace }}\modelkit-folder\bin"
           modelkit --version
