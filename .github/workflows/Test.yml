@@ -21,7 +21,10 @@ jobs:
         run: |
           "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
       - name: Test modelkit help
-        run: modelkit --help
+        run: |
+          echo $env:path
+          modelkit --version
+          modelkit --help
       - name: Run rake test
         run: |
           modelkit rake
