@@ -19,16 +19,17 @@ jobs:
       - name: Add modelkit to path
         run: |
           "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
-      - name: Test modelkit help
+      - name: Check directories
         run: |
           echo $env:path
           dir
           dir cases
           dir "${{ github.workspace }}\modelkit-folder"
           dir "${{ github.workspace }}\modelkit-folder\bin"
-          .\modelkit-folder\bin\modelkit.bat
-          modelkit --version
-          modelkit --help
+      - name: Test modelkit bat
+        run: .\modelkit-folder\bin\modelkit.bat
+      - name: Test modelkit command
+        run: modelkit --version
       - name: Run rake test
         run: |
           modelkit rake
