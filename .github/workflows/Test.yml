@@ -20,6 +20,8 @@ jobs:
       - name: Add modelkit to path
         run: |
           "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
+      - name: Test modelkit help
+        run: modelkit --help
       - name: Run rake test
         run: |
           modelkit rake
