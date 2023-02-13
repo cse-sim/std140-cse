@@ -23,6 +23,7 @@ jobs:
         run: |
           echo $env:path
           dir
+          dir cases
           dir "${{ github.workspace }}\modelkit-folder"
           dir "${{ github.workspace }}\modelkit-folder\bin"
           .\modelkit-folder\bin\modelkit.bat
