@@ -82,17 +82,14 @@ task :sim, [:filter] do |t, args|
   cases = Dir['cases/' + tests + '/*.*']
   for c in cases
     if !compose(c, tests)
-      puts "\nERROR: Composition failed..."
-      exit
+      abort("\nERROR: Composition failed...")
     end
     if !sim(c, tests)
-      puts "\nERROR: Simulation failed..."
-      exit
+      abort("\nERROR: Simulation failed...")
     end
   end
   if !write_report(tests)
-    puts "\nERROR: Failed to generate reports..."
-    exit
+    abort("\nERROR: Failed to generate reports...")
   end
 end
 
