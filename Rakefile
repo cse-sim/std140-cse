@@ -44,9 +44,9 @@ def sim(c, tests)
   success = nil
   if !(FileUtils.uptodate?(target[0], src)) or !(FileUtils.uptodate?(target[1], src))
     puts "\nsimulating..."
-    puts Dir.chdir(output_dir){dir ..\\..\\..\\.}
     Dir.chdir(output_dir){
       success = system(%Q|..\\..\\..\\CSE.exe in.cse|)
+      puts Dir.entries(".")
     }
     puts "\n"
   else
