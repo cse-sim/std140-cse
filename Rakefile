@@ -8,7 +8,7 @@ def compose(c, tests)
   unless File.directory?(output_dir)
     FileUtils.mkdir_p(output_dir)
   end
-
+  puts Dir.entries(".")
   src = ['base-#{tests}.pxt', 'CSE.exe', 'DRYCOLD_CSW2.csv', c]
   target = output_dir + '/in.cse'
 
@@ -25,6 +25,7 @@ def compose(c, tests)
     puts "  ...input already up-to-date."
     success = true
   end
+  puts "Modelkit done"
   return success
 end
 
@@ -43,6 +44,7 @@ def sim(c, tests)
   success = nil
   if !(FileUtils.uptodate?(target[0], src)) or !(FileUtils.uptodate?(target[1], src))
     puts "\nsimulating..."
+    puts Dir.chdir(output_dir){dir ..\\..\\..\\.}
     Dir.chdir(output_dir){
       success = system(%Q|..\\..\\..\\CSE.exe in.cse|)
     }
