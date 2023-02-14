@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Download & Install modelkit  # Install modelkit
         run: |
-          curl https://download.bigladdersoftware.com/cache/4a7dc4f1ed4ca1873faa71deb73f7542f29e630a/modelkit-catalyst-0.5.0.exe --output "${{ github.workspace }}\modelkit-installer.exe"
+          curl https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe --output "${{ github.workspace }}\modelkit-installer.exe"
           dir
           "${{ github.workspace }}\modelkit-installer.exe" /SP- /VERYSILENT /DIR="${{ github.workspace }}\modelkit-folder"
       - name: Add modelkit to path
