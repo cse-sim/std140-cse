@@ -32,9 +32,9 @@ jobs:
         run: modelkit --version
       - name: Create template for single case
         run: |
-        mkdir tempCase
-        modelkit template-compose -f 'cases\section-5\195\*.*' -o 'tempCase/in.cse' base-195.pxt
-        dir "${{ github.workspace }}\tempCase"
+          mkdir tempCase
+          modelkit template-compose -f 'cases\section-5\195\*.*' -o 'tempCase/in.cse' base-195.pxt
+          dir "${{ github.workspace }}\tempCase"
       - name: Run rake test
         run: |
           modelkit rake
