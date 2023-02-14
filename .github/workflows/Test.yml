@@ -34,7 +34,7 @@ jobs:
         run: |
           mkdir tempCase
           dir "${{ github.workspace }}\base-section-5.pxt"
-          modelkit template-compose -f '${{ github.workspace }}\cases\section-5\195.pxv' -o '${{ github.workspace }}\tempCase\in.cse' '${{ github.workspace }}\base-section-5.pxt'
+          modelkit template-compose '${{ github.workspace }}\base-section-5.pxt'
           dir "${{ github.workspace }}\tempCase"
       - name: Run rake test
         run: |
