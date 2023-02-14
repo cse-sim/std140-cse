@@ -12,12 +12,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Try ruby
+        run: ruby --version
       - name: Install modelkit  # Install modelkit
         run: |
           curl https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe --output ./modelkit-installer.exe
           .\modelkit-installer.exe /SP- /VERYSILENT /DIR=.\modelkit-folder
-      - name: Try ruby
-        run: ruby --version
       - name: Add modelkit to path
         run: |
           "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
