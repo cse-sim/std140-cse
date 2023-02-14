@@ -26,8 +26,6 @@ jobs:
           dir cases
           dir "${{ github.workspace }}\modelkit-folder"
           dir "${{ github.workspace }}\modelkit-folder\bin"
-      - name: Test modelkit bat
-        run: .\modelkit-folder\bin\modelkit.bat
       - name: Test modelkit command
         run: modelkit --version
       - name: Create template for single case
