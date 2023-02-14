@@ -30,6 +30,7 @@ jobs:
         run: modelkit --version
       - name: Create template for single case
         run: |
+          modelkit help template-compose
           mkdir tempCase
           dir "${{ github.workspace }}\base-section-5.pxt"
           modelkit template-compose ".\\base-section-5.pxt"
