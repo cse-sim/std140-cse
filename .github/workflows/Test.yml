@@ -15,7 +15,7 @@ jobs:
       - name: Download & Install modelkit  # Install modelkit
         run: |
           curl https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe --output ./modelkit-installer.exe
-          .\modelkit-installer.exe /SP- /VERYSILENT /DIR="${{ github.workspace }}\modelkit-folder
+          .\modelkit-installer.exe /SP- /VERYSILENT /DIR="${{ github.workspace }}\modelkit-folder"
       - name: Add modelkit to path
         run: |
           "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
