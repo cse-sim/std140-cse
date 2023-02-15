@@ -29,7 +29,6 @@ jobs:
       - name: Test modelkit command
         run: modelkit --version
       - name: Create template for single case
-        shell: bash
         run: |
           modelkit template-compose base-section-5.pxt
       - name: Run rake test
