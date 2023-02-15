@@ -12,10 +12,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Download & Install modelkit  # Install modelkit
-        run: |
-          curl -o modelkit-installer.exe https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe
-          .\modelkit-installer.exe /SP- /VERYSILENT /DIR=modelkit-folder
+      - name: Download modelkit  # Install modelkit
+        run: curl -o modelkit-installer.exe https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe
+      - name: Install modelkit
+        run: .\modelkit-installer.exe /SP- /VERYSILENT /DIR=modelkit-folder
       - name: Add modelkit to path
         run: |
           "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
