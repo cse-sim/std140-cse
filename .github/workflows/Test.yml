@@ -31,7 +31,7 @@ jobs:
       - name: Create template for single case
         shell: bash
         run: |
-          modelkit template-compose "/base-section-5.pxt"
+          modelkit template-compose base-section-5.pxt
       - name: Run rake test
         run: |
           modelkit rake
