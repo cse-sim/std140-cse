@@ -62,12 +62,13 @@ def write_report(tests)
   elsif tests == 'weather-drivers'
     target = ['reports/#{tests}/WeatherDriversResultsSubmittal.xlsx', 'reports/#{tests}/S140outNotes.txt']
   end
+
   puts "\n================="
   puts "     REPORTS     "
   puts "=================\n"
+  puts "#{target}"
+  puts "#{src}"
   success = nil
-  puts #{src}
-  puts #{target}
   if !(FileUtils.uptodate?(target[0], src)) or !(FileUtils.uptodate?(target[1], src))
     Dir.chdir('scripts/' + tests){
       success = system(%Q|python write-results.py|)
