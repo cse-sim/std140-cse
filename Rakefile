@@ -44,8 +44,6 @@ def sim(c, tests)
     puts "\nsimulating..."
     Dir.chdir(output_dir){
       success = system(%Q|..\\..\\..\\CSE.exe in.cse|)
-      puts Dir.entries(".")
-      puts Dir.pwd
     }
     puts "\n"
   else
