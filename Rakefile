@@ -75,7 +75,7 @@ def write_report(tests)
     puts "\n  ...report already up-to-date."
     success = true
   end
-  return true #success
+  return success
 end
 
 task :sim, [:filter] do |t, args|
