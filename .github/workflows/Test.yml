@@ -26,8 +26,8 @@ jobs:
         run: modelkit --version
       - name: Create template for single case
         run: |
-          dir D:/a/std140-cse/std140-cse/base-section-5.pxt
-          modelkit template-compose D:/a/std140-cse/std140-cse/base-section-5.pxt
+          dir D:/a/std140-cse/std140-cse/base-weather-drivers.pxt
+          modelkit template-compose D:/a/std140-cse/std140-cse/base-weather-drivers.pxt
       - name: Run rake test
         run: |
           modelkit rake
