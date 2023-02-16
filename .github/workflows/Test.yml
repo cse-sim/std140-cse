@@ -15,11 +15,6 @@ jobs:
       - name: Add modelkit to path
         run: |
           "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
-      - name: Create template for single case
-        run: |
-          dir D:/a/std140-cse/std140-cse/base-weather-drivers.pxt
-          echo base-section-5.pxt | modelkit template-compose -f cases/section-5/195.pxv
-          dir
       - name: Run rake test
         run: |
           modelkit rake
