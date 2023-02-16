@@ -30,7 +30,7 @@ jobs:
           python write-results.py
       - name: Test weather-drivers Python script
         run: |
-          cd scripts/weather-drivers
+          cd "${{ github.workspace }}/scripts/weather-drivers"
           python write-results.py
       
       

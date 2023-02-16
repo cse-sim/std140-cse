@@ -100,6 +100,8 @@ for case in cases:
     i += 1
 
   row  = subhourly_row_beg
+  # Check if exists
+  
   df_hourly = pd.read_csv('../../output/' + tests + '/' + case + '/HOURLY.csv')
   df_subhourly = pd.read_csv('../../output/' + tests + '/' + case + '/SUBHOURLY.csv')
 
