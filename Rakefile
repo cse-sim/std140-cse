@@ -23,7 +23,7 @@ def compose(c, tests)
     puts "#{c}"
     puts "#{output_dir + '/in.cse'}"
     puts "base-#{tests}.pxt"
-    success = system(%Q|modelkit template-compose -f "#{c}" -o "#{output_dir + '/in.cse'}"  "base-#{tests}.pxt"|)
+    success = system(%Q| echo base-#{tests}.pxt | modelkit template-compose -f "#{c}" -o "#{output_dir + '/in.cse'}"  |)
   else
     puts "  ...input already up-to-date."
     success = true
