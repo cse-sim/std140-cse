@@ -13,7 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install python dependencies
-        run: pip install openpyxl numpy pandas matplotlib
+        run: pip install openpyxl numpy pandas matplotlib mako
       - name: Download modelkit  # Install modelkit
         run: curl -o modelkit-installer.exe https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe
       - name: Install modelkit
