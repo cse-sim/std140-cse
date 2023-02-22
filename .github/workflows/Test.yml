@@ -24,13 +24,4 @@ jobs:
       - name: Run rake test
         run: |
           modelkit rake
-      - name: Test section-5 Python script
-        run: |
-          cd scripts/section-5
-          python write-results.py
-      - name: Test weather-drivers Python script
-        run: |
-          cd "${{ github.workspace }}/scripts/weather-drivers"
-          python write-results.py
-      
       

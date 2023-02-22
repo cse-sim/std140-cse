@@ -64,8 +64,6 @@ def write_report(tests)
   puts "\n================="
   puts "     REPORTS     "
   puts "=================\n"
-  puts "#{target}"
-  puts "#{src}"
   success = nil
   if !(FileUtils.uptodate?(target[0], src)) or !(FileUtils.uptodate?(target[1], src))
     Dir.chdir('scripts/' + tests){
