@@ -23,5 +23,5 @@ jobs:
           "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
       - name: Run rake test
         run: |
-          modelkit rake
+          modelkit rake sim[section-5, weather-drivers]
       
