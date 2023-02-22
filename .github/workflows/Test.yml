@@ -22,7 +22,7 @@ jobs:
         run: |
           "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
       - name: Run section-5 test
-        run: modelkit rake sim[section-5, weather-drivers]
+        run: modelkit rake sim[section-5]
       - name: Run weather-drivers test
         run: modelkit rake sim[weather-drivers]
       
