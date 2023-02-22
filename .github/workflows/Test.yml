@@ -25,13 +25,8 @@ jobs:
         run: modelkit rake sim[section-5]
       - name: Run weather-drivers test
         run: modelkit rake sim[weather-drivers]
-      - name: Upload section-5 artifact
+      - name: Upload report
         uses: actions/upload-artifact@v3
         with:
           name: section-5
-          path: output/section-5/
-      - name: Upload weather-drivers artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: weather-drivers
-          path: output/weather-drivers/
+          path: report/
