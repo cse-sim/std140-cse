@@ -8,6 +8,7 @@ def compose(c, tests)
   unless File.directory?(output_dir)
     FileUtils.mkdir_p(output_dir)
   end
+  
   src = ['base-#{tests}.pxt', 'CSE.exe', 'DRYCOLD_CSW2.csv', c]
   target = output_dir + '/in.cse'
 
