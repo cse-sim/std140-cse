@@ -28,5 +28,5 @@ jobs:
       - name: Upload report
         uses: actions/upload-artifact@v3
         with:
-          name: section-5
-          path: reports/
+          name: reports
+          path: .
