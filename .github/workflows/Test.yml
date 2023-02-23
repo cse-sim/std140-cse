@@ -1,0 +1,32 @@
+name: Test
+
+on: push
+
+jobs:
+  test-std140:
+    name: Test std140
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install python dependencies
+        run: pip install openpyxl numpy pandas matplotlib mako
+      - name: Download modelkit  # Install modelkit
+        run: curl -o modelkit-installer.exe https://share.bigladdersoftware.com/files/modelkit-caboodle-0.9.0-flannel+caboodle.22.a701d43.exe
+      - name: Install modelkit
+        run: .\modelkit-installer.exe /SP- /VERYSILENT /DIR=modelkit-folder | Out-Null
+      - name: Add modelkit to path
+        run: |
+          "${{ github.workspace }}\modelkit-folder\bin" >> $env:GITHUB_PATH
+      - name: Run section-5 test
+        run: modelkit rake sim[section-5]
+      - name: Run weather-drivers test
+        run: modelkit rake sim[weather-drivers]
+      - name: Upload report
+        uses: actions/upload-artifact@v3
+        with:
+          name: reports
+          path: ./reports/
