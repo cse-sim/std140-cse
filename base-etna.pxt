@@ -227,6 +227,7 @@ MATERIAL "Glass Wool 3"
   matSpHt = <%= 808*cp_c %>
 
 MATERIAL "Polystyrene 2 Windows" LIKE "Polystyrene 2 Floor"
+  matCond = <%= 2.6227*k_c %>
 
 CONSTRUCTION "Opaque Window"
   LAYER lrMat="Opaque Pane"
