@@ -65,75 +65,173 @@ hConvMod = No
 
 // Constructions
 
+MATERIAL "Wallpaper"
+  matCond = <%= 0.14*k_c %>
+  matDens = <%= 700*rho_c %>
+  matSpHt = <%= 1340*cp_c %>
+
 MATERIAL "Plasterboard"
-  matCond = <%= 0.16*k_c %>
-  matSpHt = <%= 840*cp_c %>
-  matDens = <%= 950*rho_c %>
+  matCond = <%= 0.35*k_c %>
+  matDens = <%= 850*rho_c %>
+  matSpHt = <%= 800*cp_c %>
 
-MATERIAL "Concrete Block"
-  matCond = <%= 0.51*k_c %>
-  matSpHt = <%= 1000*cp_c %>
-  matDens = <%= 1400*rho_c %>
+MATERIAL "Air / Honeycomb Cardboard"
+  matCond = <%= 0.307*k_c %>
+  matDens = <%= 26.1*rho_c %>
+  matSpHt = <%= 1340*cp_c %>
 
-MATERIAL "Fiberglass Quilt"
-  matCond = <%= 0.04*k_c %>
-  matSpHt = <%= 840*cp_c %>
-  matDens = <%= 12*rho_c %>
-
-MATERIAL "Foam Insulation"
-  matCond = <%= 0.04*k_c %>
-  matSpHt = <%= 1400*cp_c %>
-  matDens = <%= 10*rho_c %>
-
-MATERIAL "Wood Siding"
-  matCond = <%= 0.14*k_c %>
-  matSpHt = <%= 900*cp_c %>
-  matDens = <%= 530*rho_c %>
-
-MATERIAL "Timber Flooring"
-  matCond = <%= 0.14*k_c %>
+MATERIAL "Styrodur North Wall"
+  matCond = <%= 0.0563*k_c %>
+  matDens = <%= 18*rho_c %>
   matSpHt = <%= 1200*cp_c %>
-  matDens = <%= 650*rho_c %>
+
+MATERIAL "Polystyrene East Wall"
+  matCond = <%= 0.0407*k_c %>
+  matDens = <%= 15*rho_c %>
+  matSpHt = <%= 1200*cp_c %>
+
+MATERIAL "Air Gap Walls"
+  matCond = <%= 0.070*k_c %>
+  matDens = <%= 1.2*rho_c %>
+  matSpHt = <%= 1000*cp_c %>
+
+MATERIAL "Hollow Block"
+  matCond = <%= 1.052*k_c %>
+  matDens = <%= 1200*rho_c %>
+  matSpHt = <%= 950*cp_c %>
+
+MATERIAL "Facing"
+  matCond = <%= 1.15*k_c %>
+  matDens = <%= 1950*rho_c %>
+  matSpHt = <%= 850*cp_c %>
+
+MATERIAL "Polystyrene South Wall" LIKE "Polystyrene East Wall"
+  matCond = <%= 0.0383*k_c %>
+
+MATERIAL "Polystyrene West Wall" LIKE "Polystyrene East Wall"
+  matCond = <%= 0.0597*k_c %>
+
+MATERIAL "Glass Wool 1 Ceiling"
+  matCond = <%= 0.0364*k_c %>
+  matDens = <%= 11*rho_c %>
+  matSpHt = <%= 800*cp_c %>
+
+MATERIAL "Glass Wool 2 Ceiling" COPY "Glass Wool 1 Ceiling"
+
+MATERIAL "Air Gap Ceiling" LIKE "Air Gap Walls"
+  matCond = <%= 0.618*k_c %>
+
+MATERIAL "Particle Board"
+  matCond = <%= 0.17*k_c %>
+  matDens = <%= 700*rho_c %>
+  matSpHt = <%= 1200*cp_c %>
+
+MATERIAL "Planks"
+  matCond = <%= 0.15*k_c %>
+  matDens = <%= 500*rho_c %>
+  matSpHt = <%= 1200*cp_c %>
+
+MATERIAL "Ceramic Tile"
+  matCond = <%= 1.75*k_c %>
+  matDens = <%= 2177*rho_c %>
+  matSpHt = <%= 920*cp_c %>
+
+MATERIAL "Glue Cement"
+  matCond = <%= 1.50*k_c %>
+  matDens = <%= 1900*rho_c %>
+  matSpHt = <%= 840*cp_c %>
+
+MATERIAL "Concrete"
+  matCond = <%= 1.75*k_c %>
+  matDens = <%= 2177*rho_c %>
+  matSpHt = <%= 920*cp_c %>
+
+MATERIAL "Concrete + Tubes + Polystyrene Ribs"
+  matCond = <%= 1.47*k_c %>
+  matDens = <%= 1813*rho_c %>
+  matSpHt = <%= 954*cp_c %>
+
+MATERIAL "Polystyrene 1 Floor"
+  matCond = <%= 0.0719*k_c %>
+  matDens = <%= 16*rho_c %>
+  matSpHt = <%= 1200*cp_c %>
+
+MATERIAL "Polystyrene 2 Floor" COPY "Polystyrene 1 Floor"
+
+MATERIAL "Plastic Lining"
+  matCond = <%= 0.124*k_c %>
+  matDens = <%= 265*rho_c %>
+  matSpHt = <%= 1170*cp_c %>
 
 MATERIAL "Concrete Slab"
-  matCond = <%= 1.13*k_c %>
+  matCond = <%= 0.*k_c %>
+  matDens = <%= *rho_c %>
+  matSpHt = <%= *cp_c %>
+
+MATERIAL "Insulated Block 1"
+  matCond = <%= 0.0719*k_c %>
+  matDens = <%= 18*rho_c %>
+  matSpHt = <%= 1200*cp_c %>
+
+MATERIAL "Insulated Block 2" COPY "Insulated Block 1"
+
+MATERIAL "Concrete Beam 2"
+  matCond = <%= 1.75*k_c %>
+  matDens = <%= 2200*rho_c %>
+  matSpHt = <%= 950*cp_c %>
+
+MATERIAL "Concrete Beam 1" COPY "Concrete Beam 2"
+
+MATERIAL "Blended Wood/Air/Cardboard + Plywood + Plexiglass"
+  matCond = <%= 0.1643*k_c %>
+  matDens = <%= 307*rho_c %>
+  matSpHt = <%= 1317*cp_c %>
+
+MATERIAL "Blended Air Gap"
+  matCond = <%= 0.254*k_c %>
+  matDens = <%= 1.2*rho_c %>
   matSpHt = <%= 1000*cp_c %>
-  matDens = <%= 1400*rho_c %>
 
-MATERIAL "Insulation"
-  matCond = <%= 0.04*k_c %>
-  matSpHt = <%= 0*cp_c %>
-  matDens = <%= 0*rho_c %>
+MATERIAL "Styrodur Door" COPY "Styrodur North Wall"
 
-MATERIAL "Roofdeck"
-  matCond = <%= 0.14*k_c %>
+MATERIAL "Blended Glass/Air Gap/Glass"
+  matCond = <%= 0.124*k_c %>
+  matDens = <%= 1081*rho_c %>
   matSpHt = <%= 900*cp_c %>
-  matDens = <%= 530*rho_c %>
 
-MATERIAL "Common Wall"
-  matCond = <%= 0.510*k_c %>
+MATERIAL "Air Gap Windows" LIKE "Air Gap Walls"
+  matCond = <%= 0.1234*k_c %>
+
+MATERIAL "Glass Wool 1 Windows" LIKE "Glass Wool 1 Ceiling"
+  matCond = <%= 0.0657*k_c %>
+
+MATERIAL "Polystyrene 1 Windows" LIKE "Polystyrene 1 Floor"
+  matCond = <%= 0.0657*k_c %>
+
+MATERIAL "PVC"
+  matCond = <%= 0.16*k_c %>
+  matDens = <%= 1380*rho_c %>
   matSpHt = <%= 1000*cp_c %>
-  matDens = <%= 1400*rho_c %>
 
-<% if opaque %>
-Material "Opaque Pane"
-  matCond = <%= 1.00*k_c %>
-  matSpHt = <%= 750*cp_c %>
-  matDens = <%= 2470*rho_c %>
-  matThk = <%= 0.003048*m_ft %>
+MATERIAL "Glass Wool 2 Windows" LIKE "Glass Wool 2 Ceiling"
+  matCond = <%= 0.0657*k_c %>
 
-Material "Air Gap"
-  matCond = <%= 0.0625*k_c %>
-  matSpHt = <%= 1006.103271*cp_c %>
-  matDens = <%= 1.292498*rho_c %>
-  matThk = <%= 0.012*m_ft %>
+MATERIAL "Blended PVC + Facing + Plasterboard"
+  matCond = <%= 3.3750*k_c %>
+  matDens = <%= 1442*rho_c %>
+  matSpHt = <%= 975*cp_c %>
+
+MATERIAL "Glass Wool 3"
+  matCond = <%= 2.6227*k_c %>
+  matDens = <%= 316*rho_c %>
+  matSpHt = <%= 808*cp_c %>
+
+MATERIAL "Polystyrene 2 Windows" LIKE "Polystyrene 2 Floor"
 
 CONSTRUCTION "Opaque Window"
   LAYER lrMat="Opaque Pane"
   LAYER lrMat="Air Gap"
   LAYER lrMat="Opaque Pane"
-
-<% end %>
 
 <% if construction_mass == "LOW" %>
 
