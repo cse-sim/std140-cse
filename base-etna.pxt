@@ -75,7 +75,7 @@ MATERIAL "Plasterboard"
   matDens = <%= 850*rho_c %>
   matSpHt = <%= 800*cp_c %>
 
-MATERIAL "Air / Honeycomb Cardboard"
+MATERIAL "Air/Honeycomb Cardboard"
   matCond = <%= 0.307*k_c %>
   matDens = <%= 26.1*rho_c %>
   matSpHt = <%= 1340*cp_c %>
