@@ -229,92 +229,114 @@ MATERIAL "Glass Wool 3"
 MATERIAL "Polystyrene 2 Windows" LIKE "Polystyrene 2 Floor"
   matCond = <%= 2.6227*k_c %>
 
-CONSTRUCTION "Opaque Window"
-  LAYER lrMat="Opaque Pane"
-  LAYER lrMat="Air Gap"
-  LAYER lrMat="Opaque Pane"
+CONSTRUCTION "North Wall"
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
+  LAYER lrMat="Air/Honeycomb Cardboard" lrThk=<%= 0.0.046*m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.0.013*m_ft %>
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
+  LAYER lrMat="Styrodur North Wall" lrThk=<%= 0.060*m_ft %>
 
-<% if construction_mass == "LOW" %>
-
-CONSTRUCTION "Exterior Wall"
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.012*m_ft %>
-  LAYER lrMat="Fiberglass Quilt" lrThk=<%= 0.066*m_ft %>
-  LAYER lrMat="Wood Siding" lrThk=<%= 0.009*m_ft %>
-
-CONSTRUCTION "Raised Floor"
-  LAYER lrMat="Timber Flooring" lrThk=<%= 0.025*m_ft %>
-  LAYER lrMat="Insulation" lrThk=<%= 1.003*m_ft %>
-
-CONSTRUCTION "Roof"
+CONSTRUCTION "East Wall"
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Fiberglass Quilt" lrThk=<%= 0.1118*m_ft %>
-  LAYER lrMat="Roofdeck" lrThk=<%= 0.019*m_ft %>
+  LAYER lrMat="Polystyrene East Wall" lrThk=<%= 0.080*m_ft %>
+  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*m_ft %>
+  LAYER lrMat="Hollow Block" lrThk=<%= 0.200*m_ft %>
+  LAYER lrMat="Facing" lrThk=<%= 0.020*m_ft %>
 
-<% elsif construction_mass == "LOW-EFF" %>
-
-CONSTRUCTION "Exterior Wall"
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.012*m_ft %>
-  LAYER lrMat="Foam Insulation" lrThk=<%= 0.250*m_ft %>
-  LAYER lrMat="Wood Siding" lrThk=<%= 0.009*m_ft %>
-
-CONSTRUCTION "Raised Floor"
-  LAYER lrMat="Timber Flooring" lrThk=<%= 0.025*m_ft %>
-  LAYER lrMat="Insulation" lrThk=<%= 1.003*m_ft %>
-
-CONSTRUCTION "Roof"
+CONSTRUCTION "South Wall"
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Fiberglass Quilt" lrThk=<%= 0.400*m_ft %>
-  LAYER lrMat="Roofdeck" lrThk=<%= 0.019*m_ft %>
+  LAYER lrMat="Polystyrene South Wall" lrThk=<%= 0.080*m_ft %>
+  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*m_ft %>
+  LAYER lrMat="Hollow Block" lrThk=<%= 0.200*m_ft %>
+  LAYER lrMat="Facing" lrThk=<%= 0.020*m_ft %>
 
-<% elsif construction_mass == "HIGH" %>
-
-CONSTRUCTION "Exterior Wall"
-  LAYER lrMat="Concrete Block" lrThk=<%= 0.100*m_ft %>
-  LAYER lrMat="Foam Insulation" lrThk=<%= 0.0615*m_ft %>
-  LAYER lrMat="Wood Siding" lrThk=<%= 0.009*m_ft %>
-
-CONSTRUCTION "Raised Floor"
-  LAYER lrMat="Concrete Slab" lrThk=<%= 0.080*m_ft %>
-  LAYER lrMat="Insulation" lrThk=<%= 1.007*m_ft %>
-
-CONSTRUCTION "Roof"
+CONSTRUCTION "West Wall"
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Fiberglass Quilt" lrThk=<%= 0.1118*m_ft %>
-  LAYER lrMat="Roofdeck" lrThk=<%= 0.019*m_ft %>
-
-<% elsif construction_mass == "HIGH-EFF" %>
-
-CONSTRUCTION "Exterior Wall"
-  LAYER lrMat="Concrete Block" lrThk=<%= 0.100*m_ft %>
-  LAYER lrMat="Foam Insulation" lrThk=<%= 0.2452*m_ft %>
-  LAYER lrMat="Wood Siding" lrThk=<%= 0.009*m_ft %>
-
-CONSTRUCTION "Raised Floor"
-  LAYER lrMat="Concrete Slab" lrThk=<%= 0.080*m_ft %>
-  LAYER lrMat="Insulation" lrThk=<%= 1.007*m_ft %>
-
-CONSTRUCTION "Roof"
+  LAYER lrMat="Polystyrene West Wall" lrThk=<%= 0.080*m_ft %>
+  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*m_ft %>
+  LAYER lrMat="Hollow Block" lrThk=<%= 0.200*m_ft %>
+  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*m_ft %>
+  LAYER lrMat="Polystyrene West Wall" lrThk=<%= 0.080*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Fiberglass Quilt" lrThk=<%= 0.400*m_ft %>
-  LAYER lrMat="Roofdeck" lrThk=<%= 0.019*m_ft %>
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
 
-<% end %>
+CONSTRUCTION "Ceiling Path 1"
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
+  LAYER lrMat="Glass Wool 1 Ceiling" lrThk=<%= 0.200*m_ft %>
+  LAYER lrMat="Air Gap Ceiling" lrThk=<%= 0.100*m_ft %>
+  LAYER lrMat="Particle Board" lrThk=<%= 0.021*m_ft %>
 
-<% if sunspace %>
+CONSTRUCTION "Ceiling Path 2"
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
+  LAYER lrMat="Glass Wool 2 Ceiling" lrThk=<%= 0.150*m_ft %>
+  LAYER lrMat="Planks" lrThk=<%= 0.150*m_ft %>
+  LAYER lrMat="Particle Board" lrThk=<%= 0.021*m_ft %>
 
-CONSTRUCTION "Sunspace Exterior Wall"
-  LAYER lrMat="Concrete Block" lrThk=<%= 0.100*m_ft %>
-  LAYER lrMat="Foam Insulation" lrThk=<%= 0.0615*m_ft %>
-  LAYER lrMat="Wood Siding" lrThk=<%= 0.009*m_ft %>
+CONSTRUCTION "Floor Path 1"
+  LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*m_ft %>
+  LAYER lrMat="Glue Cement" lrThk=<%= 0.003*m_ft %>
+  LAYER lrMat="Concrete" lrThk=<%= 0.008*m_ft %>
+  LAYER lrMat="Concrete + Tubes + Polystyrene Ribs" lrThk=<%= 0.016*m_ft %>
+  LAYER lrMat="Polystyrene 1 Floor" lrThk=<%= 0.035*m_ft %>
+  LAYER lrMat="Plastic Lining" lrThk=<%= 0.002*m_ft %>
+  LAYER lrMat="Concrete Slab" lrThk=<%= 0.065*m_ft %>
+  LAYER lrMat="Insulated Block 1" lrThk=<%= 0.070*m_ft %>
+  LAYER lrMat="Insulated Block 2" lrThk=<%= 0.050*m_ft %>
+  LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
 
-CONSTRUCTION "Sunspace Raised Floor"
-  LAYER lrMat="Concrete Slab" lrThk=<%= 0.080*m_ft %>
-  LAYER lrMat="Insulation" lrThk=<%= 1.007*m_ft %>
+CONSTRUCTION "Floor Path 2"
+  LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*m_ft %>
+  LAYER lrMat="Glue Cement" lrThk=<%= 0.003*m_ft %>
+  LAYER lrMat="Concrete" lrThk=<%= 0.008*m_ft %>
+  LAYER lrMat="Concrete + Tubes + Polystyrene Ribs" lrThk=<%= 0.016*m_ft %>
+  LAYER lrMat="Polystyrene 1 Floor" lrThk=<%= 0.035*m_ft %>
+  LAYER lrMat="Plastic Lining" lrThk=<%= 0.002*m_ft %>
+  LAYER lrMat="Concrete Slab" lrThk=<%= 0.065*m_ft %>
+  LAYER lrMat="Insulated Block 1" lrThk=<%= 0.070*m_ft %>
+  LAYER lrMat="Concrete Beam 2" lrThk=<%= 0.050*m_ft %>
+  LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
 
-CONSTRUCTION "Common Wall"
-  LAYER lrMat="Common Wall" lrThk=<%= 0.20*m_ft %>
+CONSTRUCTION "Floor Path 3"
+  LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*m_ft %>
+  LAYER lrMat="Glue Cement" lrThk=<%= 0.003*m_ft %>
+  LAYER lrMat="Concrete" lrThk=<%= 0.008*m_ft %>
+  LAYER lrMat="Concrete + Tubes + Polystyrene Ribs" lrThk=<%= 0.016*m_ft %>
+  LAYER lrMat="Polystyrene 1 Floor" lrThk=<%= 0.035*m_ft %>
+  LAYER lrMat="Plastic Lining" lrThk=<%= 0.002*m_ft %>
+  LAYER lrMat="Concrete Slab" lrThk=<%= 0.065*m_ft %>
+  LAYER lrMat="Concrete Beam 1" lrThk=<%= 0.070*m_ft %>
+  LAYER lrMat="Concrete Beam 2" lrThk=<%= 0.050*m_ft %>
+  LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
 
-<% end %>
+CONSTRUCTION "Door"
+  LAYER lrMat="Blended Wood/Air/Cardboard + Plywood + Plexiglass" lrThk=<%= 0.036*m_ft %>
+  LAYER lrMat="Blended Air Gap" lrThk=<%= 0.038*m_ft %>
+  LAYER lrMat="Styrodur Door" lrThk=<%= 0.060*m_ft %>
+
+CONSTRUCTION "Windows Path 1"
+  LAYER lrMat="Blended Glass/Air Gap/Glass" lrThk=<%= 0.020*m_ft %>
+  LAYER lrMat="Air Gap Windows" lrThk=<%= 0.*m_ft %>
+  LAYER lrMat="Glass Wool 1 Windows" lrThk=<%= 0.200*m_ft %>
+  LAYER lrMat="Polystyrene 1 Windows" lrThk=<%= 0.070*m_ft %>
+
+CONSTRUCTION "Windows Path 2"
+  LAYER lrMat="PVC" lrThk=<%= 0.062*m_ft %>
+  LAYER lrMat="Glass Wool 2 Windows" lrThk=<%= 0.188*m_ft %>
+  LAYER lrMat="Polystyrene 1 Windows" lrThk=<%= 0.*m_ft %>
+
+CONSTRUCTION "Windows Path 3"
+  LAYER lrMat="Blended PVC + Facing + Plasterboard" lrThk=<%= 0.062*m_ft %>
+  LAYER lrMat="Glass Wool 3" lrThk=<%= 0.188*m_ft %>
+  LAYER lrMat="Polystyrene 2 Windows" lrThk=<%= 0.070*m_ft %>
 
 <%
 # Dimensions
