@@ -338,6 +338,13 @@ CONSTRUCTION "Windows Path 3"
   LAYER lrMat="Glass Wool 3" lrThk=<%= 0.188*m_ft %>
   LAYER lrMat="Polystyrene 2 Windows" lrThk=<%= 0.070*m_ft %>
 
+ZONE "Cell"
+  znModel = "CZM"
+  znArea = 3.5*4.655*m2_ft2
+  znVol = 3.5*4.655*2.565*m3_ft3
+  znFloorZ = 0
+  znEaveZ = 2.565*m_ft
+
 <%
 # Dimensions
 width = 8.0*m_ft
