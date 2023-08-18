@@ -343,7 +343,8 @@ ZONE "Cell"
   znArea = 3.5*4.655*m2_ft2
   znVol = 3.5*4.655*2.565*m3_ft3
   znFloorZ = 0
-  znEaveZ = 2.565*m_ft
+  znCeilingHt = 2.565*m_ft
+  infAC = 0
 
 <%
 # Dimensions
