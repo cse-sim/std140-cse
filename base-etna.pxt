@@ -51,7 +51,7 @@ tarp_conv = false
 
 %>
 
-wfName = "weather/etna/ET110meteoGMT+1_within_Melun-071530_MY.2000_v3"
+wfName = "weather/etna/ET110meteoGMT+1_within_Melun-071530_MY.2000_v3.epw"
 nSubSteps = <%= nsteps %>
 DT = No
 bldgAzm = <%= orientation %>
