@@ -63,6 +63,11 @@ skyModelLW = BERDAHLMARTIN
 hConvMod = No
 <% end %>
 
+
+IMPORTFILE TemperatureData
+  imFileName = "weather/etna/final-temps.csv"
+  imFreq = Hour
+
 // Constructions
 
 MATERIAL "Wallpaper"
