@@ -362,26 +362,6 @@ ZONE "Cell"
   znTH = import(TemperatureData,"Tcell")
   znQMxH = <%= 1000000*w_btu %>
 
-<%
-# Dimensions
-width = 8.0*m_ft
-depth = 6.0*m_ft
-height = 2.7*m_ft
-floor_area = width*depth
-zone_vol = floor_area*height
-
-win_width = 3.0*m_ft
-win_height = 2.0*m_ft
-
-overhang_depth = 1.0*m_ft
-overhang_height = 0.5*m_ft
-
-ss_depth = 2.0*m_ft
-ss_area = ss_depth*width
-ss_vol = ss_area*height
-%>
-
-<%
 # Surfaces
 surfaces = [
   {:name=>"North Wall",:type=>"Wall",:area=>width*height,:azm=>0,:windows=>0},
@@ -400,7 +380,6 @@ window_area = 0.0
   <% if surface[:type] == "Wall" %>
     <% sym = :wall %>
     sfType = Wall
-    sfCon = "Exterior Wall"
     sfAzm = <%= surface[:azm] %>
   <% elsif surface[:type] == "Roof" %>
     <% sym = :roof %>
@@ -409,220 +388,16 @@ window_area = 0.0
   <% elsif surface[:type] == "Floor" %>
     <% sym = :floor %>
     sfType = Floor
-    sfCon = "Raised Floor"
-  <% end %>
-    sfArea = <%= surface[:area] %>
-    sfExCnd = Ambient
-    sfModel = forward_difference
-    sfExAbs = <%= ext_sol_abs %>
-    sfInAbs = <%= int_sol_abs %>
-    sfExEpsLW = <%= ext_lw_abs %>
-    sfInEpsLW = <%= int_lw_abs %>
-    sfExRf = 1.67
-  <% if surface[:name] == "South Wall" and sunspace %>
-    <% if h_int %>
-      sfExHcModel = INPUT
-      sfExHcMult = <%= h_int[sym]*u_c %>
-    <% else %>
-      <% if tarp_conv %>
-        sfExHcModel = TARP
-      <% else %>
-        sfExHcModel = UNIFIED
-      <% end %>
-    <% end %>
-  <% else %>
-    <% if h_ext %>
-      sfExHcModel = INPUT
-      sfExHcMult = <%= h_ext[sym]*u_c %>
-    <% else %>
-      <% if tarp_conv %>
-        sfExHcModel = DOE2
-      <% else %>
-        sfExHcModel = UNIFIED
-      <% end %>
-    <% end %>
-  <% end %>
-  <% if h_int %>
-    sfInHcModel = INPUT
-    sfInHcMult = <%= h_int[sym]*u_c %>
-  <% else %>
-    <% if tarp_conv %>
-      sfInHcModel = TARP
-    <% else %>
-      sfInHcModel = UNIFIED
-    <% end %>
-  <% end %>
-
-  <% for win in (1..surface[:windows]) %>
-    <%
-    window_name = surface[:name] + " Window " + win.to_s
-    windows << window_name
-    window_area += win_height*win_width
-    %>
-    <% if !opaque %>
-
-    WINDOW "<%= window_name %>"
-      wnHeight = <%= win_height %>
-      wnWidth = <%= win_width %>
-      wnModel = ASHWAT
-      wnNGlz = <%= win_panes %>
-      wnUNFRC = <%= win_u*u_c %>
-      wnSHGC = <%= win_shgc %>
-      wnExEpsLW = 0.84
-      wnInEpsLW = 0.84
-      wnDirtLoss = 0
-      wnExShd = NONE
-      wnINShd = NONE
-      <% if h_ext %>
-      wnExHcModel = INPUT
-      wnExHcMult = <%= h_ext[:window]*u_c %>
-      <% end %>
-      <% if h_int %>
-      wnInHcModel = INPUT
-      wnInHcMult = <%= h_int[:window]*u_c %>
-      <% end %>
-      <% if overhangs or fins %>
-        <% if overhangs %>
-      wnVfSkyDf= <%= (Math.sqrt((overhang_height +  win_height)**2 + overhang_depth**2) - Math.sqrt(overhang_height**2 + overhang_depth**2))/(2*win_height) %>
-        <% end %>
-
-      SHADE
-        ohDepth = <%= overhang_depth %>
-        ohDistUp = <%= overhang_height %>
-        <% if fins %>
-        ohExL = 0.0
-        ohExR = 0.0
-        lfDepth = <%= overhang_depth %>
-        lfTopUp = <%= overhang_height %>
-        lfDistL = 0.0
-        lfBotUp = <%= height - overhang_height - win_height %>
-        rfDepth = <%= overhang_depth %>
-        rfTopUp = <%= overhang_height %>
-        rfDistR = 0.0
-        rfBotUp = <%= height - overhang_height - win_height %>
-        <% else %>
-        <% if win == 1 %>
-        ohExL = <%= 0.5*m_ft %>
-        ohExR = <%= 4.5*m_ft %>
-          <% else %>
-        ohExL = <%= 4.5*m_ft %>
-        ohExR = <%= 0.5*m_ft %>
-          <% end %>
-        <% end %>
-      <% end %>
-      //SGDIST sgSurf="Floor" sgFSO=1.0
-    <% else %>
-    DOOR  "<%= window_name %>"
-      drArea = <%= win_height*win_width %>
-      drModel = forward_difference
-      drExRf = 1.0
-      drCon = "Opaque Window"
-      drExAbs = <%= ext_sol_abs %>
-      drInAbs = <%= int_sol_abs %>
-      drExEpsLW = <%= ext_lw_abs %>
-      drInEpsLW = <%= int_lw_abs %>
-
-    <% end %>
-  <% end %>
-<% end %>
-
-<% if sunspace %>
-ALTER ZONE "Main Zone"
-  ALTER SURFACE "South Wall"
-    sfCon = "Common Wall"
-    sfExCnd = ADJZN
-    sfAdjZn = "Sun Zone"
-
-  <%
-  # Sun Zone surfaces
-  surfaces << {:name=>"Sun East Wall",:type=>"Wall",:area=>ss_depth*height,:azm=>90,:windows=>0}
-  surfaces << {:name=>"Sun South Wall",:type=>"Wall",:area=>width*height,:azm=>180,:windows=>2}
-  surfaces << {:name=>"Sun West Wall",:type=>"Wall",:area=>ss_depth*height,:azm=>270,:windows=>0}
-  surfaces << {:name=>"Sun Roof",:type=>"Roof",:area=>ss_area,:windows=>0}
-  surfaces << {:name=>"Sun Floor",:type=>"Floor",:area=>ss_area,:windows=>0}
-  %>
-ZONE "Sun Zone"
-  znModel = CZM
-  znArea = <%= ss_area %>
-  znVol = <%= ss_vol %>
-  infAC = <%= ach %>
-  znFloorZ = 0.0
-  znCeilingHt = <%= height %>
-  znEaveZ = <%= height %>
-
-  <% for surface in surfaces[-5..-1] %>
-  SURFACE "<%= surface[:name] %>"
-    <% if surface[:type] == "Wall" %>
+  <% elsif surface[:type] == "Door" %>
+    <% sym = :door %>
     sfType = Wall
-    sfCon = "Sunspace Exterior Wall"
     sfAzm = <%= surface[:azm] %>
-    <% elsif surface[:type] == "Roof" %>
-    sfType = Ceiling
-    sfCon = "Roof"
-    <% elsif surface[:type] == "Floor" %>
-    sfType = Floor
-    sfCon = "Sunspace Raised Floor"
-    <% end %>
-    sfArea = <%= surface[:area] %>
-    sfExCnd = Ambient
-    sfModel = forward_difference
-    sfExAbs = <%= ext_sol_abs %>
-    sfInAbs = <%= int_sol_abs %>
-    sfExEpsLW = <%= ext_lw_abs %>
-    sfInEpsLW = <%= int_lw_abs %>
-    sfExRf = 1.67
-  <% if tarp_conv %>
-    sfExHcModel = DOE2
-    sfInHcModel = TARP
-  <% else %>
-    sfExHcModel = UNIFIED
-    sfInHcModel = UNIFIED
+  <% elsif surface[:type] == "Window" %>
+    <% for azimuth in window_azimuths %>
+      <% sym = :window %>
+      sfType = Wall
+      sfAzm = <% azimuth %>
   <% end %>
-
-    <% for win in (1..surface[:windows]) %>
-      <% window_name = surface[:name] + " Window " + win.to_s %>
-    WINDOW "<%= window_name %>"
-      wnHeight = <%= win_height %>
-      wnWidth = <%= win_width %>
-      wnModel = ASHWAT
-      wnNGlz = <%= win_panes %>
-      wnUNFRC = <%= win_u*u_c %>
-      wnSHGC = <%= win_shgc %>
-      wnExEpsLW = 0.84
-      wnInEpsLW = 0.84
-      wnDirtLoss = 0
-      wnExShd = NONE
-      wnINShd = NONE
-      <% windows << window_name %>
-      <% if overhangs or fins %>
-      SHADE
-        ohDepth = <%= overhang_depth %>
-        ohDistUp = <%= overhang_height %>
-        <% if fins %>
-        ohExL = 0.0
-        ohExR = 0.0
-        lfDepth = <%= overhang_depth %>
-        lfTopUp = <%= overhang_height %>
-        lfDistL = 0.0
-        lfBotUp = <%= height - overhang_height - win_height %>
-        rfDepth = <%= overhang_depth %>
-        rfTopUp = <%= overhang_height %>
-        rfDistR = 0.0
-        rfBotUp = <%= height - overhang_height - win_height %>
-        <% else %>
-          <% if win == 1 %>
-        ohExL = <%= 0.5*m_ft %>
-        ohExR = <%= 4.5*m_ft %>
-          <% else %>
-        ohExL = <%= 4.5*m_ft %>
-        ohExR = <%= 0.5*m_ft %>
-          <% end %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-
-<% end %>
 
 <% if vent_fan %>
 IZXFER "Ventilation Fan"
