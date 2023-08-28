@@ -5,7 +5,7 @@
   parameter "overhangs", :default=>false
   parameter "fins", :default=>false
   parameter "construction_mass", :default=>"LOW" # LOW | LOW-EFF | HIGH
-  parameter "orientation", :default=>0.0
+  parameter "orientation", :default=>30
   parameter "gain", :default=>200 # W
   parameter "ext_sol_abs", :default=>0.6
   parameter "int_sol_abs", :default=>0.6
