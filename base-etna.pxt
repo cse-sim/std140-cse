@@ -429,24 +429,15 @@ window_azimuths = [90,180]
       sfAzm = <% azimuth %>
   <% end %>
 
-<% if vent_fan %>
-IZXFER "Ventilation Fan"
-  izNVType = AIRNETEXTFLOW
-  izZn1 = "Main Zone"
-  izVfMin = select( $hour > 7 && $hour <= 18, 0.0, default <%= 1700*m3_ft3/h_min %>)
+RSYS "Electric-Heater"
+  rsType = RESISTANCE
+  rsModeCtrl = HEAT
+  rsCapH = <%= 1000000*w_btu %>
 
-IZXFER "Exfiltration"
-  izNVType = AIRNETEXT
-  izZn1 = "Main Zone"
-  izALo = select( $hour > 7 && $hour <= 18, 0.0, default 100)
-
-  <% if !ff %>
-ALTER ZONE "Main Zone"
-  znQMxH = 0.0
-  znQMxC = select( $hour > 7 && $hour <= 18, <%= -1000000*w_btu %>, default 0.0)
-  <% end %>
-
-<% end %>
+GAIN "Fan"
+  gnZone = "Cell"
+  gnEndUse = FANH
+  gnPower = import(CaseData,"Qfan")
 
 // Output
 DELETE REPORT EB
