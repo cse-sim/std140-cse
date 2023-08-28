@@ -223,8 +223,8 @@ MATERIAL "Polystyrene 2 Windows" LIKE "Polystyrene 2 Floor"
 CONSTRUCTION "North Wall"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
-  LAYER lrMat="Air/Honeycomb Cardboard" lrThk=<%= 0.0.046*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.0.013*m_ft %>
+  LAYER lrMat="Air/Honeycomb Cardboard" lrThk=<%= 0.046*m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Styrodur North Wall" lrThk=<%= 0.060*m_ft %>
 
