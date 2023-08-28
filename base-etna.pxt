@@ -442,6 +442,5 @@ EXPORT
   EXPORTCOL colHead="Hour" colVal=$hour
   EXPORTCOL colHead="Heater-Experimental [Wh]" colVal=import(CaseData,"Tcell")
   EXPORTCOL colHead="Heater-Simulation [Wh]" colVal=@rsys["Electric-Heater"].loadMtri / w_btu
-  EXPORTCOL colHead="Subhour" colVal=$subhour
 
 RUN
