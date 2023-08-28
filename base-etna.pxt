@@ -64,7 +64,7 @@ wfName = "weather/etna/ET110meteoGMT+1_within_Melun-071530_MY.2000_v3.epw"
 nSubSteps = <%= nsteps %>
 DT = No
 bldgAzm = <%= orientation %>
-terrainClass = 2
+terrainClass = 3
 wuDays = 30
 skyModel = ANISOTROPIC
 skyModelLW = BERDAHLMARTIN
