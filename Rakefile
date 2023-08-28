@@ -38,6 +38,8 @@ def sim(c, tests)
   target = [output_dir + '/in.rep', output_dir + '/DETAILED.csv']
   elsif tests == 'weather-drivers'
   target = [output_dir + '/in.rep', output_dir + '/HOURLY.csv']
+  elif tests = 'etna'
+  target = [output_dir + '/in.rep', output_dir + '/OUTPUT.csv']
   end
 
   success = nil
