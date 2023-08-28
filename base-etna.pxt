@@ -73,7 +73,7 @@ hConvMod = No
 <% end %>
 
 
-IMPORTFILE TemperatureData
+IMPORTFILE CaseData
   imFileName = "weather/etna/final-temps.csv"
   imFreq = Hour
 
