@@ -81,7 +81,7 @@ def write_report(tests)
 end
 
 task :sim, [:filter] do |t, args|
-  args.with_defaults(:filter=>'section-5')
+  args.with_defaults(:filter=>'etna')
   tests = args.fetch(:filter) # 'section-5', 'weather-drivers'
   cases = Dir['cases/' + tests + '/*.*']
   for c in cases
