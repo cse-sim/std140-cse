@@ -424,89 +424,24 @@ DELETE REPORT LOG
 DELETE REPORT ERR
 REPORT  rpType=ZEB  rpZone="Main Zone"  rpFreq=Month
 
-EXPORTFILE "Detailed"
-  xfFileName = "Detailed.csv"
+EXPORTFILE "Output"
+  xfFileName = "Output.csv"
   xfFileStat = OVERWRITE
 
 EXPORT
-  exExportfile = "Detailed"
+  exExportfile = "Output"
   exHeader = ColumnsOnly
   exFooter = No
   exType = UDT
-  exFreq = SUBHOUR
+  exFreq = HOUR
   exDayBeg = JAN 1
   exDayEnd = DEC 31
 
   EXPORTCOL colHead="Month" colVal=$month
   EXPORTCOL colHead="Day" colVal=$dayOfMonth
   EXPORTCOL colHead="Hour" colVal=$hour
+  EXPORTCOL colHead="Heater-Experimental [Wh]" colVal=import(CaseData,"Tcell")
+  EXPORTCOL colHead="Heater-Simulation [Wh]" colVal=@rsys["Electric-Heater"].loadMtri / w_btu
   EXPORTCOL colHead="Subhour" colVal=$subhour
-  EXPORTCOL colHead="Outdoor Temp [C]" colVal=($tDbOSh - 32)*<%= 1/k_r %>
-  EXPORTCOL colHead="Sky Temp [C]" colVal=(@Top.tSkySh - 32)*<%= 1/k_r %>
-  EXPORTCOL colHead="Zone Temp [C]" colVal=(@znRes["Main Zone"].S.tAir - 32)*<%= 1/k_r %>
-  EXPORTCOL colHead="Zone Heating SP [C]" colVal=(@zone["Main Zone"].znTH - 32)*<%= 1/k_r %>
-  EXPORTCOL colHead="Zone Cooling SP [C]" colVal=(@zone["Main Zone"].znTC - 32)*<%= 1/k_r %>
-<% if sunspace %>
-  EXPORTCOL colHead="Sun Zone Temp [C]" colVal=(@znRes["Sun Zone"].S.tAir - 32)*<%= 1/k_r %>
-<% end %>
-  // Heating
-  EXPORTCOL colHead="Heating Load [Wh]" colVal=@znRes["Main Zone"].S.qhMech*<%= 1/w_btu %>
 
-  // Cooling
-  EXPORTCOL colHead="Cooling Load [Wh]" colVal=-@znRes["Main Zone"].S.qcMech*<%= 1/w_btu %>
-
-  // Incident Solar
-<% for surface in surfaces[0..5] %>
-  <% if ["Wall", "Roof"].include?(surface[:type]) %>
-  EXPORTCOL colHead="Incident Solar <%= surface[:name] %> [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.sgTarg.tot*<%= 1/q_c %>*@Top.subhrDur
-  <% end %>
-<% end %>
-
-  // Transmitted Solar
-<% if window_area > 0.0 %>
-  EXPORTCOL colHead="Transmitted Solar [Wh/m2]" colVal=@znRes["Main Zone"].S.qSlr*<%= m2_ft2/(w_btu*window_area) %>
-<% end %>
-
-  // Convective Coefficients
-<% for surface in surfaces[0..5] %>
-  <% if ["Wall", "Roof", "Floor"].include?(surface[:type]) %>
-  EXPORTCOL colHead="Exterior Conv. Coeff. <%= surface[:name] %> [W/m2-K]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hxa*<%= 1/u_c %>
-  EXPORTCOL colHead="Interior Conv. Coeff. <%= surface[:name] %> [W/m2-K]" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxa*<%= 1/u_c %>
-  <% end %>
-<% end %>
-<% for win in windows %>
-  EXPORTCOL colHead="Exterior Conv. Coeff. <%= win %> [W/m2-K]" colVal=@xsurf["<%= win %>"].sbcO.hxa*<%= 1/u_c %>
-  EXPORTCOL colHead="Interior Conv. Coeff. <%= win %> [W/m2-K]" colVal=@xsurf["<%= win %>"].sbcI.hxa*<%= 1/u_c %>
-<% end %>
-
-/*
-EXPORTFILE "Results"
-  xfFileName = "..\\Results.csv"
-  xfFileStat = APPEND
-
-EXPORT
- 	exExportfile = "Results"
-  exHeader = NO //ColumnsOnly
-  exFooter = NO
-  exType = UDT
-  exFreq = YEAR
-  EXPORTCOL colHead="Run Timestamp" colVal=@Top.runDateTime
-  EXPORTCOL colHead="Case" colVal="<%= case_name %>"
-
-  // Heating
-  EXPORTCOL colHead="Annual Heating [MWh]" colVal=@znRes["Main Zone"].Y.qhMech*<%= 1/(1000000*w_btu) %>
-  EXPORTCOL colHead="Peak Heating [kW]" colVal=@Top.qhPeak*<%= 1/(1000*w_btu) %>
-  EXPORTCOL colHead="Peak Heating [Month]" colVal=@Top.qhPeakM
-  EXPORTCOL colHead="Peak Heating [Day]" colVal=@Top.qhPeakD
-  EXPORTCOL colHead="Peak Heating [Hour]" colVal=@Top.qhPeakH
-
-  // Cooling
-  EXPORTCOL colHead="Annual Cooling [MWh]" colVal=@znRes["Main Zone"].Y.qcMech*<%= -1/(1000000*w_btu) %>
-  EXPORTCOL colHead="Peak Cooling [kW]" colVal=@Top.qcPeak*<%= -1/(1000*w_btu) %>
-  EXPORTCOL colHead="Peak Cooling [Month]" colVal=@Top.qcPeakM
-  EXPORTCOL colHead="Peak Cooling [Day]" colVal=@Top.qcPeakD
-  EXPORTCOL colHead="Peak Cooling [Hour]" colVal=@Top.qcPeakH
-
-  DELETE EXPORTFILE Primary
-*/
 RUN
