@@ -354,13 +354,14 @@ CONSTRUCTION "Windows Path 3"
 
 ZONE "Cell"
   znModel = "CZM"
-  znArea = floor_area*m2_ft2
-  znVol = zone_vol*m3_ft3
+  znArea = floor_area
+  znVol = zone_vol
   znFloorZ = 0
-  znCeilingHt = height*m_ft
+  znCeilingHt = height
   infAC = 0
-  znTH = import(TemperatureData,"Tcell")
+  znTH = import(CaseData,"Tcell")
   znQMxH = <%= 1000000*w_btu %>
+  znRSys = "Electric-Heater"
 
 # Surfaces
 surfaces = [
