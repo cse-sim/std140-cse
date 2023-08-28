@@ -1,29 +1,5 @@
 <%#INTERFACE
-  parameter "case_name"
-  parameter "south_windows", :default=>2
-  parameter "east_west_windows", :default=>0
-  parameter "overhangs", :default=>false
-  parameter "fins", :default=>false
-  parameter "construction_mass", :default=>"LOW" # LOW | LOW-EFF | HIGH
   parameter "orientation", :default=>30
-  parameter "gain", :default=>200 # W
-  parameter "ext_sol_abs", :default=>0.6
-  parameter "int_sol_abs", :default=>0.6
-  parameter "ext_lw_abs", :default=>0.9
-  parameter "int_lw_abs", :default=>0.9
-  parameter "win_u", :default=>2.10 # W/m2-K
-  parameter "win_shgc", :default=>0.769
-  parameter "win_panes", :default=>2
-  parameter "ach", :default=>0.5
-  parameter "heat_sp", :default=>20 # C
-  parameter "cool_sp", :default=>27 # C
-  parameter "heat_sb", :default=>20 # C
-  parameter "vent_fan", :default=>false
-  parameter "sunspace", :default=>false
-  parameter "ff", :default=>false
-  parameter "opaque", :default=>false
-  parameter "h_ext", :default=>nil
-  parameter "h_int", :default=>nil
 %>
 
 <%
