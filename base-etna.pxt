@@ -404,7 +404,9 @@ window_azimuths = [90,180]
       <% sym = :window %>
       sfType = Wall
       sfAzm = <% azimuth %>
+    <% end %>
   <% end %>
+<% end %>
 
 RSYS "Electric-Heater"
   rsType = RESISTANCE
