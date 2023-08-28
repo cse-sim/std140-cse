@@ -48,6 +48,7 @@ skyModelLW = BERDAHLMARTIN
 hConvMod = No
 <% end %>
 
+METER "MtrElec"
 
 IMPORTFILE CaseData
   imFileName = "weather/etna/final-temps.csv"
@@ -409,6 +410,7 @@ RSYS "Electric-Heater"
   rsType = RESISTANCE
   rsModeCtrl = HEAT
   rsCapH = <%= 1000000*w_btu %>
+  rsElecMtr = "MtrElec"
 
 GAIN "Fan"
   gnZone = "Cell"
