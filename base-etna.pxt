@@ -155,9 +155,9 @@ MATERIAL "Plastic Lining"
   matSpHt = <%= 1170*cp_c %>
 
 MATERIAL "Concrete Slab"
-  matCond = <%= 0.*k_c %>
-  matDens = <%= *rho_c %>
-  matSpHt = <%= *cp_c %>
+  matCond = <%= 1.75*k_c %>
+  matDens = <%= 2200*rho_c %>
+  matSpHt = <%= 950*cp_c %>
 
 MATERIAL "Insulated Block 1"
   matCond = <%= 0.0719*k_c %>
