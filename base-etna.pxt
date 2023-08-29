@@ -513,7 +513,7 @@ EXPORT
   EXPORTCOL colHead="Month" colVal=$month
   EXPORTCOL colHead="Day" colVal=$dayOfMonth
   EXPORTCOL colHead="Hour" colVal=$hour
-  EXPORTCOL colHead="Heater-Experimental [Wh]" colVal=import(CaseData,"Tcell")
-  EXPORTCOL colHead="Heater-Simulation [Wh]" colVal=@rsys["Electric-Heater"].loadMtri / w_btu
+  EXPORTCOL colHead="Heater-Experimental [Wh]" colVal=import(CaseData,"QHtr")
+  EXPORTCOL colHead="Heater-Simulation [Wh]" colVal=@export["MtrElecHeater"].mtri
 
 RUN
