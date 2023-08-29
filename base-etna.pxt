@@ -48,7 +48,7 @@ skyModelLW = BERDAHLMARTIN
 hConvMod = No
 <% end %>
 
-METER "MtrElec"
+METER "MtrElecFan"
 
 IMPORTFILE CaseData
   imFileName = "weather/etna/final-temps.csv"
@@ -410,14 +410,13 @@ window_azimuths = [90,180]
 
 RSYS "Electric-Heater"
   rsType = RESISTANCE
-  rsModeCtrl = HEAT
-  rsCapH = 1000000*w_btu
-  rsElecMtr = "MtrElec"
+  rsElecMtr = "MtrElecHeater"
 
 GAIN "Fan"
   gnZone = "Cell"
   gnEndUse = FANH
   gnPower = import(CaseData,"Qfan")
+  gnMeter = "MtrElecFan"
 
 // Output
 DELETE REPORT EB
