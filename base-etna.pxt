@@ -366,6 +366,11 @@ long_wave_emissivity = 0
 window_azimuths = [90,180]
 
 <% for surface in surfaces %>
+  <% if surface[:type] == "Window" %>
+    <% for azimuth in window_azimuths %>
+      SURFACE "<%= surface[:name] + azimuth[:surface_name_extension] %>"
+        <% sym = :wall %>
+        sfType = Wall
         <% # TODO need to fix Window sfAzm (needed for 90 and 180 degree orientations) %>
         sfAzm = 90
         sfExT = import(CaseData, <%= azimuth[:temp] %>)
@@ -382,7 +387,10 @@ window_azimuths = [90,180]
         sfExCnd = SPECIFIEDT
         sfModel = FORWARD_DIFFERENCE
         sfGrndRefl = 0.2
+    <% end %>
+  <% else %>
   SURFACE "<%= surface[:name] %>"
+  <% end %>
     sfExHcModel = INPUT
     sfInHcModel = INPUT
     sfExHcMult = <%= exterior_coefficient %>
