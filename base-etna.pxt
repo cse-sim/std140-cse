@@ -459,7 +459,7 @@ window_azimuths = [
     sfModel = FORWARD_DIFFERENCE
     sfGrndRefl = 0.2
   <% elsif surface[:type] == "Door" %>
-    <% sym = :door %>
+    <% sym = :wall %>
     sfType = Wall
     sfAzm = <%= surface[:azm] %>
     sfExT = import(CaseData, <%= surface[:temp] %>)
