@@ -413,17 +413,7 @@ window_azimuths = [
     sfCon = <%= surface[:name] %>
     sfExCnd = SPECIFIEDT
     sfModel = FORWARD_DIFFERENCE
-    sfExAbs = <%= ext_sol_abs %>
-    sfInAbs = <%= int_sol_abs %>
-    sfExEpsLW = <%= ext_lw_abs %>
-    sfInEpsLW = <%= int_lw_abs %>
-    sfExT = import(CaseData, <%= surface[:temp] %>)
     sfGrndRefl = 0.2
-    sfInH
-  <% if surface[:type] == "Wall" %>
-    <% sym = :wall %>
-    sfType = Wall
-    sfAzm = <%= surface[:azm] %>
   <% elsif surface[:type] == "Ceiling" %>
     <% sym = :roof %>
     sfType = Ceiling
