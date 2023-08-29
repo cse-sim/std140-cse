@@ -485,7 +485,6 @@ DELETE REPORT EB
 DELETE REPORT INP
 DELETE REPORT LOG
 DELETE REPORT ERR
-REPORT  rpType=ZEB  rpZone="Main Zone"  rpFreq=Month
 
 EXPORTFILE "Output"
   xfFileName = "Output.csv"
