@@ -48,6 +48,7 @@ skyModelLW = BERDAHLMARTIN
 hConvMod = No
 <% end %>
 
+METER "MtrElecHeater"
 METER "MtrElecFan"
 
 IMPORTFILE CaseData
