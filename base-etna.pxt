@@ -396,6 +396,11 @@ window_azimuths = [
   <% else %>
   SURFACE "<%= surface[:name] %>"
   <% end %>
+  <% if surface[:type] == "Wall" %>
+    <% sym = :wall %>
+    sfType = Wall
+    sfAzm = <%= surface[:azm] %>
+    sfExT = import(CaseData, <%= surface[:temp] %>)
     sfExHcModel = INPUT
     sfInHcModel = INPUT
     sfExHcMult = 18
