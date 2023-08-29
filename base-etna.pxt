@@ -341,6 +341,7 @@ ZONE "Cell"
   znQMxH = <%= 1000000*w_btu %>
   znRSys = "Electric-Heater"
 
+<%
 # Surfaces
 surfaces = [
   {:name=>"North Wall",:type=>"Wall",:area=>7.1494,:azm=>0,:windows=>0,:doors=>door,:temp=>"Tnorth",:interior_coefficient=>10.5,:interior_absorptivity=>0.343,:exterior_absorptivity=>0.300},
@@ -367,6 +368,7 @@ window_azimuths = [
   {:azm=>90,:temp=>"Teast",:surface_name_extension=>"East"},
   {:azm=>180,:temp=>"Tsouth",:surface_name_extension=>"South"}
 ]
+%>
 
 <% for surface in surfaces %>
   <% if surface[:type] == "Window" %>
