@@ -392,6 +392,7 @@ window_azimuths = [
       SURFACE "<%= surface[:name] + window_azimuth[:name] %>"
         <% sym = :wall %>
         sfType = Wall
+        sfAzm = <%= window_azimuth[:azm] %>
         sfExT = import(CaseData, <%= window_azimuth[:temp] %>)
         <% create_surface_data_members(surface) %>
     <% end %>
