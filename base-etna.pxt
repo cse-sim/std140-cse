@@ -370,6 +370,22 @@ window_azimuths = [
 ]
 %>
 
+<% def create_surface_data_members(surface) %>
+  sfExHcModel = INPUT
+  sfInHcModel = INPUT
+  sfExHcMult = 18
+  sfInHcMult = <%= surface[:interior_coefficient] %>
+  sfExAbs = <%= surface[:exterior_absorptivity] %>
+  sfInAbs = <%= surface[:interior_absorptivity] %>
+  sfExEpsLW = 0
+  sfInEpsLW = 0
+  sfArea = <%= surface[:area] %>
+  sfCon = <%= surface[:name] %>
+  sfExCnd = SPECIFIEDT
+  sfModel = FORWARD_DIFFERENCE
+  sfGrndRefl = 0.2
+<% end %>
+
 <% for surface in surfaces %>
   <% if surface[:type] == "Window" %>
     <% for azimuth in window_azimuths %>
@@ -379,19 +395,7 @@ window_azimuths = [
         <% # TODO need to fix Window sfAzm (needed for 90 and 180 degree orientations) %>
         sfAzm = 90
         sfExT = import(CaseData, <%= azimuth[:temp] %>)
-        sfExHcModel = INPUT
-        sfInHcModel = INPUT
-        sfExHcMult = 18
-        sfInHcMult = <%= surface[:interior_coefficient] %>
-        sfExAbs = <%= surface[:exterior_absorptivity] %>
-        sfInAbs = <%= surface[:interior_absorptivity] %>
-        sfExEpsLW = 0
-        sfInEpsLW = 0
-        sfArea = <%= surface[:area] %>
-        sfCon = <%= surface[:name] %>
-        sfExCnd = SPECIFIEDT
-        sfModel = FORWARD_DIFFERENCE
-        sfGrndRefl = 0.2
+        <% create_surface_data_members(surface) %>
     <% end %>
   <% else %>
   SURFACE "<%= surface[:name] %>"
@@ -401,71 +405,23 @@ window_azimuths = [
     sfType = Wall
     sfAzm = <%= surface[:azm] %>
     sfExT = import(CaseData, <%= surface[:temp] %>)
-    sfExHcModel = INPUT
-    sfInHcModel = INPUT
-    sfExHcMult = 18
-    sfInHcMult = <%= surface[:interior_coefficient] %>
-    sfExAbs = <%= surface[:exterior_absorptivity] %>
-    sfInAbs = <%= surface[:interior_absorptivity] %>
-    sfExEpsLW = 0
-    sfInEpsLW = 0
-    sfArea = <%= surface[:area] %>
-    sfCon = <%= surface[:name] %>
-    sfExCnd = SPECIFIEDT
-    sfModel = FORWARD_DIFFERENCE
-    sfGrndRefl = 0.2
+    <% create_surface_data_members(surface) %>
   <% elsif surface[:type] == "Ceiling" %>
     <% sym = :roof %>
     sfType = Ceiling
     sfExT = import(CaseData, <%= surface[:temp] %>)
-    sfExHcModel = INPUT
-    sfInHcModel = INPUT
-    sfExHcMult = 18
-    sfInHcMult = <%= surface[:interior_coefficient] %>
-    sfExAbs = <%= surface[:exterior_absorptivity] %>
-    sfInAbs = <%= surface[:interior_absorptivity] %>
-    sfExEpsLW = 0
-    sfInEpsLW = 0
-    sfArea = <%= surface[:area] %>
-    sfCon = <%= surface[:name] %>
-    sfExCnd = SPECIFIEDT
-    sfModel = FORWARD_DIFFERENCE
-    sfGrndRefl = 0.2
+    <% create_surface_data_members(surface) %>
   <% elsif surface[:type] == "Floor" %>
     <% sym = :floor %>
     sfType = Floor
     sfExT = import(CaseData, <%= surface[:temp] %>)
-    sfExHcModel = INPUT
-    sfInHcModel = INPUT
-    sfExHcMult = 18
-    sfInHcMult = <%= surface[:interior_coefficient] %>
-    sfExAbs = <%= surface[:exterior_absorptivity] %>
-    sfInAbs = <%= surface[:interior_absorptivity] %>
-    sfExEpsLW = 0
-    sfInEpsLW = 0
-    sfArea = <%= surface[:area] %>
-    sfCon = <%= surface[:name] %>
-    sfExCnd = SPECIFIEDT
-    sfModel = FORWARD_DIFFERENCE
-    sfGrndRefl = 0.2
+    <% create_surface_data_members(surface) %>
   <% elsif surface[:type] == "Door" %>
     <% sym = :wall %>
     sfType = Wall
     sfAzm = <%= surface[:azm] %>
     sfExT = import(CaseData, <%= surface[:temp] %>)
-    sfExHcModel = INPUT
-    sfInHcModel = INPUT
-    sfExHcMult = 18
-    sfInHcMult = <%= surface[:interior_coefficient] %>
-    sfExAbs = <%= surface[:exterior_absorptivity] %>
-    sfInAbs = <%= surface[:interior_absorptivity] %>
-    sfExEpsLW = 0
-    sfInEpsLW = 0
-    sfArea = <%= surface[:area] %>
-    sfCon = <%= surface[:name] %>
-    sfExCnd = SPECIFIEDT
-    sfModel = FORWARD_DIFFERENCE
-    sfGrndRefl = 0.2
+    <% create_surface_data_members(surface) %>
   <% end %>
 <% end %>
 
