@@ -365,8 +365,8 @@ long_wave_emissivity = 0
 
 # Azimuths for windows on east and south walls
 window_azimuths = [
-  {:azm=>90,:temp=>"Teast",:surface_name_extension=>"East"},
-  {:azm=>180,:temp=>"Tsouth",:surface_name_extension=>"South"}
+  {:name=>"East",:azm=>90,:temp=>"Teast"},
+  {:name=>"South",:azm=>180,:temp=>"Tsouth"}
 ]
 %>
 
@@ -388,13 +388,11 @@ window_azimuths = [
 
 <% for surface in surfaces %>
   <% if surface[:type] == "Window" %>
-    <% for azimuth in window_azimuths %>
-      SURFACE "<%= surface[:name] + azimuth[:surface_name_extension] %>"
+    <% for window_azimuth in window_azimuths %>
+      SURFACE "<%= surface[:name] + window_azimuth[:name] %>"
         <% sym = :wall %>
         sfType = Wall
-        <% # TODO need to fix Window sfAzm (needed for 90 and 180 degree orientations) %>
-        sfAzm = 90
-        sfExT = import(CaseData, <%= azimuth[:temp] %>)
+        sfExT = import(CaseData, <%= window_azimuth[:temp] %>)
         <% create_surface_data_members(surface) %>
     <% end %>
   <% else %>
