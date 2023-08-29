@@ -411,6 +411,7 @@ window_azimuths = [90,180]
 
 RSYS "Electric-Heater"
   rsType = RESISTANCE
+  rsCapH = <%= 1000000*w_btu %>
   rsElecMtr = "MtrElecHeater"
 
 GAIN "Fan"
