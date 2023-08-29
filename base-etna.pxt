@@ -332,10 +332,10 @@ CONSTRUCTION "WindowsPath3"
 
 ZONE "Cell"
   znModel = "CZM"
-  znArea = floor_area
-  znVol = zone_vol
+  znArea = <%= floor_area %>
+  znVol = <%= zone_vol %>
   znFloorZ = 0
-  znCeilingHt = height
+  znCeilingHt = <%= height %>
   infAC = 0
   znTH = import(CaseData,"Tcell")
   znQMxH = <%= 1000000*w_btu %>
