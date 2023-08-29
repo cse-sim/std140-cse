@@ -366,6 +366,8 @@ long_wave_emissivity = 0
 window_azimuths = [90,180]
 
 <% for surface in surfaces %>
+        <% # TODO need to fix Window sfAzm (needed for 90 and 180 degree orientations) %>
+        sfAzm = 90
         sfExT = import(CaseData, <%= azimuth[:temp] %>)
         sfExHcModel = INPUT
         sfInHcModel = INPUT
