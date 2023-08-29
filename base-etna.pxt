@@ -221,7 +221,7 @@ MATERIAL "Glass Wool 3"
 MATERIAL "Polystyrene 2 Windows" LIKE "Polystyrene 2 Floor"
   matCond = <%= 2.6227*k_c %>
 
-CONSTRUCTION "North Wall"
+CONSTRUCTION "NorthWall"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
   LAYER lrMat="Air/Honeycomb Cardboard" lrThk=<%= 0.046*m_ft %>
@@ -229,7 +229,7 @@ CONSTRUCTION "North Wall"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Styrodur North Wall" lrThk=<%= 0.060*m_ft %>
 
-CONSTRUCTION "East Wall"
+CONSTRUCTION "EastWall"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
   LAYER lrMat="Polystyrene East Wall" lrThk=<%= 0.080*m_ft %>
@@ -237,7 +237,7 @@ CONSTRUCTION "East Wall"
   LAYER lrMat="Hollow Block" lrThk=<%= 0.200*m_ft %>
   LAYER lrMat="Facing" lrThk=<%= 0.020*m_ft %>
 
-CONSTRUCTION "South Wall"
+CONSTRUCTION "SouthWall"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
   LAYER lrMat="Polystyrene South Wall" lrThk=<%= 0.080*m_ft %>
@@ -245,7 +245,7 @@ CONSTRUCTION "South Wall"
   LAYER lrMat="Hollow Block" lrThk=<%= 0.200*m_ft %>
   LAYER lrMat="Facing" lrThk=<%= 0.020*m_ft %>
 
-CONSTRUCTION "West Wall"
+CONSTRUCTION "WestWall"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
   LAYER lrMat="Polystyrene West Wall" lrThk=<%= 0.080*m_ft %>
@@ -256,21 +256,21 @@ CONSTRUCTION "West Wall"
   LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
 
-CONSTRUCTION "Ceiling Path 1"
+CONSTRUCTION "CeilingPath1"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
   LAYER lrMat="Glass Wool 1 Ceiling" lrThk=<%= 0.200*m_ft %>
   LAYER lrMat="Air Gap Ceiling" lrThk=<%= 0.100*m_ft %>
   LAYER lrMat="Particle Board" lrThk=<%= 0.021*m_ft %>
 
-CONSTRUCTION "Ceiling Path 2"
+CONSTRUCTION "CeilingPath2"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
   LAYER lrMat="Glass Wool 2 Ceiling" lrThk=<%= 0.150*m_ft %>
   LAYER lrMat="Planks" lrThk=<%= 0.150*m_ft %>
   LAYER lrMat="Particle Board" lrThk=<%= 0.021*m_ft %>
 
-CONSTRUCTION "Floor Path 1"
+CONSTRUCTION "FloorPath1"
   LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*m_ft %>
   LAYER lrMat="Glue Cement" lrThk=<%= 0.003*m_ft %>
   LAYER lrMat="Concrete" lrThk=<%= 0.008*m_ft %>
@@ -283,7 +283,7 @@ CONSTRUCTION "Floor Path 1"
   LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
 
-CONSTRUCTION "Floor Path 2"
+CONSTRUCTION "FloorPath2"
   LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*m_ft %>
   LAYER lrMat="Glue Cement" lrThk=<%= 0.003*m_ft %>
   LAYER lrMat="Concrete" lrThk=<%= 0.008*m_ft %>
@@ -296,7 +296,7 @@ CONSTRUCTION "Floor Path 2"
   LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
 
-CONSTRUCTION "Floor Path 3"
+CONSTRUCTION "FloorPath3"
   LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*m_ft %>
   LAYER lrMat="Glue Cement" lrThk=<%= 0.003*m_ft %>
   LAYER lrMat="Concrete" lrThk=<%= 0.008*m_ft %>
@@ -309,23 +309,23 @@ CONSTRUCTION "Floor Path 3"
   LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
 
-CONSTRUCTION "Door"
+CONSTRUCTION "NorthWallPath2"
   LAYER lrMat="Blended Wood/Air/Cardboard + Plywood + Plexiglass" lrThk=<%= 0.036*m_ft %>
   LAYER lrMat="Blended Air Gap" lrThk=<%= 0.038*m_ft %>
   LAYER lrMat="Styrodur Door" lrThk=<%= 0.060*m_ft %>
 
-CONSTRUCTION "Windows Path 1"
+CONSTRUCTION "WindowsPath1"
   LAYER lrMat="Blended Glass/Air Gap/Glass" lrThk=<%= 0.020*m_ft %>
   LAYER lrMat="Air Gap Windows" lrThk=<%= 0.*m_ft %>
   LAYER lrMat="Glass Wool 1 Windows" lrThk=<%= 0.200*m_ft %>
   LAYER lrMat="Polystyrene 1 Windows" lrThk=<%= 0.070*m_ft %>
 
-CONSTRUCTION "Windows Path 2"
+CONSTRUCTION "WindowsPath2"
   LAYER lrMat="PVC" lrThk=<%= 0.062*m_ft %>
   LAYER lrMat="Glass Wool 2 Windows" lrThk=<%= 0.188*m_ft %>
   LAYER lrMat="Polystyrene 1 Windows" lrThk=<%= 0.*m_ft %>
 
-CONSTRUCTION "Windows Path 3"
+CONSTRUCTION "WindowsPath3"
   LAYER lrMat="Blended PVC + Facing + Plasterboard" lrThk=<%= 0.062*m_ft %>
   LAYER lrMat="Glass Wool 3" lrThk=<%= 0.188*m_ft %>
   LAYER lrMat="Polystyrene 2 Windows" lrThk=<%= 0.070*m_ft %>
