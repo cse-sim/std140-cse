@@ -363,7 +363,10 @@ exterior_coefficient = 18
 long_wave_emissivity = 0
 
 # Azimuths for windows on east and south walls
-window_azimuths = [90,180]
+window_azimuths = [
+  {:azm=>90,:temp=>"Teast",:surface_name_extension=>"East"},
+  {:azm=>180,:temp=>"Tsouth",:surface_name_extension=>"South"}
+]
 
 <% for surface in surfaces %>
   <% if surface[:type] == "Window" %>
