@@ -316,14 +316,14 @@ CONSTRUCTION "NorthWallPath2"
 
 CONSTRUCTION "WindowsPath1"
   LAYER lrMat="Blended Glass/Air Gap/Glass" lrThk=<%= 0.020*m_ft %>
-  LAYER lrMat="Air Gap Windows" lrThk=<%= 0.*m_ft %>
+  LAYER lrMat="Air Gap Windows" lrThk=<%= 0.009*m_ft %>
   LAYER lrMat="Glass Wool 1 Windows" lrThk=<%= 0.200*m_ft %>
   LAYER lrMat="Polystyrene 1 Windows" lrThk=<%= 0.070*m_ft %>
 
 CONSTRUCTION "WindowsPath2"
   LAYER lrMat="PVC" lrThk=<%= 0.062*m_ft %>
   LAYER lrMat="Glass Wool 2 Windows" lrThk=<%= 0.188*m_ft %>
-  LAYER lrMat="Polystyrene 1 Windows" lrThk=<%= 0.*m_ft %>
+  LAYER lrMat="Polystyrene 1 Windows" lrThk=<%= 0.070*m_ft %>
 
 CONSTRUCTION "WindowsPath3"
   LAYER lrMat="Blended PVC + Facing + Plasterboard" lrThk=<%= 0.062*m_ft %>
