@@ -338,6 +338,7 @@ ZONE "Cell"
   znCeilingHt = <%= height %>
   infAC = 0
   znTH = import(CaseData,"TCell") * 9/5 + 32
+  znCAir = <%= 0.24*0.077*zone_vol %>
 
 <%
 # Surfaces
