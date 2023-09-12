@@ -454,10 +454,48 @@ EXPORT
   exDayBeg = JAN 1
   exDayEnd = DEC 31
 
+<%
+input_temperature_surface_checks = [
+  {:name=>"CeilingPath1"},
+  {:name=>"FloorPath1"},
+  {:name=>"NorthWall"},
+  {:name=>"EastWall"},
+  {:name=>"SouthWall"},
+  {:name=>"WestWall"}
+]
+
+output_surface_fluxes = [
+  {:name=>"CeilingPath1"},
+  {:name=>"CeilingPath2"},
+  {:name=>"FloorPath1"},
+  {:name=>"FloorPath2"},
+  {:name=>"FloorPath3"},
+  {:name=>"FloorPath3"},
+  {:name=>"NorthWall"},
+  {:name=>"NorthWallPath2"},
+  {:name=>"EastWall"},
+  {:name=>"WindowsPath1East"},
+  {:name=>"WindowsPath2East"},
+  {:name=>"WindowsPath3East"},
+  {:name=>"SouthWall"},
+  {:name=>"WindowsPath1South"},
+  {:name=>"WindowsPath2South"},
+  {:name=>"WindowsPath3South"},
+  {:name=>"WestWall"}
+]
+%>
+
   EXPORTCOL colHead="Month" colVal=$month
   EXPORTCOL colHead="Day" colVal=$dayOfMonth
   EXPORTCOL colHead="Hour" colVal=$hour
-  EXPORTCOL colHead="Heater-Experimental [Wh]" colVal=import(CaseData,"QHtr")
-  EXPORTCOL colHead="Heater-Simulation [Wh]" colVal=@export["MtrElecHeater"].mtri
+<% for surface in input_temperature_surface_checks %>
+  EXPORTCOL colHead="<%= surface[:name] %> Surface Temperature - Simulation [C]" colVal=(@surface["<%= surface[:name] %>"].sfExT - 32) / 1.8
+<% end %>
+  EXPORTCOL colHead="Cell Temperature - Simulation [C]" colVal=(@znRes["Cell"].H.tAir - 32) / 1.8
+  EXPORTCOL colHead="Fan-Simulation [Wh]" colVal=@gain["Fan"].gnPower / <%= w_btu %>
+  EXPORTCOL colHead="Heater-Simulation [Wh]" colVal=@znRes["Cell"].H.qhMech / <%= w_btu %>
+<% for surface in output_surface_fluxes %>
+  EXPORTCOL colHead="<%= surface[:name] %> Heat Flux [Wh/m2]" colVal=(@surface["<%= surface[:name] %>"].UNom * 1.8 * 3.28084 * 3.28084 / 3.412) * (@znRes["Cell"].H.tAir - @surface["<%= surface[:name] %>"].sfExT) / 1.8
+<% end %>
 
 RUN
