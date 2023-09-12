@@ -378,7 +378,7 @@ window_azimuths = [
   sfInAbs = <%= surface[:interior_absorptivity] %>
   sfExEpsLW = 0
   sfInEpsLW = 0
-  sfArea = <%= surface[:area] %>
+  sfArea = <%= surface[:area] * 3.28084 * 3.28084 %> 
   sfCon = <%= surface[:name] %>
   sfExCnd = SPECIFIEDT
   sfModel = FORWARD_DIFFERENCE
