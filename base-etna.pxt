@@ -337,9 +337,7 @@ ZONE "Cell"
   znFloorZ = 0
   znCeilingHt = <%= height %>
   infAC = 0
-  znTH = import(CaseData,"Tcell")
-  znQMxH = <%= 1000000*w_btu %>
-  znRSys = "Electric-Heater"
+  znTH = import(CaseData,"TCell") * 9/5 + 32
 
 <%
 # Surfaces
@@ -393,7 +391,7 @@ window_azimuths = [
         <% sym = :wall %>
         sfType = Wall
         sfAzm = <%= window_azimuth[:azm] %>
-        sfExT = import(CaseData, <%= window_azimuth[:temp] %>)
+        sfExT = import(CaseData, <%= window_azimuth[:temp] %>) * 9/5 + 32
         <% create_surface_data_members(surface) %>
     <% end %>
   <% else %>
@@ -403,23 +401,23 @@ window_azimuths = [
     <% sym = :wall %>
     sfType = Wall
     sfAzm = <%= surface[:azm] %>
-    sfExT = import(CaseData, <%= surface[:temp] %>)
+    sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
     <% create_surface_data_members(surface) %>
   <% elsif surface[:type] == "Ceiling" %>
     <% sym = :roof %>
     sfType = Ceiling
-    sfExT = import(CaseData, <%= surface[:temp] %>)
+    sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
     <% create_surface_data_members(surface) %>
   <% elsif surface[:type] == "Floor" %>
     <% sym = :floor %>
     sfType = Floor
-    sfExT = import(CaseData, <%= surface[:temp] %>)
+    sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
     <% create_surface_data_members(surface) %>
   <% elsif surface[:type] == "Door" %>
     <% sym = :wall %>
     sfType = Wall
     sfAzm = <%= surface[:azm] %>
-    sfExT = import(CaseData, <%= surface[:temp] %>)
+    sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
     <% create_surface_data_members(surface) %>
   <% end %>
 <% end %>
