@@ -432,7 +432,7 @@ window_azimuths = [
 GAIN "Fan"
   gnZone = "Cell"
   gnEndUse = FANH
-  gnPower = import(CaseData,"Qfan")
+  gnPower = import(CaseData,"Qfan") * <%= w_btu %>
   gnMeter = "MtrElecFan"
 
 // Output
