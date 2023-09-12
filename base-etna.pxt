@@ -372,8 +372,8 @@ window_azimuths = [
 <% def create_surface_data_members(surface) %>
   sfExHcModel = INPUT
   sfInHcModel = INPUT
-  sfExHcMult = 18
-  sfInHcMult = <%= surface[:interior_coefficient] %>
+  sfExHcMult = 18 * 3.412 / 3.28084 / 3.28084 / 1.8
+  sfInHcMult = <%= surface[:interior_coefficient] * 3.412 / 3.28084 / 3.28084 / 1.8 %>
   sfExAbs = <%= surface[:exterior_absorptivity] %>
   sfInAbs = <%= surface[:interior_absorptivity] %>
   sfExEpsLW = 0
