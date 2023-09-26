@@ -1,5 +1,10 @@
 <%#INTERFACE
   parameter "orientation", :default=>30
+  parameter "case_name"
+  parameter "cell"
+  parameter "insulated_windows"
+  parameter "imputed_conductivities"
+  parameter "constant_interior_coefficients"
 %>
 
 <%
@@ -28,6 +33,216 @@ tarp_conv = false
 %>
 
 <%
+if cell == "A"
+
+  cell_A_east_wall = "EastWall"
+  cell_A_west_wall = "WestWall"
+  window_latitude_name = "East"
+  window_latitude_azimuth = 90
+  window_latitude_temperature = "Teast"
+
+  if insulated_windows
+
+    # ET110A1 and ET110A2
+    import_file = "ET110A-measured-data.csv"
+    interior_absorptivity_window_glass = 0.500
+    interior_absorptivity_window_frame = 0.343
+    exterior_absorptivity_window_glass = 0.419
+    exterior_absorptivity_window_frame = 0.419
+    interior_coefficient_window_glass = 7.0
+    interior_coefficient_window_inner_frame = 7.0
+    $convection_model = "INPUT"
+
+    if imputed_conductivities
+
+      # ET110A1
+      infiltration = 0
+      material_conductivity_styrodur_north_wall_door = 0.0563 * $k_c
+      material_conductivity_polystyrene_east_wall = 0.0407 * $k_c
+      material_conductivity_polystyrene_south_wall = 0.0383 * $k_c
+      material_conductivity_polystyrene_west_wall = 0.0597 * $k_c
+      material_conductivity_glass_wool_ceiling  = 0.0364 * $k_c
+      material_conductivity_polystyrene_floor = 0.0719 * $k_c
+      material_conductivity_insulated_block_floor = 0.0719 * $k_c
+      material_conductivity_blended_wood_air_cardboard_plywood_plexiglass_door = 0.1643 * $k_c
+      material_conductivity_air_gap_windows = 0.1234 * $k_c
+      material_conductivity_glass_wool_1_windows = 0.0657 * $k_c
+      material_conductivity_polystyrene_1_windows = 0.0657 * $k_c
+      material_conductivity_glass_wool_2_windows = 0.0657 * $k_c
+      material_conductivity_glass_wool_3_windows = 2.6227 * $k_c
+      material_conductivity_polystyrene_2_windows = 2.6227 * $k_c
+      material_conductivity_blended_pvc_facing_plasterboard = 3.3570 * $k_c
+
+    else
+
+      # ET110A2
+      infiltration = 0.05775
+      material_conductivity_styrodur_north_wall_door = 0.032 * $k_c
+      material_conductivity_polystyrene_east_wall = 0.043 * $k_c
+      material_conductivity_polystyrene_south_wall = 0.043 * $k_c
+      material_conductivity_polystyrene_west_wall = 0.043 * $k_c
+      material_conductivity_glass_wool_ceiling  = 0.042 * $k_c
+      material_conductivity_polystyrene_floor = 0.040 * $k_c
+      material_conductivity_insulated_block_floor = 0.040 * $k_c
+      material_conductivity_blended_wood_air_cardboard_plywood_plexiglass_door = 0.093 * $k_c
+      material_conductivity_air_gap_windows = 0.062 * $k_c
+      material_conductivity_glass_wool_1_windows = 0.033 * $k_c
+      material_conductivity_polystyrene_1_windows = 0.033 * $k_c
+      material_conductivity_glass_wool_2_windows = 0.033 * $k_c
+      material_conductivity_glass_wool_3_windows = 0.208 * $k_c
+      material_conductivity_polystyrene_2_windows = 0.208 * $k_c
+      material_conductivity_blended_pvc_facing_plasterboard = 0.267 * $k_c
+
+    end
+
+  else
+
+    # ET100A1 and ET100A3
+    import_file = "ET100A-measured-data.csv"
+    interior_absorptivity_window_glass = 0.129
+    interior_absorptivity_window_frame = 0.343
+    exterior_absorptivity_window_glass = 0.129
+    exterior_absorptivity_window_frame = 0.343
+    infiltration = 0
+    material_conductivity_styrodur_north_wall_door = 0.0563 * $k_c
+    material_conductivity_polystyrene_east_wall = 0.0407 * $k_c
+    material_conductivity_polystyrene_south_wall = 0.0383 * $k_c
+    material_conductivity_polystyrene_west_wall = 0.0597 * $k_c
+    material_conductivity_glass_wool_ceiling  = 0.0364 * $k_c
+    material_conductivity_polystyrene_floor = 0.0719 * $k_c
+    material_conductivity_insulated_block_floor = 0.0719 * $k_c
+    material_conductivity_blended_wood_air_cardboard_plywood_plexiglass_door = 0.1643 * $k_c
+    material_conductivity_air_gap_windows = 0.1234 * $k_c
+    material_conductivity_glass_wool_1_windows = 0.0657 * $k_c
+    material_conductivity_polystyrene_1_windows = 0.0657 * $k_c
+    material_conductivity_glass_wool_2_windows = 0.0657 * $k_c
+    material_conductivity_glass_wool_3_windows = 2.6227 * $k_c
+    material_conductivity_polystyrene_2_windows = 2.6227 * $k_c
+    material_conductivity_blended_pvc_facing_plasterboard = 0.267 * $k_c
+
+    if constant_interior_coefficients
+
+      # ET100A1
+      interior_coefficient_window_glass = 12
+      interior_coefficient_window_inner_frame = 12
+      $convection_model = "INPUT"
+
+    else
+
+      # ET100A3
+      $convection_model = "UNIFIED"
+
+    end
+
+  end
+
+elsif cell == "B"
+
+    cell_A_east_wall = "WestWall"
+    cell_A_west_wall = "EastWall"
+    window_latitude_name = "West"
+    window_latitude_azimuth = 270
+    window_latitude_temperature = "Twest"
+
+  if insulated_windows
+
+    # ET110B1 and ET110B2
+    import_file = "ET110B-measured-data.csv"
+    interior_absorptivity_window_glass = 0.500
+    interior_absorptivity_window_frame = 0.343
+    exterior_absorptivity_window_glass = 0.419
+    exterior_absorptivity_window_frame = 0.419
+    interior_coefficient_window_glass = 7.0
+    interior_coefficient_window_inner_frame = 7.0
+    $convection_model = "INPUT"
+
+    if imputed_conductivities
+
+      # ET110B1
+      infiltration = 0
+      material_conductivity_styrodur_north_wall_door = 0.0518 * $k_c
+      material_conductivity_polystyrene_east_wall = 0.0353 * $k_c
+      material_conductivity_polystyrene_south_wall = 0.0503 * $k_c
+      material_conductivity_polystyrene_west_wall = 0.0505 * $k_c
+      material_conductivity_glass_wool_ceiling  = 0.0340 * $k_c
+      material_conductivity_polystyrene_floor = 0.0853 * $k_c
+      material_conductivity_insulated_block_floor = 0.0853 * $k_c
+      material_conductivity_blended_wood_air_cardboard_plywood_plexiglass_door = 0.1514 * $k_c
+      material_conductivity_air_gap_windows = 0.1292 * $k_c
+      material_conductivity_glass_wool_1_windows = 0.0688 * $k_c
+      material_conductivity_polystyrene_1_windows = 0.0688 * $k_c
+      material_conductivity_glass_wool_2_windows = 0.0688 * $k_c
+      material_conductivity_glass_wool_3_windows = 2.7444 * $k_c
+      material_conductivity_polystyrene_2_windows = 2.7444 * $k_c
+      material_conductivity_blended_pvc_facing_plasterboard = 3.5128 * $k_c
+
+    else
+
+      # ET110B2
+      infiltration = 0.02045
+      material_conductivity_styrodur_north_wall_door = 0.032 * $k_c
+      material_conductivity_polystyrene_east_wall = 0.043 * $k_c
+      material_conductivity_polystyrene_south_wall = 0.043 * $k_c
+      material_conductivity_polystyrene_west_wall = 0.043 * $k_c
+      material_conductivity_glass_wool_ceiling  = 0.042 * $k_c
+      material_conductivity_polystyrene_floor = 0.040 * $k_c
+      material_conductivity_insulated_block_floor = 0.040 * $k_c
+      material_conductivity_blended_wood_air_cardboard_plywood_plexiglass_door = 0.093 * $k_c
+      material_conductivity_air_gap_windows = 0.062 * $k_c
+      material_conductivity_glass_wool_1_windows = 0.033 * $k_c
+      material_conductivity_polystyrene_1_windows = 0.033 * $k_c
+      material_conductivity_glass_wool_2_windows = 0.033 * $k_c
+      material_conductivity_glass_wool_3_windows = 0.208 * $k_c
+      material_conductivity_polystyrene_2_windows = 0.208 * $k_c
+      material_conductivity_blended_pvc_facing_plasterboard = 0.267 * $k_c
+
+    end
+
+  else
+
+    # ET100B1 and ET100B3
+    import_file = "ET100B-measured-data.csv"
+    interior_absorptivity_window_glass = 0.129
+    interior_absorptivity_window_frame = 0.343
+    exterior_absorptivity_window_glass = 0.129
+    exterior_absorptivity_window_frame = 0.343
+    infiltration = 0
+    material_conductivity_styrodur_north_wall_door = 0.0563 * $k_c
+    material_conductivity_polystyrene_east_wall = 0.0407 * $k_c
+    material_conductivity_polystyrene_south_wall = 0.0383 * $k_c
+    material_conductivity_polystyrene_west_wall = 0.0597 * $k_c
+    material_conductivity_glass_wool_ceiling  = 0.0364 * $k_c
+    material_conductivity_polystyrene_floor = 0.0719 * $k_c
+    material_conductivity_insulated_block_floor = 0.0719 * $k_c
+    material_conductivity_blended_wood_air_cardboard_plywood_plexiglass_door = 0.1643 * $k_c
+    material_conductivity_air_gap_windows = 0.1234 * $k_c
+    material_conductivity_glass_wool_1_windows = 0.0657 * $k_c
+    material_conductivity_polystyrene_1_windows = 0.0657 * $k_c
+    material_conductivity_glass_wool_2_windows = 0.0657 * $k_c
+    material_conductivity_glass_wool_3_windows = 2.6227 * $k_c
+    material_conductivity_polystyrene_2_windows = 2.6227 * $k_c
+    material_conductivity_blended_pvc_facing_plasterboard = 0.267 * $k_c
+
+    if constant_interior_coefficients
+
+      # ET100B1
+      interior_coefficient_window_glass = 12
+      interior_coefficient_window_inner_frame = 12
+      $convection_model = "INPUT"
+
+    else
+
+      # ET100B3
+      $convection_model = "UNIFIED"
+
+    end
+
+  end
+
+end 
+%>
+
+<%
 # Dimensions
 width = 3.500*m_ft
 depth = 4.655*m_ft
@@ -52,7 +267,7 @@ METER "MtrElecHeater"
 METER "MtrElecFan"
 
 IMPORTFILE CaseData
-  imFileName = "weather/etna/final-temps.csv"
+  imFileName = "<%= "weather/etna/" + import_file %>"
   imFreq = Hour
 
 // Constructions
@@ -73,12 +288,12 @@ MATERIAL "Air/Honeycomb Cardboard"
   matSpHt = <%= 1340*cp_c %>
 
 MATERIAL "Styrodur North Wall"
-  matCond = <%= 0.0563*k_c %>
+  matCond = <%= material_conductivity_styrodur_north_wall_door %>
   matDens = <%= 18*rho_c %>
   matSpHt = <%= 1200*cp_c %>
 
 MATERIAL "Polystyrene East Wall"
-  matCond = <%= 0.0407*k_c %>
+  matCond = <%= material_conductivity_polystyrene_east_wall %>
   matDens = <%= 15*rho_c %>
   matSpHt = <%= 1200*cp_c %>
 
@@ -98,13 +313,13 @@ MATERIAL "Facing"
   matSpHt = <%= 850*cp_c %>
 
 MATERIAL "Polystyrene South Wall" LIKE "Polystyrene East Wall"
-  matCond = <%= 0.0383*k_c %>
+  matCond = <%= material_conductivity_polystyrene_south_wall %>
 
 MATERIAL "Polystyrene West Wall" LIKE "Polystyrene East Wall"
-  matCond = <%= 0.0597*k_c %>
+  matCond = <%= material_conductivity_polystyrene_west_wall %>
 
 MATERIAL "Glass Wool 1 Ceiling"
-  matCond = <%= 0.0364*k_c %>
+  matCond = <%= material_conductivity_glass_wool_ceiling %>
   matDens = <%= 11*rho_c %>
   matSpHt = <%= 800*cp_c %>
 
@@ -144,7 +359,7 @@ MATERIAL "Concrete + Tubes + Polystyrene Ribs"
   matSpHt = <%= 954*cp_c %>
 
 MATERIAL "Polystyrene 1 Floor"
-  matCond = <%= 0.0719*k_c %>
+  matCond = <%= material_conductivity_polystyrene_floor %>
   matDens = <%= 16*rho_c %>
   matSpHt = <%= 1200*cp_c %>
 
@@ -161,7 +376,7 @@ MATERIAL "Concrete Slab"
   matSpHt = <%= 950*cp_c %>
 
 MATERIAL "Insulated Block 1"
-  matCond = <%= 0.0719*k_c %>
+  matCond = <%= material_conductivity_insulated_block_floor %>
   matDens = <%= 18*rho_c %>
   matSpHt = <%= 1200*cp_c %>
 
@@ -175,7 +390,7 @@ MATERIAL "Concrete Beam 2"
 MATERIAL "Concrete Beam 1" COPY "Concrete Beam 2"
 
 MATERIAL "Blended Wood/Air/Cardboard + Plywood + Plexiglass"
-  matCond = <%= 0.1643*k_c %>
+  matCond = <%= material_conductivity_blended_wood_air_cardboard_plywood_plexiglass_door %>
   matDens = <%= 307*rho_c %>
   matSpHt = <%= 1317*cp_c %>
 
@@ -192,10 +407,10 @@ MATERIAL "Blended Glass/Air Gap/Glass"
   matSpHt = <%= 900*cp_c %>
 
 MATERIAL "Air Gap Windows" LIKE "Air Gap Walls"
-  matCond = <%= 0.1234*k_c %>
+  matCond = <%= material_conductivity_air_gap_windows %>
 
 MATERIAL "Glass Wool 1 Windows" LIKE "Glass Wool 1 Ceiling"
-  matCond = <%= 0.0657*k_c %>
+  matCond = <%= material_conductivity_glass_wool_1_windows %>
 
 MATERIAL "Polystyrene 1 Windows" LIKE "Polystyrene 1 Floor"
   matCond = <%= 0.0657*k_c %>
@@ -206,20 +421,19 @@ MATERIAL "PVC"
   matSpHt = <%= 1000*cp_c %>
 
 MATERIAL "Glass Wool 2 Windows" LIKE "Glass Wool 2 Ceiling"
-  matCond = <%= 0.0657*k_c %>
+  matCond = <%= material_conductivity_glass_wool_2_windows %>
 
 MATERIAL "Blended PVC + Facing + Plasterboard"
-  matCond = <%= 3.3750*k_c %>
+  matCond = <%= material_conductivity_blended_pvc_facing_plasterboard %>
   matDens = <%= 1442*rho_c %>
   matSpHt = <%= 975*cp_c %>
 
 MATERIAL "Glass Wool 3"
-  matCond = <%= 2.6227*k_c %>
+  matCond = <%= material_conductivity_glass_wool_3_windows %>
   matDens = <%= 316*rho_c %>
   matSpHt = <%= 808*cp_c %>
 
-MATERIAL "Polystyrene 2 Windows" LIKE "Polystyrene 2 Floor"
-  matCond = <%= 2.6227*k_c %>
+  matCond = <%= material_conductivity_polystyrene_2_windows %>
 
 CONSTRUCTION "NorthWall"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
@@ -229,13 +443,11 @@ CONSTRUCTION "NorthWall"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
   LAYER lrMat="Styrodur North Wall" lrThk=<%= 0.060*m_ft %>
 
+<% if cell == "A" %>
 CONSTRUCTION "EastWall"
-  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Polystyrene East Wall" lrThk=<%= 0.080*m_ft %>
-  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Hollow Block" lrThk=<%= 0.200*m_ft %>
-  LAYER lrMat="Facing" lrThk=<%= 0.020*m_ft %>
+<% else %>
+CONSTRUCTION "WestWall"
+<% end %>
 
 CONSTRUCTION "SouthWall"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
@@ -245,16 +457,11 @@ CONSTRUCTION "SouthWall"
   LAYER lrMat="Hollow Block" lrThk=<%= 0.200*m_ft %>
   LAYER lrMat="Facing" lrThk=<%= 0.020*m_ft %>
 
+<% if cell == "B" %>
+CONSTRUCTION "EastWall"
+<% else %>
 CONSTRUCTION "WestWall"
-  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Polystyrene West Wall" lrThk=<%= 0.080*m_ft %>
-  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Hollow Block" lrThk=<%= 0.200*m_ft %>
-  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Polystyrene West Wall" lrThk=<%= 0.080*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
+<% end %>
 
 CONSTRUCTION "CeilingPath1"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
@@ -315,20 +522,16 @@ CONSTRUCTION "NorthWallPath2"
   LAYER lrMat="Styrodur Door" lrThk=<%= 0.060*m_ft %>
 
 CONSTRUCTION "WindowsPath1"
-  LAYER lrMat="Blended Glass/Air Gap/Glass" lrThk=<%= 0.020*m_ft %>
-  LAYER lrMat="Air Gap Windows" lrThk=<%= 0.009*m_ft %>
-  LAYER lrMat="Glass Wool 1 Windows" lrThk=<%= 0.200*m_ft %>
-  LAYER lrMat="Polystyrene 1 Windows" lrThk=<%= 0.070*m_ft %>
+<% if insulated_windows %>  
+<% end %>
 
 CONSTRUCTION "WindowsPath2"
-  LAYER lrMat="PVC" lrThk=<%= 0.062*m_ft %>
-  LAYER lrMat="Glass Wool 2 Windows" lrThk=<%= 0.188*m_ft %>
-  LAYER lrMat="Polystyrene 1 Windows" lrThk=<%= 0.070*m_ft %>
+<% if insulated_windows %>
+<% end %>
 
 CONSTRUCTION "WindowsPath3"
-  LAYER lrMat="Blended PVC + Facing + Plasterboard" lrThk=<%= 0.062*m_ft %>
-  LAYER lrMat="Glass Wool 3" lrThk=<%= 0.188*m_ft %>
-  LAYER lrMat="Polystyrene 2 Windows" lrThk=<%= 0.070*m_ft %>
+<% if insulated_windows %>
+<% end %>
 
 ZONE "Cell"
   znModel = "CZM"
@@ -336,7 +539,7 @@ ZONE "Cell"
   znVol = <%= zone_vol %>
   znFloorZ = 0
   znCeilingHt = <%= height %>
-  infAC = 0
+  infAC = <%= infiltration %>
   znTH = import(CaseData,"TCell") * 9/5 + 32
   znQMxH = <%= 10000000*w_btu %>
   znCAir = <%= 0.24*0.077*zone_vol %>
@@ -344,37 +547,36 @@ ZONE "Cell"
 <%
 # Surfaces
 surfaces = [
-  {:name=>"CeilingPath1",:type=>"Ceiling",:area=>14.4025,:windows=>0,:doors=>0,:temp=>"Tattic",:interior_coefficient=>3.6,:interior_absorptivity=>0.343,:exterior_absorptivity=>0.300},
-  {:name=>"CeilingPath2",:type=>"Ceiling",:area=>1.8900,:windows=>0,:doors=>0,:temp=>"Tattic",:interior_coefficient=>3.6,:interior_absorptivity=>0.343,:exterior_absorptivity=>0.300},
-  {:name=>"FloorPath1",:type=>"Floor",:area=>13.3525,:windows=>0,:doors=>0,:temp=>"Tcellar",:interior_coefficient=>5.3,:interior_absorptivity=>0.249,:exterior_absorptivity=>0.300},
-  {:name=>"FloorPath2",:type=>"Floor",:area=>1.4700,:windows=>0,:doors=>0,:temp=>"Tcellar",:interior_coefficient=>5.3,:interior_absorptivity=>0.249,:exterior_absorptivity=>0.300},
-  {:name=>"FloorPath3",:type=>"Floor",:area=>1.4700,:windows=>0,:doors=>0,:temp=>"Tcellar",:interior_coefficient=>5.3,:interior_absorptivity=>0.249,:exterior_absorptivity=>0.300},
-  {:name=>"NorthWall",:type=>"Wall",:area=>7.1494,:azm=>0,:windows=>0,:doors=>"door",:temp=>"Tnorth",:interior_coefficient=>10.5,:interior_absorptivity=>0.343,:exterior_absorptivity=>0.300},
-  {:name=>"NorthWallPath2",:type=>"Wall",:area=>1.8281,:azm=>0,:windows=>0,:doors=>0,:temp=>"Tnorth",:interior_coefficient=>10.5,:interior_absorptivity=>0.439,:exterior_absorptivity=>0.300},
-  {:name=>"EastWall",:type=>"Wall",:area=>10.3178,:azm=>90,:windows=>"window",:doors=>0,:temp=>"Teast",:interior_coefficient=>7.0,:interior_absorptivity=>0.343,:exterior_absorptivity=>0.419},
-  {:name=>"SouthWall",:type=>"Wall",:area=>7.1752,:azm=>180,:windows=>"window",:doors=>0,:temp=>"Tsouth",:interior_coefficient=>7.0,:interior_absorptivity=>0.343,:exterior_absorptivity=>0.419},
-  {:name=>"WestWall",:type=>"Wall",:area=>11.9401,:azm=>270,:windows=>0,:doors=>0,:temp=>"Twest",:interior_coefficient=>5.3,:interior_absorptivity=>0.343,:exterior_absorptivity=>0.343},
-  {:name=>"WindowsPath1",:type=>"Window",:area=>0.9905,:windows=>0,:doors=>0,:temp=>"Window",:interior_coefficient=>7.0,:interior_absorptivity=>0.500,:exterior_absorptivity=>0.439},
-  {:name=>"WindowsPath2",:type=>"Window",:area=>0.1385,:windows=>0,:doors=>0,:temp=>"Window",:interior_coefficient=>7.0,:interior_absorptivity=>0.343,:exterior_absorptivity=>0.419},
-  {:name=>"WindowsPath3",:type=>"Window",:area=>0.6734,:windows=>0,:doors=>0,:temp=>"Window",:interior_coefficient=>12.0,:interior_absorptivity=>0.343,:exterior_absorptivity=>0.419}
+  {:name=>"CeilingPath1",   :type=>"Ceiling", :area=>14.4025,           :windows=>0,        :doors=>0,      :temp=>"Tattic",  :interior_coefficient=>3.6,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.300},
+  {:name=>"CeilingPath2",   :type=>"Ceiling", :area=>1.8900,            :windows=>0,        :doors=>0,      :temp=>"Tattic",  :interior_coefficient=>3.6,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.300},
+  {:name=>"FloorPath1",     :type=>"Floor",   :area=>13.3525,           :windows=>0,        :doors=>0,      :temp=>"Tcellar", :interior_coefficient=>5.3,                                     :interior_absorptivity=>0.249,                              :exterior_absorptivity=>0.300},
+  {:name=>"FloorPath2",     :type=>"Floor",   :area=>1.4700,            :windows=>0,        :doors=>0,      :temp=>"Tcellar", :interior_coefficient=>5.3,                                     :interior_absorptivity=>0.249,                              :exterior_absorptivity=>0.300},
+  {:name=>"FloorPath3",     :type=>"Floor",   :area=>1.4700,            :windows=>0,        :doors=>0,      :temp=>"Tcellar", :interior_coefficient=>5.3,                                     :interior_absorptivity=>0.249,                              :exterior_absorptivity=>0.300},
+  {:name=>"NorthWall",      :type=>"Wall",    :area=>7.1494,  :azm=>0,  :windows=>0,        :doors=>"door", :temp=>"Tnorth",  :interior_coefficient=>10.5,                                    :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.300},
+  {:name=>"NorthWallPath2", :type=>"Wall",    :area=>1.8281,  :azm=>0,  :windows=>0,        :doors=>0,      :temp=>"Tnorth",  :interior_coefficient=>10.5,                                    :interior_absorptivity=>0.439,                              :exterior_absorptivity=>0.439},
+  {:name=>cell_A_east_wall, :type=>"Wall",    :area=>10.3178, :azm=>90, :windows=>"window", :doors=>0,      :temp=>"Teast",   :interior_coefficient=>7.0,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.419},
+  {:name=>"SouthWall",      :type=>"Wall",    :area=>7.1752,  :azm=>180,:windows=>"window", :doors=>0,      :temp=>"Tsouth",  :interior_coefficient=>7.0,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.419},
+  {:name=>cell_A_west_wall, :type=>"Wall",    :area=>11.9401, :azm=>270,:windows=>0,        :doors=>0,      :temp=>"Twest",   :interior_coefficient=>5.3,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.343},
+  {:name=>"WindowsPath1",   :type=>"Window",  :area=>0.9905,            :windows=>0,        :doors=>0,      :temp=>"Window",  :interior_coefficient=>interior_coefficient_window_glass,       :interior_absorptivity=>interior_absorptivity_window_glass, :exterior_absorptivity=>exterior_absorptivity_window_glass},
+  {:name=>"WindowsPath2",   :type=>"Window",  :area=>0.1385,            :windows=>0,        :doors=>0,      :temp=>"Window",  :interior_coefficient=>interior_coefficient_window_inner_frame, :interior_absorptivity=>interior_absorptivity_window_frame, :exterior_absorptivity=>exterior_absorptivity_window_frame},
+  {:name=>"WindowsPath3",   :type=>"Window",  :area=>0.6734,            :windows=>0,        :doors=>0,      :temp=>"Window",  :interior_coefficient=>12.0,                                    :interior_absorptivity=>interior_absorptivity_window_frame, :exterior_absorptivity=>exterior_absorptivity_window_frame}
 ]
 
 # Surface Constants
 exterior_coefficient = 18
 long_wave_emissivity = 0
 
-# Azimuths for windows on east and south walls
+# Azimuths for windows on east/west and south walls
 window_azimuths = [
-  {:name=>"East",:azm=>90,:temp=>"Teast"},
+  {:name=>window_latitude_name,:azm=>window_latitude_azimuth,:temp=>window_latitude_temperature},
   {:name=>"South",:azm=>180,:temp=>"Tsouth"}
 ]
 %>
 
-<% def create_surface_data_members(surface) %>
+<% def create_surface_data_members(surface,constant_interior_coefficients) %>
   sfExHcModel = INPUT
-  sfInHcModel = INPUT
-  sfExHcMult = 18 * 3.412 / 3.28084 / 3.28084 / 1.8
-  sfInHcMult = <%= surface[:interior_coefficient] * 3.412 / 3.28084 / 3.28084 / 1.8 %>
+<% if constant_interior_coefficients %>
+<% end %>
   sfExAbs = <%= surface[:exterior_absorptivity] %>
   sfInAbs = <%= surface[:interior_absorptivity] %>
   sfExEpsLW = 0
@@ -394,7 +596,7 @@ window_azimuths = [
         sfType = Wall
         sfAzm = <%= window_azimuth[:azm] %>
         sfExT = import(CaseData, <%= window_azimuth[:temp] %>) * 9/5 + 32
-        <% create_surface_data_members(surface) %>
+        <% create_surface_data_members(surface,constant_interior_coefficients) %>
     <% end %>
   <% else %>
   SURFACE "<%= surface[:name] %>"
@@ -404,23 +606,23 @@ window_azimuths = [
     sfType = Wall
     sfAzm = <%= surface[:azm] %>
     sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
-    <% create_surface_data_members(surface) %>
+    <% create_surface_data_members(surface,constant_interior_coefficients) %>
   <% elsif surface[:type] == "Ceiling" %>
     <% sym = :roof %>
     sfType = Ceiling
     sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
-    <% create_surface_data_members(surface) %>
+    <% create_surface_data_members(surface,constant_interior_coefficients) %>
   <% elsif surface[:type] == "Floor" %>
     <% sym = :floor %>
     sfType = Floor
     sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
-    <% create_surface_data_members(surface) %>
+    <% create_surface_data_members(surface,constant_interior_coefficients) %>
   <% elsif surface[:type] == "Door" %>
     <% sym = :wall %>
     sfType = Wall
     sfAzm = <%= surface[:azm] %>
     sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
-    <% create_surface_data_members(surface) %>
+    <% create_surface_data_members(surface,constant_interior_coefficients) %>
   <% end %>
 <% end %>
 
@@ -464,6 +666,8 @@ input_temperature_surface_checks = [
   {:name=>"WestWall"}
 ]
 
+if cell == "A"
+
 output_surface_fluxes = [
   {:name=>"CeilingPath1"},
   {:name=>"CeilingPath2"},
@@ -483,6 +687,29 @@ output_surface_fluxes = [
   {:name=>"WindowsPath3South"},
   {:name=>"WestWall"}
 ]
+
+elsif cell == "B"
+
+  output_surface_fluxes = [
+    {:name=>"CeilingPath1"},
+    {:name=>"CeilingPath2"},
+    {:name=>"FloorPath1"},
+    {:name=>"FloorPath2"},
+    {:name=>"FloorPath3"},
+    {:name=>"NorthWall"},
+    {:name=>"NorthWallPath2"},
+    {:name=>"EastWall"},
+    {:name=>"SouthWall"},
+    {:name=>"WindowsPath1South"},
+    {:name=>"WindowsPath2South"},
+    {:name=>"WindowsPath3South"},
+    {:name=>"WestWall"},
+    {:name=>"WindowsPath1West"},
+    {:name=>"WindowsPath2West"},
+    {:name=>"WindowsPath3West"},
+  ]
+
+end
 %>
 
   EXPORTCOL colHead="Month" colVal=$month
