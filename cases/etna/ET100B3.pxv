@@ -1,0 +1,5 @@
+:case_name=>"ET100A3",
+:cell=>"B",
+:insulated_windows=>true,
+:imputed_conductivities=>true,
+:constant_interior_coefficients=>false
