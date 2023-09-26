@@ -754,7 +754,7 @@ end
   EXPORTCOL colHead="Fan-Simulation [Wh]" colVal=@gain["Fan"].gnPower / <%= $w_btu %>
   EXPORTCOL colHead="Heater-Simulation [Wh]" colVal=@znRes["Cell"].H.qhMech / <%= $w_btu %>
 <% for surface in output_surface_fluxes %>
-  EXPORTCOL colHead="<%= surface[:name] %> Heat Flux [Wh/m2]" colVal=(@surface["<%= surface[:name] %>"].UNom * 1.8 * 3.28084 * 3.28084 / 3.412) * (@znRes["Cell"].H.tAir - @surface["<%= surface[:name] %>"].sfExT) / 1.8
+  EXPORTCOL colHead="<%= surface[:name] %> Heat Flux [Wh/m2]" colVal=(@xsurf["<%= surface[:name] %>"].sbcI.qSrf * <%= $m2_ft2 / $w_btu %>)
 <% end %>
 
 RUN
