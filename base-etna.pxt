@@ -9,17 +9,17 @@
 
 <%
 # Unit Conversions
-m_ft = 3.28084
-m2_ft2 = m_ft*m_ft
-m3_ft3 = m2_ft2*m_ft
-h_min = 60.0
-k_c = 0.5781759824
-rho_c = 0.062428
-cp_c = 0.000239
-w_btu = 3.412
-k_r = 9/5.0
-q_c = w_btu/m2_ft2
-u_c = q_c/k_r
+$m_ft = 1
+$m2_ft2 = $m_ft*$m_ft
+$m3_ft3 = $m2_ft2*$m_ft
+$h_min = 60.0
+$k_c = 0.5781759824
+$rho_c = 0.062428
+$cp_c = 0.000239
+$w_btu = 3.412
+$k_r = 9/5.0
+$q_c = $w_btu/$m2_ft2
+$u_c = $q_c/$k_r
 
 def c_f(c)
   return c*9/5.0 + 32.0
@@ -244,9 +244,9 @@ end
 
 <%
 # Dimensions
-width = 3.500*m_ft
-depth = 4.655*m_ft
-height = 2.565*m_ft
+width = 3.500*$m_ft
+depth = 4.655*$m_ft
+height = 2.565*$m_ft
 floor_area = width*depth
 zone_vol = floor_area*height
 %>
@@ -273,44 +273,44 @@ IMPORTFILE CaseData
 // Constructions
 
 MATERIAL "Wallpaper"
-  matCond = <%= 0.14*k_c %>
-  matDens = <%= 700*rho_c %>
-  matSpHt = <%= 1340*cp_c %>
+  matCond = <%= 0.14*$k_c %>
+  matDens = <%= 700*$rho_c %>
+  matSpHt = <%= 1340*$cp_c %>
 
 MATERIAL "Plasterboard"
-  matCond = <%= 0.35*k_c %>
-  matDens = <%= 850*rho_c %>
-  matSpHt = <%= 800*cp_c %>
+  matCond = <%= 0.35*$k_c %>
+  matDens = <%= 850*$rho_c %>
+  matSpHt = <%= 800*$cp_c %>
 
 MATERIAL "Air/Honeycomb Cardboard"
-  matCond = <%= 0.307*k_c %>
-  matDens = <%= 26.1*rho_c %>
-  matSpHt = <%= 1340*cp_c %>
+  matCond = <%= 0.307*$k_c %>
+  matDens = <%= 26.1*$rho_c %>
+  matSpHt = <%= 1340*$cp_c %>
 
 MATERIAL "Styrodur North Wall"
   matCond = <%= material_conductivity_styrodur_north_wall_door %>
-  matDens = <%= 18*rho_c %>
-  matSpHt = <%= 1200*cp_c %>
+  matDens = <%= 18*$rho_c %>
+  matSpHt = <%= 1200*$cp_c %>
 
 MATERIAL "Polystyrene East Wall"
   matCond = <%= material_conductivity_polystyrene_east_wall %>
-  matDens = <%= 15*rho_c %>
-  matSpHt = <%= 1200*cp_c %>
+  matDens = <%= 15*$rho_c %>
+  matSpHt = <%= 1200*$cp_c %>
 
 MATERIAL "Air Gap Walls"
-  matCond = <%= 0.070*k_c %>
-  matDens = <%= 1.2*rho_c %>
-  matSpHt = <%= 1000*cp_c %>
+  matCond = <%= 0.070*$k_c %>
+  matDens = <%= 1.2*$rho_c %>
+  matSpHt = <%= 1000*$cp_c %>
 
 MATERIAL "Hollow Block"
-  matCond = <%= 1.052*k_c %>
-  matDens = <%= 1200*rho_c %>
-  matSpHt = <%= 950*cp_c %>
+  matCond = <%= 1.052*$k_c %>
+  matDens = <%= 1200*$rho_c %>
+  matSpHt = <%= 950*$cp_c %>
 
 MATERIAL "Facing"
-  matCond = <%= 1.15*k_c %>
-  matDens = <%= 1950*rho_c %>
-  matSpHt = <%= 850*cp_c %>
+  matCond = <%= 1.15*$k_c %>
+  matDens = <%= 1950*$rho_c %>
+  matSpHt = <%= 850*$cp_c %>
 
 MATERIAL "Polystyrene South Wall" LIKE "Polystyrene East Wall"
   matCond = <%= material_conductivity_polystyrene_south_wall %>
@@ -320,91 +320,91 @@ MATERIAL "Polystyrene West Wall" LIKE "Polystyrene East Wall"
 
 MATERIAL "Glass Wool 1 Ceiling"
   matCond = <%= material_conductivity_glass_wool_ceiling %>
-  matDens = <%= 11*rho_c %>
-  matSpHt = <%= 800*cp_c %>
+  matDens = <%= 11*$rho_c %>
+  matSpHt = <%= 800*$cp_c %>
 
 MATERIAL "Glass Wool 2 Ceiling" COPY "Glass Wool 1 Ceiling"
 
 MATERIAL "Air Gap Ceiling" LIKE "Air Gap Walls"
-  matCond = <%= 0.618*k_c %>
+  matCond = <%= 0.618*$k_c %>
 
 MATERIAL "Particle Board"
-  matCond = <%= 0.17*k_c %>
-  matDens = <%= 700*rho_c %>
-  matSpHt = <%= 1200*cp_c %>
+  matCond = <%= 0.17*$k_c %>
+  matDens = <%= 700*$rho_c %>
+  matSpHt = <%= 1200*$cp_c %>
 
 MATERIAL "Planks"
-  matCond = <%= 0.15*k_c %>
-  matDens = <%= 500*rho_c %>
-  matSpHt = <%= 1200*cp_c %>
+  matCond = <%= 0.15*$k_c %>
+  matDens = <%= 500*$rho_c %>
+  matSpHt = <%= 1200*$cp_c %>
 
 MATERIAL "Ceramic Tile"
-  matCond = <%= 1.75*k_c %>
-  matDens = <%= 2177*rho_c %>
-  matSpHt = <%= 920*cp_c %>
+  matCond = <%= 1.75*$k_c %>
+  matDens = <%= 2177*$rho_c %>
+  matSpHt = <%= 920*$cp_c %>
 
 MATERIAL "Glue Cement"
-  matCond = <%= 1.50*k_c %>
-  matDens = <%= 1900*rho_c %>
-  matSpHt = <%= 840*cp_c %>
+  matCond = <%= 1.50*$k_c %>
+  matDens = <%= 1900*$rho_c %>
+  matSpHt = <%= 840*$cp_c %>
 
 MATERIAL "Concrete"
-  matCond = <%= 1.75*k_c %>
-  matDens = <%= 2177*rho_c %>
-  matSpHt = <%= 920*cp_c %>
+  matCond = <%= 1.75*$k_c %>
+  matDens = <%= 2177*$rho_c %>
+  matSpHt = <%= 920*$cp_c %>
 
 MATERIAL "Concrete + Tubes + Polystyrene Ribs"
-  matCond = <%= 1.47*k_c %>
-  matDens = <%= 1813*rho_c %>
-  matSpHt = <%= 954*cp_c %>
+  matCond = <%= 1.47*$k_c %>
+  matDens = <%= 1813*$rho_c %>
+  matSpHt = <%= 954*$cp_c %>
 
 MATERIAL "Polystyrene 1 Floor"
   matCond = <%= material_conductivity_polystyrene_floor %>
-  matDens = <%= 16*rho_c %>
-  matSpHt = <%= 1200*cp_c %>
+  matDens = <%= 16*$rho_c %>
+  matSpHt = <%= 1200*$cp_c %>
 
 MATERIAL "Polystyrene 2 Floor" COPY "Polystyrene 1 Floor"
 
 MATERIAL "Plastic Lining"
-  matCond = <%= 0.124*k_c %>
-  matDens = <%= 265*rho_c %>
-  matSpHt = <%= 1170*cp_c %>
+  matCond = <%= 0.124*$k_c %>
+  matDens = <%= 265*$rho_c %>
+  matSpHt = <%= 1170*$cp_c %>
 
 MATERIAL "Concrete Slab"
-  matCond = <%= 1.75*k_c %>
-  matDens = <%= 2200*rho_c %>
-  matSpHt = <%= 950*cp_c %>
+  matCond = <%= 1.75*$k_c %>
+  matDens = <%= 2200*$rho_c %>
+  matSpHt = <%= 950*$cp_c %>
 
 MATERIAL "Insulated Block 1"
   matCond = <%= material_conductivity_insulated_block_floor %>
-  matDens = <%= 18*rho_c %>
-  matSpHt = <%= 1200*cp_c %>
+  matDens = <%= 18*$rho_c %>
+  matSpHt = <%= 1200*$cp_c %>
 
 MATERIAL "Insulated Block 2" COPY "Insulated Block 1"
 
 MATERIAL "Concrete Beam 2"
-  matCond = <%= 1.75*k_c %>
-  matDens = <%= 2200*rho_c %>
-  matSpHt = <%= 950*cp_c %>
+  matCond = <%= 1.75*$k_c %>
+  matDens = <%= 2200*$rho_c %>
+  matSpHt = <%= 950*$cp_c %>
 
 MATERIAL "Concrete Beam 1" COPY "Concrete Beam 2"
 
 MATERIAL "Blended Wood/Air/Cardboard + Plywood + Plexiglass"
   matCond = <%= material_conductivity_blended_wood_air_cardboard_plywood_plexiglass_door %>
-  matDens = <%= 307*rho_c %>
-  matSpHt = <%= 1317*cp_c %>
+  matDens = <%= 307*$rho_c %>
+  matSpHt = <%= 1317*$cp_c %>
 
 MATERIAL "Blended Air Gap"
-  matCond = <%= 0.254*k_c %>
-  matDens = <%= 1.2*rho_c %>
-  matSpHt = <%= 1000*cp_c %>
+  matCond = <%= 0.254*$k_c %>
+  matDens = <%= 1.2*$rho_c %>
+  matSpHt = <%= 1000*$cp_c %>
 
 MATERIAL "Styrodur Door" COPY "Styrodur North Wall"
 
 MATERIAL "Blended Glass/Air Gap/Glass"
-  matCond = <%= 0.124*k_c %>
-  matDens = <%= 1081*rho_c %>
-  matSpHt = <%= 900*cp_c %>
+  matCond = <%= 0.124*$k_c %>
+  matDens = <%= 1081*$rho_c %>
+  matSpHt = <%= 900*$cp_c %>
 
 MATERIAL "Air Gap Windows" LIKE "Air Gap Walls"
   matCond = <%= material_conductivity_air_gap_windows %>
@@ -413,124 +413,152 @@ MATERIAL "Glass Wool 1 Windows" LIKE "Glass Wool 1 Ceiling"
   matCond = <%= material_conductivity_glass_wool_1_windows %>
 
 MATERIAL "Polystyrene 1 Windows" LIKE "Polystyrene 1 Floor"
-  matCond = <%= 0.0657*k_c %>
+  matCond = <%= 0.0657*$k_c %>
 
 MATERIAL "PVC"
-  matCond = <%= 0.16*k_c %>
-  matDens = <%= 1380*rho_c %>
-  matSpHt = <%= 1000*cp_c %>
+  matCond = <%= 0.16*$k_c %>
+  matDens = <%= 1380*$rho_c %>
+  matSpHt = <%= 1000*$cp_c %>
 
 MATERIAL "Glass Wool 2 Windows" LIKE "Glass Wool 2 Ceiling"
   matCond = <%= material_conductivity_glass_wool_2_windows %>
 
 MATERIAL "Blended PVC + Facing + Plasterboard"
   matCond = <%= material_conductivity_blended_pvc_facing_plasterboard %>
-  matDens = <%= 1442*rho_c %>
-  matSpHt = <%= 975*cp_c %>
+  matDens = <%= 1442*$rho_c %>
+  matSpHt = <%= 975*$cp_c %>
 
 MATERIAL "Glass Wool 3"
   matCond = <%= material_conductivity_glass_wool_3_windows %>
-  matDens = <%= 316*rho_c %>
-  matSpHt = <%= 808*cp_c %>
+  matDens = <%= 316*$rho_c %>
+  matSpHt = <%= 808*$cp_c %>
 
+MATERIAL "Polystyrene 2 Windows"
   matCond = <%= material_conductivity_polystyrene_2_windows %>
+  matDens = <%= 320*$rho_c %>
+  matSpHt = <%= 1145*$cp_c %>
 
 CONSTRUCTION "NorthWall"
-  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
-  LAYER lrMat="Air/Honeycomb Cardboard" lrThk=<%= 0.046*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
-  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
-  LAYER lrMat="Styrodur North Wall" lrThk=<%= 0.060*m_ft %>
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*$m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*$m_ft %>
+  LAYER lrMat="Air/Honeycomb Cardboard" lrThk=<%= 0.046*$m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*$m_ft %>
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*$m_ft %>
+  LAYER lrMat="Styrodur North Wall" lrThk=<%= 0.060*$m_ft %>
 
 <% if cell == "A" %>
 CONSTRUCTION "EastWall"
 <% else %>
 CONSTRUCTION "WestWall"
 <% end %>
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*$m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.010*$m_ft %>
+  LAYER lrMat="Polystyrene East Wall" lrThk=<%= 0.080*$m_ft %>
+  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*$m_ft %>
+  LAYER lrMat="Hollow Block" lrThk=<%= 0.200*$m_ft %>
+  LAYER lrMat="Facing" lrThk=<%= 0.020*$m_ft %>
 
 CONSTRUCTION "SouthWall"
-  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Polystyrene South Wall" lrThk=<%= 0.080*m_ft %>
-  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*m_ft %>
-  LAYER lrMat="Hollow Block" lrThk=<%= 0.200*m_ft %>
-  LAYER lrMat="Facing" lrThk=<%= 0.020*m_ft %>
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*$m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.010*$m_ft %>
+  LAYER lrMat="Polystyrene South Wall" lrThk=<%= 0.080*$m_ft %>
+  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*$m_ft %>
+  LAYER lrMat="Hollow Block" lrThk=<%= 0.200*$m_ft %>
+  LAYER lrMat="Facing" lrThk=<%= 0.020*$m_ft %>
 
 <% if cell == "B" %>
 CONSTRUCTION "EastWall"
 <% else %>
 CONSTRUCTION "WestWall"
 <% end %>
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*$m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.010*$m_ft %>
+  LAYER lrMat="Polystyrene West Wall" lrThk=<%= 0.080*$m_ft %>
+  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*$m_ft %>
+  LAYER lrMat="Hollow Block" lrThk=<%= 0.200*$m_ft %>
+  LAYER lrMat="Air Gap Walls" lrThk=<%= 0.010*$m_ft %>
+  LAYER lrMat="Polystyrene West Wall" lrThk=<%= 0.080*$m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.010*$m_ft %>
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*$m_ft %>
 
 CONSTRUCTION "CeilingPath1"
-  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
-  LAYER lrMat="Glass Wool 1 Ceiling" lrThk=<%= 0.200*m_ft %>
-  LAYER lrMat="Air Gap Ceiling" lrThk=<%= 0.100*m_ft %>
-  LAYER lrMat="Particle Board" lrThk=<%= 0.021*m_ft %>
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*$m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*$m_ft %>
+  LAYER lrMat="Glass Wool 1 Ceiling" lrThk=<%= 0.200*$m_ft %>
+  LAYER lrMat="Air Gap Ceiling" lrThk=<%= 0.100*$m_ft %>
+  LAYER lrMat="Particle Board" lrThk=<%= 0.021*$m_ft %>
 
 CONSTRUCTION "CeilingPath2"
-  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
-  LAYER lrMat="Glass Wool 2 Ceiling" lrThk=<%= 0.150*m_ft %>
-  LAYER lrMat="Planks" lrThk=<%= 0.150*m_ft %>
-  LAYER lrMat="Particle Board" lrThk=<%= 0.021*m_ft %>
+  LAYER lrMat="Wallpaper" lrThk=<%= 0.001*$m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*$m_ft %>
+  LAYER lrMat="Glass Wool 2 Ceiling" lrThk=<%= 0.150*$m_ft %>
+  LAYER lrMat="Planks" lrThk=<%= 0.150*$m_ft %>
+  LAYER lrMat="Particle Board" lrThk=<%= 0.021*$m_ft %>
 
 CONSTRUCTION "FloorPath1"
-  LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*m_ft %>
-  LAYER lrMat="Glue Cement" lrThk=<%= 0.003*m_ft %>
-  LAYER lrMat="Concrete" lrThk=<%= 0.008*m_ft %>
-  LAYER lrMat="Concrete + Tubes + Polystyrene Ribs" lrThk=<%= 0.016*m_ft %>
-  LAYER lrMat="Polystyrene 1 Floor" lrThk=<%= 0.035*m_ft %>
-  LAYER lrMat="Plastic Lining" lrThk=<%= 0.002*m_ft %>
-  LAYER lrMat="Concrete Slab" lrThk=<%= 0.065*m_ft %>
-  LAYER lrMat="Insulated Block 1" lrThk=<%= 0.070*m_ft %>
-  LAYER lrMat="Insulated Block 2" lrThk=<%= 0.050*m_ft %>
-  LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
+  LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*$m_ft %>
+  LAYER lrMat="Glue Cement" lrThk=<%= 0.003*$m_ft %>
+  LAYER lrMat="Concrete" lrThk=<%= 0.008*$m_ft %>
+  LAYER lrMat="Concrete + Tubes + Polystyrene Ribs" lrThk=<%= 0.016*$m_ft %>
+  LAYER lrMat="Polystyrene 1 Floor" lrThk=<%= 0.035*$m_ft %>
+  LAYER lrMat="Plastic Lining" lrThk=<%= 0.002*$m_ft %>
+  LAYER lrMat="Concrete Slab" lrThk=<%= 0.065*$m_ft %>
+  LAYER lrMat="Insulated Block 1" lrThk=<%= 0.070*$m_ft %>
+  LAYER lrMat="Insulated Block 2" lrThk=<%= 0.050*$m_ft %>
+  LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*$m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*$m_ft %>
 
 CONSTRUCTION "FloorPath2"
-  LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*m_ft %>
-  LAYER lrMat="Glue Cement" lrThk=<%= 0.003*m_ft %>
-  LAYER lrMat="Concrete" lrThk=<%= 0.008*m_ft %>
-  LAYER lrMat="Concrete + Tubes + Polystyrene Ribs" lrThk=<%= 0.016*m_ft %>
-  LAYER lrMat="Polystyrene 1 Floor" lrThk=<%= 0.035*m_ft %>
-  LAYER lrMat="Plastic Lining" lrThk=<%= 0.002*m_ft %>
-  LAYER lrMat="Concrete Slab" lrThk=<%= 0.065*m_ft %>
-  LAYER lrMat="Insulated Block 1" lrThk=<%= 0.070*m_ft %>
-  LAYER lrMat="Concrete Beam 2" lrThk=<%= 0.050*m_ft %>
-  LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
+  LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*$m_ft %>
+  LAYER lrMat="Glue Cement" lrThk=<%= 0.003*$m_ft %>
+  LAYER lrMat="Concrete" lrThk=<%= 0.008*$m_ft %>
+  LAYER lrMat="Concrete + Tubes + Polystyrene Ribs" lrThk=<%= 0.016*$m_ft %>
+  LAYER lrMat="Polystyrene 1 Floor" lrThk=<%= 0.035*$m_ft %>
+  LAYER lrMat="Plastic Lining" lrThk=<%= 0.002*$m_ft %>
+  LAYER lrMat="Concrete Slab" lrThk=<%= 0.065*$m_ft %>
+  LAYER lrMat="Insulated Block 1" lrThk=<%= 0.070*$m_ft %>
+  LAYER lrMat="Concrete Beam 2" lrThk=<%= 0.050*$m_ft %>
+  LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*$m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*$m_ft %>
 
 CONSTRUCTION "FloorPath3"
-  LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*m_ft %>
-  LAYER lrMat="Glue Cement" lrThk=<%= 0.003*m_ft %>
-  LAYER lrMat="Concrete" lrThk=<%= 0.008*m_ft %>
-  LAYER lrMat="Concrete + Tubes + Polystyrene Ribs" lrThk=<%= 0.016*m_ft %>
-  LAYER lrMat="Polystyrene 1 Floor" lrThk=<%= 0.035*m_ft %>
-  LAYER lrMat="Plastic Lining" lrThk=<%= 0.002*m_ft %>
-  LAYER lrMat="Concrete Slab" lrThk=<%= 0.065*m_ft %>
-  LAYER lrMat="Concrete Beam 1" lrThk=<%= 0.070*m_ft %>
-  LAYER lrMat="Concrete Beam 2" lrThk=<%= 0.050*m_ft %>
-  LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*m_ft %>
-  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*m_ft %>
+  LAYER lrMat="Ceramic Tile" lrThk=<%= 0.006*$m_ft %>
+  LAYER lrMat="Glue Cement" lrThk=<%= 0.003*$m_ft %>
+  LAYER lrMat="Concrete" lrThk=<%= 0.008*$m_ft %>
+  LAYER lrMat="Concrete + Tubes + Polystyrene Ribs" lrThk=<%= 0.016*$m_ft %>
+  LAYER lrMat="Polystyrene 1 Floor" lrThk=<%= 0.035*$m_ft %>
+  LAYER lrMat="Plastic Lining" lrThk=<%= 0.002*$m_ft %>
+  LAYER lrMat="Concrete Slab" lrThk=<%= 0.065*$m_ft %>
+  LAYER lrMat="Concrete Beam 1" lrThk=<%= 0.070*$m_ft %>
+  LAYER lrMat="Concrete Beam 2" lrThk=<%= 0.050*$m_ft %>
+  LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*$m_ft %>
+  LAYER lrMat="Plasterboard" lrThk=<%= 0.013*$m_ft %>
 
 CONSTRUCTION "NorthWallPath2"
-  LAYER lrMat="Blended Wood/Air/Cardboard + Plywood + Plexiglass" lrThk=<%= 0.036*m_ft %>
-  LAYER lrMat="Blended Air Gap" lrThk=<%= 0.038*m_ft %>
-  LAYER lrMat="Styrodur Door" lrThk=<%= 0.060*m_ft %>
+  LAYER lrMat="Blended Wood/Air/Cardboard + Plywood + Plexiglass" lrThk=<%= 0.036*$m_ft %>
+  LAYER lrMat="Blended Air Gap" lrThk=<%= 0.038*$m_ft %>
+  LAYER lrMat="Styrodur Door" lrThk=<%= 0.060*$m_ft %>
 
 CONSTRUCTION "WindowsPath1"
+  LAYER lrMat="Blended Glass/Air Gap/Glass" lrThk=<%= 0.020*$m_ft %>
 <% if insulated_windows %>  
+  LAYER lrMat="Air Gap Windows" lrThk=<%= 0.009*$m_ft %>
+  LAYER lrMat="Glass Wool 1 Windows" lrThk=<%= 0.200*$m_ft %>
+  LAYER lrMat="Polystyrene 1 Windows" lrThk=<%= 0.070*$m_ft %>
 <% end %>
 
 CONSTRUCTION "WindowsPath2"
+  LAYER lrMat="PVC" lrThk=<%= 0.062*$m_ft %>
 <% if insulated_windows %>
+  LAYER lrMat="Glass Wool 2 Windows" lrThk=<%= 0.188*$m_ft %>
+  LAYER lrMat="Polystyrene 1 Windows" lrThk=<%= 0.070*$m_ft %>
 <% end %>
 
 CONSTRUCTION "WindowsPath3"
+  LAYER lrMat="Blended PVC + Facing + Plasterboard" lrThk=<%= 0.062*$m_ft %>
 <% if insulated_windows %>
+  LAYER lrMat="Glass Wool 3" lrThk=<%= 0.188*$m_ft %>
+  LAYER lrMat="Polystyrene 2 Windows" lrThk=<%= 0.070*$m_ft %>
 <% end %>
 
 ZONE "Cell"
@@ -541,7 +569,7 @@ ZONE "Cell"
   znCeilingHt = <%= height %>
   infAC = <%= infiltration %>
   znTH = import(CaseData,"TCell") * 9/5 + 32
-  znQMxH = <%= 10000000*w_btu %>
+  znQMxH = <%= 10000000*$w_btu %>
   znCAir = <%= 0.24*0.077*zone_vol %>
 
 <%
@@ -574,14 +602,18 @@ window_azimuths = [
 %>
 
 <% def create_surface_data_members(surface,constant_interior_coefficients) %>
+  
   sfExHcModel = INPUT
+  sfInHcModel = <%= $convection_model %>
+  sfExHcMult = <%= $exterior_coefficient * $w_btu / $m2_ft2 / $k_r %>
 <% if constant_interior_coefficients %>
+  sfInHcMult = <%= surface[:interior_coefficient] * $w_btu / $m2_ft2 / $k_r %>
 <% end %>
   sfExAbs = <%= surface[:exterior_absorptivity] %>
   sfInAbs = <%= surface[:interior_absorptivity] %>
   sfExEpsLW = 0
   sfInEpsLW = 0
-  sfArea = <%= surface[:area] * 3.28084 * 3.28084 %> 
+  sfArea = <%= surface[:area] * $m2_ft2 %> 
   sfCon = <%= surface[:name] %>
   sfExCnd = SPECIFIEDT
   sfModel = FORWARD_DIFFERENCE
@@ -634,7 +666,7 @@ window_azimuths = [
 GAIN "Fan"
   gnZone = "Cell"
   gnEndUse = FANH
-  gnPower = import(CaseData,"Qfan") * <%= w_btu %>
+  gnPower = import(CaseData,"Qfan") * <%= $w_btu %>
   gnMeter = "MtrElecFan"
 
 // Output
@@ -719,8 +751,8 @@ end
   EXPORTCOL colHead="<%= surface[:name] %> Surface Temperature - Simulation [C]" colVal=(@surface["<%= surface[:name] %>"].sfExT - 32) / 1.8
 <% end %>
   EXPORTCOL colHead="Cell Temperature - Simulation [C]" colVal=(@znRes["Cell"].H.tAir - 32) / 1.8
-  EXPORTCOL colHead="Fan-Simulation [Wh]" colVal=@gain["Fan"].gnPower / <%= w_btu %>
-  EXPORTCOL colHead="Heater-Simulation [Wh]" colVal=@znRes["Cell"].H.qhMech / <%= w_btu %>
+  EXPORTCOL colHead="Fan-Simulation [Wh]" colVal=@gain["Fan"].gnPower / <%= $w_btu %>
+  EXPORTCOL colHead="Heater-Simulation [Wh]" colVal=@znRes["Cell"].H.qhMech / <%= $w_btu %>
 <% for surface in output_surface_fluxes %>
   EXPORTCOL colHead="<%= surface[:name] %> Heat Flux [Wh/m2]" colVal=(@surface["<%= surface[:name] %>"].UNom * 1.8 * 3.28084 * 3.28084 / 3.412) * (@znRes["Cell"].H.tAir - @surface["<%= surface[:name] %>"].sfExT) / 1.8
 <% end %>
