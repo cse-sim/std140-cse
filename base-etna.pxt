@@ -656,10 +656,6 @@ sfExHcModel = INPUT
   <% end %>
 <% end %>
 
-//RSYS "Electric-Heater"
- // rsType = RESISTANCE
- // rsCapH = <%= 1000000*w_btu %>
- // rsElecMtr = "MtrElec"
 
 GAIN "Fan"
   gnZone = "Cell"
