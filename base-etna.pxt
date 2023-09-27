@@ -144,7 +144,7 @@ elsif cell == "B"
     cell_A_west_wall = "EastWall"
     window_latitude_name = "West"
     window_latitude_azimuth = 270
-    window_latitude_temperature = "Twest"
+    temperature = "Twest"
 
   if insulated_windows
 
