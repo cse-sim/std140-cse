@@ -9,7 +9,7 @@ def compose(c, tests)
     FileUtils.mkdir_p(output_dir)
   end
 
-  src = ['base-#{tests}.pxt', 'CSE.exe', c]
+  src = ["base-#{tests}.pxt", 'CSE.exe', c]
   target = output_dir + '/in.cse'
 
   puts "================="
