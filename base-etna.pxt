@@ -41,7 +41,7 @@ if cell == "A"
   cell_A_west_wall_azimuth = 270
   window_latitude_name = "East"
   window_latitude_azimuth = 90
-  window_latitude_temperature = "Teast"
+  temperature = "Teast"
 
   if insulated_windows
 
@@ -598,7 +598,7 @@ $long_wave_emissivity = 0
 
 # Azimuths for windows on east/west and south walls
 window_azimuths = [
-  {:name=>window_latitude_name,:azm=>window_latitude_azimuth,:temp=>window_latitude_temperature},
+  {:name=>window_latitude_name,:azm=>window_latitude_azimuth,:temp=>temperature},
   {:name=>"South",:azm=>180,:temp=>"Tsouth"}
 ]
 %>
