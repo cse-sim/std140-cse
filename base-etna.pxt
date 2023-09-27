@@ -415,7 +415,7 @@ MATERIAL "Glass Wool 1 Windows" LIKE "Glass Wool 1 Ceiling"
   matCond = <%= material_conductivity_glass_wool_1_windows %>
 
 MATERIAL "Polystyrene 1 Windows" LIKE "Polystyrene 1 Floor"
-  matCond = <%= 0.0657*$k_c %>
+  matCond = <%= material_conductivity_polystyrene_1_windows %>
 
 MATERIAL "PVC"
   matCond = <%= 0.16*$k_c %>
