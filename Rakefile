@@ -63,7 +63,7 @@ def write_report(tests)
   elsif tests == 'weather-drivers'
     target = ["reports/#{tests}/WeatherDriversResultsSubmittal.xlsx", "reports/#{tests}/S140outNotes.txt"]
   elsif tests == 'etna'
-    target = ['reports/#{tests}/ETNAResultsSubmittal.xlsx', 'reports/#{tests}/S140outNotes.txt']
+    target = ["reports/#{tests}/ET100series-Output-GMT+1 (071023a).xlsx", "reports/#{tests}/S140outNotes.txt"]
   end
   puts "\n================="
   puts "     REPORTS     "
