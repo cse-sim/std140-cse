@@ -142,6 +142,8 @@ elsif cell == "B"
 
     cell_A_east_wall = "WestWall"
     cell_A_west_wall = "EastWall"
+    cell_A_east_wall_azimuth = 270
+    cell_A_west_wall_azimuth = 90
     window_latitude_name = "West"
     window_latitude_azimuth = 270
     temperature = "Twest"
