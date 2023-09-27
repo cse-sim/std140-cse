@@ -211,20 +211,20 @@ elsif cell == "B"
     exterior_absorptivity_window_glass = 0.129
     exterior_absorptivity_window_frame = 0.343
     infiltration = 0
-    material_conductivity_styrodur_north_wall_door = 0.0563 * $k_c
-    material_conductivity_polystyrene_east_wall = 0.0407 * $k_c
-    material_conductivity_polystyrene_south_wall = 0.0383 * $k_c
-    material_conductivity_polystyrene_west_wall = 0.0597 * $k_c
-    material_conductivity_glass_wool_ceiling  = 0.0364 * $k_c
-    material_conductivity_polystyrene_floor = 0.0719 * $k_c
-    material_conductivity_insulated_block_floor = 0.0719 * $k_c
-    material_conductivity_blended_wood_air_cardboard_plywood_plexiglass_door = 0.1643 * $k_c
-    material_conductivity_air_gap_windows = 0.1234 * $k_c
-    material_conductivity_glass_wool_1_windows = 0.0657 * $k_c
-    material_conductivity_polystyrene_1_windows = 0.0657 * $k_c
-    material_conductivity_glass_wool_2_windows = 0.0657 * $k_c
-    material_conductivity_glass_wool_3_windows = 2.6227 * $k_c
-    material_conductivity_polystyrene_2_windows = 2.6227 * $k_c
+    material_conductivity_styrodur_north_wall_door = 0.0518 * $k_c
+    material_conductivity_polystyrene_east_wall = 0.0353 * $k_c
+    material_conductivity_polystyrene_south_wall = 0.0503 * $k_c
+    material_conductivity_polystyrene_west_wall = 0.0505 * $k_c
+    material_conductivity_glass_wool_ceiling  = 0.0340 * $k_c
+    material_conductivity_polystyrene_floor = 0.0853 * $k_c
+    material_conductivity_insulated_block_floor = 0.0853 * $k_c
+    material_conductivity_blended_wood_air_cardboard_plywood_plexiglass_door = 0.1514 * $k_c
+    material_conductivity_air_gap_windows = 0.1292 * $k_c
+    material_conductivity_glass_wool_1_windows = 0.0688 * $k_c
+    material_conductivity_polystyrene_1_windows = 0.0688 * $k_c
+    material_conductivity_glass_wool_2_windows = 0.0688 * $k_c
+    material_conductivity_glass_wool_3_windows = 2.7444 * $k_c
+    material_conductivity_polystyrene_2_windows = 2.7444 * $k_c
     material_conductivity_blended_pvc_facing_plasterboard = 0.267 * $k_c
 
     if constant_interior_coefficients
