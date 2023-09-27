@@ -9,7 +9,7 @@
 
 <%
 # Unit Conversions
-$m_ft = 1
+$m_ft = 3.28084
 $m2_ft2 = $m_ft*$m_ft
 $m3_ft3 = $m2_ft2*$m_ft
 $h_min = 60.0
