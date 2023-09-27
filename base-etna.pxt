@@ -698,25 +698,24 @@ input_temperature_surface_checks = [
 
 if cell == "A"
 
-output_surface_fluxes = [
-  {:name=>"CeilingPath1"},
-  {:name=>"CeilingPath2"},
-  {:name=>"FloorPath1"},
-  {:name=>"FloorPath2"},
-  {:name=>"FloorPath3"},
-  {:name=>"FloorPath3"},
-  {:name=>"NorthWall"},
-  {:name=>"NorthWallPath2"},
-  {:name=>"EastWall"},
-  {:name=>"WindowsPath1East"},
-  {:name=>"WindowsPath2East"},
-  {:name=>"WindowsPath3East"},
-  {:name=>"SouthWall"},
-  {:name=>"WindowsPath1South"},
-  {:name=>"WindowsPath2South"},
-  {:name=>"WindowsPath3South"},
-  {:name=>"WestWall"}
-]
+  output_surface_fluxes = [
+    {:name=>"CeilingPath1"},
+    {:name=>"CeilingPath2"},
+    {:name=>"FloorPath1"},
+    {:name=>"FloorPath2"},
+    {:name=>"FloorPath3"},
+    {:name=>"NorthWall"},
+    {:name=>"NorthWallPath2"},
+    {:name=>"EastWall"},
+    {:name=>"WindowsPath1East"},
+    {:name=>"WindowsPath2East"},
+    {:name=>"WindowsPath3East"},
+    {:name=>"SouthWall"},
+    {:name=>"WindowsPath1South"},
+    {:name=>"WindowsPath2South"},
+    {:name=>"WindowsPath3South"},
+    {:name=>"WestWall"}
+  ]
 
 elsif cell == "B"
 
