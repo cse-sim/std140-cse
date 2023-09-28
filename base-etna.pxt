@@ -28,7 +28,7 @@ end
 # Internal use
 nsteps = 10
 
-tarp_conv = false
+
 
 %>
 
@@ -263,9 +263,7 @@ terrainClass = 3
 wuDays = 0
 skyModel = ANISOTROPIC
 skyModelLW = BERDAHLMARTIN
-<% if tarp_conv %>
 hConvMod = No
-<% end %>
 
 METER "MtrElecHeater"
 METER "MtrElecFan"
