@@ -30,6 +30,7 @@ nsteps = 10
 %>
 
 <%
+# ETNA Case Variables
 if cell == "A"
 
   cell_A_east_wall = "EastWall"
@@ -269,7 +270,7 @@ IMPORTFILE CaseData
   imFileName = "<%= "weather/etna/" + import_file %>"
   imFreq = Hour
 
-// Constructions
+// Materials
 
 MATERIAL "Wallpaper"
   matCond = <%= 0.14*$k_c %>
@@ -436,6 +437,8 @@ MATERIAL "Polystyrene 2 Windows"
   matCond = <%= material_conductivity_polystyrene_2_windows %>
   matDens = <%= 320*$rho_c %>
   matSpHt = <%= 1145*$cp_c %>
+
+// Constructions
 
 CONSTRUCTION "NorthWall"
   LAYER lrMat="Wallpaper" lrThk=<%= 0.001*$m_ft %>
@@ -671,6 +674,7 @@ EXPORT
   exDayEnd = DEC 31
 
 <%
+# Input Checks
 input_temperature_surface_checks = [
   {:name=>"CeilingPath1"},
   {:name=>"FloorPath1"},
@@ -680,6 +684,7 @@ input_temperature_surface_checks = [
   {:name=>"WestWall"}
 ]
 
+# Outputs
 if cell == "A"
 
   output_surface_fluxes = [
@@ -724,6 +729,8 @@ elsif cell == "B"
 
 end
 %>
+
+// Export Results
 
   EXPORTCOL colHead="Month" colVal=$month
   EXPORTCOL colHead="Day" colVal=$dayOfMonth
