@@ -661,11 +661,6 @@ GAIN "Fan"
   gnPower = import(CaseData,"Qfan") * <%= $w_btu %>
   gnMeter = "MtrElec"
 
-// Output
-DELETE REPORT EB
-DELETE REPORT INP
-DELETE REPORT LOG
-DELETE REPORT ERR
 
 EXPORTFILE "Output"
   xfFileName = "Output.csv"
