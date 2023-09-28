@@ -265,7 +265,7 @@ skyModel = ANISOTROPIC
 skyModelLW = BERDAHLMARTIN
 hConvMod = No
 
-METER "MtrElecHeater"
+METER "MtrElec"
 METER "MtrElecFan"
 
 IMPORTFILE CaseData
@@ -659,7 +659,7 @@ GAIN "Fan"
   gnZone = "Cell"
   gnEndUse = FANH
   gnPower = import(CaseData,"Qfan") * <%= $w_btu %>
-  gnMeter = "MtrElecFan"
+  gnMeter = "MtrElec"
 
 // Output
 DELETE REPORT EB
