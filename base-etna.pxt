@@ -264,7 +264,6 @@ skyModelLW = BERDAHLMARTIN
 hConvMod = No
 
 METER "MtrElec"
-METER "MtrElecFan"
 
 IMPORTFILE CaseData
   imFileName = "<%= "weather/etna/" + import_file %>"
