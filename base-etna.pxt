@@ -266,7 +266,7 @@ hConvMod = No
 METER "MtrElec"
 
 IMPORTFILE CaseData
-  imFileName = "<%= "weather/etna/" + import_file %>"
+  imFileName = "<%= "output/etna/INPUTS/" + import_file %>"
   imFreq = Hour
 
 // Materials
