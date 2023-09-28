@@ -260,7 +260,7 @@ nSubSteps = <%= nsteps %>
 DT = No
 bldgAzm = <%= orientation %>
 terrainClass = 3
-wuDays = 30
+wuDays = 0
 skyModel = ANISOTROPIC
 skyModelLW = BERDAHLMARTIN
 <% if tarp_conv %>
