@@ -250,7 +250,7 @@ width = 3.500*$m_ft
 depth = 4.655*$m_ft
 height = 2.565*$m_ft
 floor_area = width*depth
-zone_vol = floor_area*height
+zone_volume = floor_area*height
 %>
 
 wfName = "weather/etna/ET110meteoGMT+1_within_Melun-071530_MY.2000_v3.epw"
@@ -565,13 +565,13 @@ CONSTRUCTION "WindowsPath3"
 ZONE "Cell"
   znModel = "CZM"
   znArea = <%= floor_area %>
-  znVol = <%= zone_vol %>
+  znVol = <%= zone_volume %>
   znFloorZ = 0
   znCeilingHt = <%= height %>
   infAC = <%= infiltration %>
   znTH = import(CaseData,"TCell") * 9/5 + 32
   znQMxH = <%= 10000000*$w_btu %>
-  znCAir = <%= 0.24*0.077*zone_vol %>
+  znCAir = <%= 0.24*0.077*zone_volume %>
 
 <%
 # Surfaces
