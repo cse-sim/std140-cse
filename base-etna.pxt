@@ -562,13 +562,37 @@ CONSTRUCTION "WindowsPath3"
   LAYER lrMat="Polystyrene 2 Windows" lrThk=<%= 0.070*$m_ft %>
 <% end %>
 
+<% guard_surfaces = [
+  {:name => "Ceiling", :temp => "Tattic"},
+  {:name => "Floor", :temp => "Tcellar"},
+  {:name => "NorthWall", :temp => "Tnorth"},
+  {:name => "EastWall", :temp => "Teast"},
+  {:name => "SouthWall", :temp => "Tsouth"},
+  {:name => "WestWall", :temp => "Twest"}, 
+]%>
+
+<% if imputed_conductivities == false %>
+  <% for surface in guard_surfaces %>
+IZXFER <%= surface[:name] + "Infiltration" %>
+  izNVType = AIRNETEXTFLOW
+  izZn1 = "Cell"
+  izTEx = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
+  izVfMin = <%= infiltration / 6 * zone_volume / $h_min * $m3_ft3 %>
+  <% end %>
+IZXFER CellOpening
+  izNVType = AIRNETEXT
+  izZn1 = "Cell"
+  izALo = 1
+  izCpr = 0
+  izNVEff = 1
+<% end %>
+
 ZONE "Cell"
   znModel = "CZM"
   znArea = <%= floor_area %>
   znVol = <%= zone_volume %>
   znFloorZ = 0
   znCeilingHt = <%= height %>
-  infAC = <%= infiltration %>
   znTH = import(CaseData,"TCell") * 9/5 + 32
   znQMxH = <%= 10000000*$w_btu %>
   znCAir = <%= 0.24*0.077*zone_volume %>
