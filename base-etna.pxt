@@ -592,6 +592,7 @@ ZONE "Cell"
   znArea = <%= floor_area %>
   znVol = <%= zone_volume %>
   znFloorZ = 0
+  infAC = 0
   znCeilingHt = <%= height %>
   znTH = import(CaseData,"TCell") * 9/5 + 32
   znQMxH = <%= 10000000*$w_btu %>
