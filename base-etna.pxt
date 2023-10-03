@@ -581,7 +581,7 @@ IZXFER <%= surface[:name] + "Infiltration" %>
   izNVType = AIRNETEXTFLOW
   izZn1 = "Cell"
   izTEx = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
-  izVfMin = <%= infiltration / 6 * zone_volume / $h_min * $m3_ft3 %>
+  izVfMin = <%= infiltration / 6 * zone_volume / $h_min %>
   <% end %>
 IZXFER CellOpening
   izNVType = AIRNETEXT
