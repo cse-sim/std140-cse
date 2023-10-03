@@ -601,6 +601,9 @@ ZONE "Cell"
   znTH = import(CaseData,"TCell") * 9/5 + 32
   znQMxH = <%= 10000000*$w_btu %>
   znCAir = <%= 0.24*0.077*zone_volume %>
+<% if constant_interior_coefficients == false %>
+  znHcAirX = import(CaseData,"HWDsafr") * <%= $m3_ft3 / zone_volume %>
+<% end %>
 
 <%
 # Surfaces
