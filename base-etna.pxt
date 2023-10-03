@@ -622,7 +622,7 @@ $long_wave_emissivity = 0
 
 # Azimuths for windows on east/west and south walls
 window_azimuths = [
-  {:name=>window_latitude_name,:azm=>window_latitude_azimuth,:temp=>temperature},
+  {:name=>lateral_window_name,:azm=>lateral_window_azimuth,:temp=>lateral_window_temperature},
   {:name=>"South",:azm=>180,:temp=>"Tsouth"}
 ]
 %>
