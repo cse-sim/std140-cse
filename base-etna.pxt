@@ -95,7 +95,7 @@ if cell == "A"
 
     end
 
-  else
+  else # if conductivities not imputed
 
     # ET100A1 and ET100A3
     import_file = "ET100A-measured-data.csv"
@@ -178,7 +178,7 @@ elsif cell == "B"
       material_conductivity_polystyrene_2_windows = 2.7444 * $k_c
       material_conductivity_blended_pvc_facing_plasterboard = 3.5128 * $k_c
 
-    else
+    else # if conductivities not imputed
 
       # ET110B2
       infiltration = 0.02045
