@@ -26,7 +26,8 @@ output_directory = "output/etna/INPUTS/"
 # define temperature for 'fake' temperature data
 # CSE requires an entire year's worth of temperature data
 # ETNA temperature data does not encompass an entire year, therefore filler data is used.
-FAKE_TEMPERATURE = 10
+FAKE_TEMPERATURE_GUARDS = 10
+FAKE_TEMPERATURE_CELL = 35
 FAKE_FAN_HOURLY_ENERGY_CONSUMPTION = 0
 FAKE_FAN_VOLUMETRIC_FLOW_RATE = 0
 FAKE_HEATER_HOURLY_ENERGY_CONSUMPTION = 0
@@ -107,8 +108,8 @@ for temperature_file in temperature_files
 			break
 			# add fake temperature data before start date
 			elsif month > 0
-				csv << [month,day,hour,[FAKE_TEMPERATURE]*7,FAKE_FAN_HOURLY_ENERGY_CONSUMPTION,FAKE_FAN_VOLUMETRIC_FLOW_RATE,FAKE_HEATER_HOURLY_ENERGY_CONSUMPTION].flatten
-				final_csv.append([month,day,hour,[FAKE_TEMPERATURE]*7,FAKE_FAN_HOURLY_ENERGY_CONSUMPTION,FAKE_FAN_VOLUMETRIC_FLOW_RATE,FAKE_HEATER_HOURLY_ENERGY_CONSUMPTION].flatten)
+				csv << [month,day,hour,[FAKE_TEMPERATURE_GUARDS]*6,FAKE_TEMPERATURE_CELL,FAKE_FAN_HOURLY_ENERGY_CONSUMPTION,FAKE_FAN_VOLUMETRIC_FLOW_RATE,FAKE_HEATER_HOURLY_ENERGY_CONSUMPTION].flatten
+				final_csv.append([month,day,hour,[FAKE_TEMPERATURE_GUARDS]*6,FAKE_TEMPERATURE_CELL,FAKE_FAN_HOURLY_ENERGY_CONSUMPTION,FAKE_FAN_VOLUMETRIC_FLOW_RATE,FAKE_HEATER_HOURLY_ENERGY_CONSUMPTION].flatten)
 			end
 		end
 		# add fake temperature data after end date
@@ -116,8 +117,8 @@ for temperature_file in temperature_files
 			month = end_template_row[0].to_i
 			day = end_template_row[1].to_i
 			hour = end_template_row[2].to_i
-			csv << [month,day,hour,[FAKE_TEMPERATURE]*7,FAKE_FAN_HOURLY_ENERGY_CONSUMPTION,FAKE_FAN_VOLUMETRIC_FLOW_RATE,FAKE_HEATER_HOURLY_ENERGY_CONSUMPTION].flatten
-			final_csv.append([month,day,hour,[FAKE_TEMPERATURE]*7,FAKE_FAN_HOURLY_ENERGY_CONSUMPTION,FAKE_FAN_VOLUMETRIC_FLOW_RATE,FAKE_HEATER_HOURLY_ENERGY_CONSUMPTION].flatten)
+			csv << [month,day,hour,[FAKE_TEMPERATURE_GUARDS]*6,FAKE_TEMPERATURE_CELL,FAKE_FAN_HOURLY_ENERGY_CONSUMPTION,FAKE_FAN_VOLUMETRIC_FLOW_RATE,FAKE_HEATER_HOURLY_ENERGY_CONSUMPTION].flatten
+			final_csv.append([month,day,hour,[FAKE_TEMPERATURE_GUARDS]*6,FAKE_TEMPERATURE_CELL,FAKE_FAN_HOURLY_ENERGY_CONSUMPTION,FAKE_FAN_VOLUMETRIC_FLOW_RATE,FAKE_HEATER_HOURLY_ENERGY_CONSUMPTION].flatten)
 		end
 	end
 
