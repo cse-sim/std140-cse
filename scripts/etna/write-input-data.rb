@@ -124,9 +124,9 @@ for temperature_file in temperature_files
 	# Add header and shift hours up 1 (0-23 becomes 1-24) for CSE compatability
 	header = 0
 	CSV.open(output_directory+temperature_file[:case_name]+"-measured-data.csv",'w') do |csv|
-		csv << [temperature_file_path[0,6]]
-		csv << ["ETNA CSE Temperature, Energy Consumption, and Fan Flow Rate Data Test File of Artificial Case"]
-		csv << ["","Hour"]
+		csv << [temperature_file[:case_name],0]
+		csv << [Time.now.getutc]
+		csv << ["#{temperature_file[:case_name]} Input Data","Hour"]
 		for row in final_csv
 			if header == 1
 				row[2] = row[2].to_i + 1
