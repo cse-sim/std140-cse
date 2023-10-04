@@ -18,10 +18,16 @@ case_results_path = "output/etna"
 cases_cell_A = ["ET100A1","ET100A3","ET110A1","ET110A2"]
 cases_insulated_windows = ["ET110A1","ET110A2","ET110B1","ET110B2"]
 
-experiment_dates = {"cases_insulated_windows":  {"start_date": datetime(2000,1,26,12),
-                                                 "end_date":   datetime(2000,2,11, 9)},
-                    "cases_uninsulated_windows":{"start_date": datetime(2000,9, 8,16),
-                                                 "end_date":   datetime(2000,9,18,14)}}
+experiment_dates = {"cases_insulated_windows":
+                    {"cases_cell_A":{"start_date": datetime(2000,1,26,12),
+                                     "end_date":   datetime(2000,2,11, 9)},
+                     "cases_cell_B":{"start_date": datetime(2000,1,26,12),
+                                     "end_date":   datetime(2000,2,11, 9)}},
+                     "cases_uninsulated_windows":
+                    {"cases_cell_A":{"start_date": datetime(2000,9, 8,16),
+                                     "end_date":   datetime(2000,9,18,14)},
+						         "cases_cell_B":{"start_date": datetime(2000,9, 8,16),
+                                     "end_date":   datetime(2000,9,18,15)}}}
 
 output_columns = {
 "cases_cell_A":{
@@ -83,14 +89,14 @@ def find_case_specifics(case):
   global cases_insulated_windows
   global cases_cell_A
 
-  if case in cases_insulated_windows:
-    start_date, end_date = experiment_dates["cases_insulated_windows"]["start_date"],experiment_dates["cases_insulated_windows"]["end_date"]
-  else:
-    start_date, end_date = experiment_dates["cases_uninsulated_windows"]["start_date"],experiment_dates["cases_uninsulated_windows"]["end_date"]
   if case in cases_cell_A:
     cell = "cases_cell_A"
   else:
     cell = "cases_cell_B"
+  if case in cases_insulated_windows:
+    start_date, end_date = experiment_dates["cases_insulated_windows"][cell]["start_date"],experiment_dates["cases_insulated_windows"][cell]["end_date"]
+  else:
+    start_date, end_date = experiment_dates["cases_uninsulated_windows"][cell]["start_date"],experiment_dates["cases_uninsulated_windows"][cell]["end_date"]
   return cell, start_date, end_date
 
 for case in cases:
