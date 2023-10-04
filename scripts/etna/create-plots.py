@@ -1,5 +1,5 @@
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 import openpyxl as xl
 import os
 import plotly.graph_objects as go
@@ -41,7 +41,7 @@ measured_data = {
 }
 
 def find_dates(series):
-    df = call_csv(f"{measured_data_directory}/{series}A-Measurements-GMT+1 (071123).csv")
+    df = call_csv(f"{measured_data_directory}/{series}B-Measurements-GMT+1 (071123).csv")
     df.columns = df.iloc[1]
     df = df.drop([0,1,2]).reset_index()
     return pd.DataFrame([datetime.strptime(date,'%m/%d/%Y %H:%M') for date in list(df["Date (XLS format)"])],columns=["Date"])
@@ -64,6 +64,8 @@ for series in measured_data.keys():
         df = call_csv(f"{measured_data_directory}/{file}")
         df.columns = df.iloc[1]
         df = df.drop([0,1,2]).reset_index()
+        if case == "ET100A":
+            df.loc[len(df.index)] = None
         df_measured[f"{case} Heater Energy Consumption (Wh) - Measured"] = df["Qhtr"]
         
 template = xl.load_workbook(filename=simulated_data_path)
@@ -84,8 +86,8 @@ for case in cases:
         df = df_ET110
     df_simulated = pd.read_excel(simulated_data_path, sheet_name=case, header=3)
     df_simulated = df_simulated.drop([0]).reset_index()
-    if case in ["ET100B1","ET100B3"]:
-        df_simulated.drop(df_simulated.index[-1], inplace=True)
+    if case in ["ET100A1","ET100A3"]:
+        df_simulated.loc[len(df.index)] = None
     df[f"{case} Heater Energy Consumption (Wh) - Simulated"] = list(df_simulated["Qhtr"])
 
 df_ET100.to_csv(f"{dataframe_file_path}/ET100_Series.csv",index=False)
@@ -150,6 +152,10 @@ for series in output_cases.keys():
             for case in output_cases[series][cell][simulated_or_measured]:
                 start_date = steady_state_dates[series]["start date"]
                 end_date = steady_state_dates[series]["end date"]
+                experiment_end_date = experiment_dates[series]["end date"]
+                if case in ["ET100B","ET100B1","ET100B3"]:
+                    end_date += timedelta(hours=1)
+                    experiment_end_date += timedelta(hours=1)
                 y_values = df[f"{case} Heater Energy Consumption (Wh) - {simulated_or_measured}"].astype(float)
                 fig.add_trace(go.Scatter(
                                 x=df["Date"],
@@ -199,7 +205,7 @@ for series in output_cases.keys():
             ticks='outside',
             showline=True,
             linecolor='black',
-            range=[experiment_dates[series]["start date"],experiment_dates[series]["end date"]]
+            range=[experiment_dates[series]["start date"],experiment_end_date]
         )
         fig.update_yaxes(
             mirror=True,
