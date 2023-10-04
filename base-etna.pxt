@@ -539,7 +539,7 @@ CONSTRUCTION "FloorPath3"
   LAYER lrMat="Polystyrene 2 Floor" lrThk=<%= 0.030*$m_ft %>
   LAYER lrMat="Plasterboard" lrThk=<%= 0.013*$m_ft %>
 
-CONSTRUCTION "NorthWallPath2"
+CONSTRUCTION "NorthWallDoor"
   LAYER lrMat="Blended Wood/Air/Cardboard + Plywood + Plexiglass" lrThk=<%= 0.036*$m_ft %>
   LAYER lrMat="Blended Air Gap" lrThk=<%= 0.038*$m_ft %>
   LAYER lrMat="Styrodur Door" lrThk=<%= 0.060*$m_ft %>
@@ -614,7 +614,7 @@ surfaces = [
   {:name=>"FloorPath2",     :type=>"Floor",   :area=>1.4700,                                  :windows=>0,        :doors=>0,      :temp=>"Tcellar", :interior_coefficient=>5.3,                                     :interior_absorptivity=>0.249,                              :exterior_absorptivity=>0.300},
   {:name=>"FloorPath3",     :type=>"Floor",   :area=>1.4700,                                  :windows=>0,        :doors=>0,      :temp=>"Tcellar", :interior_coefficient=>5.3,                                     :interior_absorptivity=>0.249,                              :exterior_absorptivity=>0.300},
   {:name=>"NorthWall",      :type=>"Wall",    :area=>7.1494,  :azm=>0,                        :windows=>0,        :doors=>"door", :temp=>"Tnorth",  :interior_coefficient=>10.5,                                    :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.300},
-  {:name=>"NorthWallPath2", :type=>"Wall",    :area=>1.8281,  :azm=>0,                        :windows=>0,        :doors=>0,      :temp=>"Tnorth",  :interior_coefficient=>10.5,                                    :interior_absorptivity=>0.439,                              :exterior_absorptivity=>0.439},
+  {:name=>"NorthWallDoor",  :type=>"Wall",    :area=>1.8281,  :azm=>0,                        :windows=>0,        :doors=>0,      :temp=>"Tnorth",  :interior_coefficient=>10.5,                                    :interior_absorptivity=>0.439,                              :exterior_absorptivity=>0.439},
   {:name=>lateral_wall,     :type=>"Wall",    :area=>10.1378, :azm=>lateral_wall_azimuth,     :windows=>"window", :doors=>0,      :temp=>lateral_wall_temperature,   :interior_coefficient=>7.0,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.419},
   {:name=>"SouthWall",      :type=>"Wall",    :area=>7.1752,  :azm=>180,                      :windows=>"window", :doors=>0,      :temp=>"Tsouth",  :interior_coefficient=>7.0,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.419},
   {:name=>medial_wall,      :type=>"Wall",    :area=>11.9401, :azm=>medial_wall_azimuth,      :windows=>0,        :doors=>0,      :temp=>medial_wall_temperature,   :interior_coefficient=>5.3,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.343},
@@ -725,7 +725,7 @@ if cell == "A"
     {:name=>"FloorPath2"},
     {:name=>"FloorPath3"},
     {:name=>"NorthWall"},
-    {:name=>"NorthWallPath2"},
+    {:name=>"NorthWallDoor"},
     {:name=>"EastWall"},
     {:name=>"WindowsPath1East"},
     {:name=>"WindowsPath2East"},
@@ -746,7 +746,7 @@ elsif cell == "B"
     {:name=>"FloorPath2"},
     {:name=>"FloorPath3"},
     {:name=>"NorthWall"},
-    {:name=>"NorthWallPath2"},
+    {:name=>"NorthWallDoor"},
     {:name=>"EastWall"},
     {:name=>"SouthWall"},
     {:name=>"WindowsPath1South"},
