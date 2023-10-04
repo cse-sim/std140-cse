@@ -48,7 +48,6 @@ def find_dates(series):
 
 df_ET100 = find_dates("ET100")
 df_ET110 = find_dates("ET110")
-# df_ET1n00 = drop(df_ET100.index[-1], inplace=True)
 
 def call_df_measured(series):
     if series == "ET100":
@@ -221,7 +220,6 @@ for series in output_cases.keys():
             title_x=0.5,
             plot_bgcolor='white',
             font_color='black',
-            # margin=dict(l=0, r=0, t=30, b=40)
             )
         file_path = f"{graphs_file_path}/{series}{cell}-Heater.html"
         fig.write_html(file_path)
