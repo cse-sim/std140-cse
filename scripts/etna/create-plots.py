@@ -7,6 +7,9 @@ import plotly.offline as pyo
 from plotly.subplots import make_subplots
 from pathlib import Path
 from shutil import rmtree
+import warnings
+
+warnings.filterwarnings("ignore")
 
 pd.set_option("display.max_rows",500)
 pd.set_option("display.max_columns",100)
