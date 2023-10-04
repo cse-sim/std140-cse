@@ -136,3 +136,6 @@ for temperature_file in temperature_files
 		end
 	end
 end
+
+File.delete("final-temps.csv")
+File.delete("new-temp.csv")
