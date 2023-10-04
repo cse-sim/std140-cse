@@ -102,6 +102,7 @@ for temperature_file in temperature_files
 			# add ETNA temperature data
 			if (month == start_date.month) && (day == start_date.day) && (hour == start_date.hour)
 				for temperature_row in temperature_rows do
+					temperature_row.map! { |str| str.gsub(",", "") }
 					csv << temperature_row
 					final_csv.append(temperature_row)
 				end
