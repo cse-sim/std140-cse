@@ -634,56 +634,43 @@ window_azimuths = [
 ]
 %>
 
-<% def create_surface_data_members(surface,constant_interior_coefficients) %>
-sfExHcModel = INPUT
-    sfInHcModel = <%= $convection_model %>
+<%
+constant_u_value_surface = [
+  {:name => "NorthWall",  :temp => "Tnorth",  :UA  => 6.06, :Area => width*height,  :type => "Wall",  :azm => 0,    :interior_coefficient=>10.5,  :interior_absorptivity=>0.343,  :exterior_absorptivity=>0.300},
+  {:name => "EastWall",   :temp => "Teast",   :UA  => 6.86, :Area => depth*height,  :type => "Wall",  :azm => 90,   :interior_coefficient=>7.0,   :interior_absorptivity=>0.343,  :exterior_absorptivity=>0.419},
+  {:name => "SouthWall",  :temp => "Tsouth",  :UA  => 5.57, :Area => width*height,  :type => "Wall",  :azm => 180,  :interior_coefficient=>7.0,   :interior_absorptivity=>0.343,  :exterior_absorptivity=>0.419},
+  {:name => "WestWall",   :temp => "Twest",   :UA  => 3.44, :Area => depth*height,  :type => "Wall",  :azm => 270,  :interior_coefficient=>5.3,   :interior_absorptivity=>0.343,  :exterior_absorptivity=>0.343},
+  {:name => "Floor",      :temp => "Tcellar", :UA  => 6.32, :Area => floor_area,    :type => "Floor",               :interior_coefficient=>5.3,   :interior_absorptivity=>0.249,  :exterior_absorptivity=>0.300},
+  {:name => "Ceiling",    :temp => "Tattic",  :UA  => 2.67, :Area => floor_area,    :type => "Ceiling",             :interior_coefficient=>3.6,   :interior_absorptivity=>0.343,  :exterior_absorptivity=>0.300}
+]
+
+$exterior_coefficient = 18
+%>
+
+<% for surface in constant_u_value_surface %>
+  SURFACE <%= surface[:name] %>
+    sfType = <%= surface[:type] %>
+  <% if surface[:type] == "Wall" %>
+    sfAzm = <%= surface[:azm] %>
+  <% end %> 
+    sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
+    sfExHcModel = INPUT
+    sfInHcModel = INPUT
+    //sfExAbs = <%= surface[:exterior_absorptivity] %>
+    //sfInAbs = <%= surface[:interior_absorptivity] %>
+    sfExAbs = 0
+    sfInAbs = 0
+    sfInHcMult = <%= surface[:interior_coefficient] * $w_btu / $m2_ft2 / $k_r*2 %>
     sfExHcMult = <%= $exterior_coefficient * $w_btu / $m2_ft2 / $k_r %>
-<% if constant_interior_coefficients %>
-    sfInHcMult = <%= surface[:interior_coefficient] * $w_btu / $m2_ft2 / $k_r %>
-<% end %>
-    sfExAbs = <%= surface[:exterior_absorptivity] %>
-    sfInAbs = <%= surface[:interior_absorptivity] %>
     sfExEpsLW = 0
     sfInEpsLW = 0
-    sfArea = <%= surface[:area] * $m2_ft2 %> 
-    sfCon = <%= surface[:name] %>
+    sfU = <%= surface[:UA] / surface[:Area] * $w_btu / $k_r %>
+    sfArea = <%= surface[:Area] %>
     sfExCnd = SPECIFIEDT
-    sfModel = FORWARD_DIFFERENCE
+    sfModel = AUTO
     sfGrndRefl = 0.2
-<% end %>
-
-<% for surface in surfaces %>
-  <% if surface[:type] == "Window" %>
-    <% for window_azimuth in window_azimuths %>
-  SURFACE "<%= surface[:name] + window_azimuth[:name] %>"
-    sfType = Wall
-    sfAzm = <%= window_azimuth[:azm] %>
-    sfExT = import(CaseData, <%= window_azimuth[:temp] %>) * 9/5 + 32
-    <% create_surface_data_members(surface,constant_interior_coefficients) %>
-    <% end %>
-  <% else %>
-  SURFACE "<%= surface[:name] %>"
-  <% end %>
-  <% if surface[:type] == "Wall" %>
-    sfType = Wall
-    sfAzm = <%= surface[:azm] %>
-    sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
-    <% create_surface_data_members(surface,constant_interior_coefficients) %>
-  <% elsif surface[:type] == "Ceiling" %>
-    sfType = Ceiling
-    sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
-    <% create_surface_data_members(surface,constant_interior_coefficients) %>
-  <% elsif surface[:type] == "Floor" %>
-    sfType = Floor
-    sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
-    <% create_surface_data_members(surface,constant_interior_coefficients) %>
-  <% elsif surface[:type] == "Door" %>
-    sfType = Wall
-    sfAzm = <%= surface[:azm] %>
-    sfExT = import(CaseData, <%= surface[:temp] %>) * 9/5 + 32
-    <% create_surface_data_members(surface,constant_interior_coefficients) %>
-  <% end %>
-<% end %>
+<% end %> 
+   
 
 GAIN "Fan"
   gnZone = "Cell"
@@ -707,8 +694,8 @@ EXPORT
 <%
 # Input Checks
 input_temperature_surface_checks = [
-  {:name=>"CeilingPath1"},
-  {:name=>"FloorPath1"},
+  {:name=>"Ceiling"},
+  {:name=>"Floor"},
   {:name=>"NorthWall"},
   {:name=>"EastWall"},
   {:name=>"SouthWall"},
@@ -719,44 +706,24 @@ input_temperature_surface_checks = [
 if cell == "A"
 
   output_surface_fluxes = [
-    {:name=>"CeilingPath1"},
-    {:name=>"CeilingPath2"},
-    {:name=>"FloorPath1"},
-    {:name=>"FloorPath2"},
-    {:name=>"FloorPath3"},
-    {:name=>"NorthWall"},
-    {:name=>"NorthWallDoor"},
-    {:name=>"EastWall"},
-    {:name=>"WindowsPath1East"},
-    {:name=>"WindowsPath2East"},
-    {:name=>"WindowsPath3East"},
-    {:name=>"SouthWall"},
-    {:name=>"WindowsPath1South"},
-    {:name=>"WindowsPath2South"},
-    {:name=>"WindowsPath3South"},
-    {:name=>"WestWall"}
-  ]
+  {:name=>"Ceiling"},
+  {:name=>"Floor"},
+  {:name=>"NorthWall"},
+  {:name=>"EastWall"},
+  {:name=>"SouthWall"},
+  {:name=>"WestWall"}
+]
 
 elsif cell == "B"
 
   output_surface_fluxes = [
-    {:name=>"CeilingPath1"},
-    {:name=>"CeilingPath2"},
-    {:name=>"FloorPath1"},
-    {:name=>"FloorPath2"},
-    {:name=>"FloorPath3"},
-    {:name=>"NorthWall"},
-    {:name=>"NorthWallDoor"},
-    {:name=>"EastWall"},
-    {:name=>"SouthWall"},
-    {:name=>"WindowsPath1South"},
-    {:name=>"WindowsPath2South"},
-    {:name=>"WindowsPath3South"},
-    {:name=>"WestWall"},
-    {:name=>"WindowsPath1West"},
-    {:name=>"WindowsPath2West"},
-    {:name=>"WindowsPath3West"},
-  ]
+  {:name=>"Ceiling"},
+  {:name=>"Floor"},
+  {:name=>"NorthWall"},
+  {:name=>"EastWall"},
+  {:name=>"SouthWall"},
+  {:name=>"WestWall"}
+]
 
 end
 %>
@@ -767,13 +734,39 @@ end
   EXPORTCOL colHead="Day" colVal=$dayOfMonth
   EXPORTCOL colHead="Hour" colVal=$hour
 <% for surface in input_temperature_surface_checks %>
-  EXPORTCOL colHead="<%= surface[:name] %> Surface Temperature - Simulation [C]" colVal=(@surface["<%= surface[:name] %>"].sfExT - 32) / 1.8
+  EXPORTCOL colHead="<%= surface[:name] %> Surface Temperature - Simulation [C]" colVal=(@surface["<%= surface[:name] %>"].sfExT - 32) / <%= $k_r %>
 <% end %>
-  EXPORTCOL colHead="Cell Temperature - Simulation [C]" colVal=(@znRes["Cell"].H.tAir - 32) / 1.8
+  EXPORTCOL colHead="Cell Temperature - Simulation [C]" colVal=(@znRes["Cell"].H.tAir - 32) / <%= $k_r %>
   EXPORTCOL colHead="Fan-Simulation [Wh]" colVal=@gain["Fan"].gnPower / <%= $w_btu %>
   EXPORTCOL colHead="Heater-Simulation [Wh]" colVal=@znRes["Cell"].H.qhMech / <%= $w_btu %>
 <% for surface in output_surface_fluxes %>
-  EXPORTCOL colHead="<%= surface[:name] %> Heat Flux [Wh/m2]" colVal=(@xsurf["<%= surface[:name] %>"].sbcI.qSrf * <%= $m2_ft2 / $w_btu %>)
+  //EXPORTCOL colHead="<%= surface[:name] %> Heat Flux [Wh/m2]" colVal=(@xsurf["<%= surface[:name] %>"].sbcI.qSrf * <%= $m2_ft2 / $w_btu %>)
+  //EXPORTCOL colHead="<%= surface[:name] %> Exterior Heat Flux [Wh/m2]" colVal=(@xsurf["<%= surface[:name] %>"].sbcO.qSrf * <%= $m2_ft2 / $w_btu %>)
+  //EXPORTCOL colHead="<%= surface[:name] %> Interior and Exterior Heat Flux Difference [Wh/m2]" colVal=(@xsurf["<%= surface[:name] %>"].sbcI.qSrf + @xsurf["<%= surface[:name] %>"].sbcO.qSrf) * <%= $m2_ft2 / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> Interior Radiation Heat Flux [Wh/m2]" colVal=@surface["<%= surface[:name] %>"].sbcI.qrAbs
+  //EXPORTCOL colHead="<%= surface[:name] %> exterior surface hxa" colVal=@surface["<%= surface[:name] %>"].sbcO.hxa * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> interior surface hxa" colVal=@surface["<%= surface[:name] %>"].sbcI.hxa * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> exterior xsurf hxa" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hxa * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> interior xsurf hxa" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxa * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> exterior xsurt hxr" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hxr * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> interior xsurf hxr" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxr * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> exterior surface hxtot" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hxtot * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> interior surface hxtot" colVal=@surface["<%= surface[:name] %>"].sbcI.hxtot * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> exterior xsurf hxr" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hxtot * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> interior xsurf hxr" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxtot * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> exterior xsurf hcNat" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hcNat * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> interior xsurf hcNat" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hcNat * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> exterior xsurf hcFrc" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hcFrc * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> interior xsurf hcFrc" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hcFrc * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> exterior xsurf hcMult" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hcMult * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> interior xsurf hcMult" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hcMult * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> Interior Radiation Heat Flux [Wh/m2]" colVal=@surface["<%= surface[:name] %>"].sbcI.qrAbs
+  //EXPORTCOL colHead="<%= surface[:name] %> Exterior Radiation Heat Flux [Wh/m2]" colVal=@surface["<%= surface[:name] %>"].sbcO.qrAbs
+  //EXPORTCOL colHead="<%= surface[:name] %> Interior Combined Coefficient [Wh/m2K]" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxtot * <%= $m2_ft2 * $k_r / $w_btu %>
+  //EXPORTCOL colHead="<%= surface[:name] %> Exterior Combined Coefficient [Wh/m2K]" colVal=@xsurf["<%= surface[:name] %>"].sbcO.hxtot * <%= $m2_ft2 * $k_r / $w_btu %>
+<% end %>
+<% for surface in input_temperature_surface_checks %>
+  EXPORTCOL colHead="<%= surface[:name] %> UA-Nom [W/K]" colVal=(@surface[<%= surface[:name] %>].UANom)* <%= $k_r / $w_btu %>
 <% end %>
 
 RUN
