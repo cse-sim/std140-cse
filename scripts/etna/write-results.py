@@ -5,20 +5,30 @@ from datetime import datetime
 import mako.template as mk
 import os
 import pytz
+import os, glob
 
 def call_csv(path):
 	data = pd.read_csv(path)
 	return pd.DataFrame(data)
+
+# delete output file
+def delete_output_file(path):
+  for file in glob.glob(f"{path}*"):
+      os.remove(file)
 
 # prints date and time with time zone on each plot
 def find_todays_date():
 	utc_timezone = pytz.timezone("America/Denver")
 	current_date_time = datetime.now(utc_timezone)
 	return current_date_time.strftime("%Y%m%d")
+
+output_file_root = "CSE-ET100series"
 tests = 'etna'
-output_file = "ET100series-Output-GMT+1 (071023a)"
+template_file = "ET100series-Output-GMT+1 (071023a)-Template.xlsx"
 current_directory = os.path.dirname(os.path.dirname(os.getcwd()))
-template = xl.load_workbook(filename=f"{current_directory}/reports/etna/{output_file}-Template.xlsx")
+delete_output_file(f"{current_directory}/reports/etna/{output_file_root}")
+output_file = f"{output_file_root}-{find_todays_date()}"
+template = xl.load_workbook(filename=f"{current_directory}/reports/etna/{template_file}")
 cases = template.sheetnames
 case_results_path = "output/etna"
 cases_cell_A = ["ET100A1","ET100A3","ET110A1","ET110A2"]
