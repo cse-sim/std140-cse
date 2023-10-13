@@ -84,7 +84,9 @@ end
 task :sim, [:filter] do |t, args|
   args.with_defaults(:filter=>'etna')
   tests = args.fetch(:filter) # 'section-5', 'weather-drivers'
-  WriteInputData.write_input_data
+  if "etna" in tests
+    WriteInputData.write_input_data
+  end
   cases = Dir['cases/' + tests + '/*.*']
   for c in cases
     if !compose(c, tests)
