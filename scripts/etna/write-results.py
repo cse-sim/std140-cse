@@ -4,11 +4,17 @@ import pandas as pd
 from datetime import datetime
 import mako.template as mk
 import os
+import pytz
 
 def call_csv(path):
 	data = pd.read_csv(path)
 	return pd.DataFrame(data)
 
+# prints date and time with time zone on each plot
+def find_todays_date():
+	utc_timezone = pytz.timezone("America/Denver")
+	current_date_time = datetime.now(utc_timezone)
+	return current_date_time.strftime("%Y%m%d")
 tests = 'etna'
 output_file = "ET100series-Output-GMT+1 (071023a)"
 current_directory = os.path.dirname(os.path.dirname(os.getcwd()))
