@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 from pathlib import Path
 from shutil import rmtree
 import warnings
+import pytz
 
 warnings.filterwarnings("ignore")
 
@@ -28,8 +29,15 @@ def call_csv(path):
 	df = pd.DataFrame(data)
 	return df
 
+# prints date and time with time zone on each plot
+def find_todays_date():
+	utc_timezone = pytz.timezone("America/Denver")
+	current_date_time = datetime.now(utc_timezone)
+	return current_date_time.strftime("%Y%m%d")
+
 measured_data_directory = "docs/etna"
-simulated_data_path = "reports/etna/ET100series-Output-GMT+1 (071023a).xlsx"
+output_file = f"CSE-ET100series-{find_todays_date()}"
+simulated_data_path = f"reports/etna/{output_file}.xlsx"
 
 measured_data = {
     "ET100":{
