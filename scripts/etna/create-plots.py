@@ -161,7 +161,6 @@ for series in output_cases.keys():
                 end_date = steady_state_dates[series]["end date"]
                 experiment_end_date = experiment_dates[series]["end date"]
                 if case in ["ET100B","ET100B1","ET100B3"]:
-                    end_date += timedelta(hours=1)
                     experiment_end_date += timedelta(hours=1)
                 y_values = df[f"{case} Heater Energy Consumption (Wh) - {simulated_or_measured}"].astype(float)
                 fig.add_trace(go.Scatter(
