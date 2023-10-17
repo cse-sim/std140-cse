@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 from pathlib import Path
 from shutil import rmtree
 import warnings
-import pytz
+import os
 
 warnings.filterwarnings("ignore")
 
@@ -16,6 +16,11 @@ def create_or_replace_folder(path):
     if path.exists():
         rmtree(path)
     path.mkdir(exist_ok=True)
+
+def find_measured_file_path(path):
+    for file in os.listdir(path):
+        if file.startswith("CSE-ET100series"):
+            return os.path.join(path,file)
 
 outputs_file_path = Path("output/etna/OUTPUTS")
 dataframe_file_path = Path(outputs_file_path,"DATA")
@@ -29,15 +34,8 @@ def call_csv(path):
 	df = pd.DataFrame(data)
 	return df
 
-# prints date and time with time zone on each plot
-def find_todays_date():
-	utc_timezone = pytz.timezone("America/Denver")
-	current_date_time = datetime.now(utc_timezone)
-	return current_date_time.strftime("%Y%m%d")
-
 measured_data_directory = "docs/etna"
-output_file = f"CSE-ET100series-{find_todays_date()}"
-simulated_data_path = f"reports/etna/{output_file}.xlsx"
+simulated_data_path = find_measured_file_path("reports/etna")
 
 measured_data = {
     "ET100":{
