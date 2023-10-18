@@ -28,7 +28,7 @@ template_file = "ET100series-Output-GMT+1 (071023a)-Template.xlsx"
 current_directory = os.path.dirname(os.path.dirname(os.getcwd()))
 delete_output_file(f"{current_directory}/reports/etna/{output_file_root}")
 output_file = f"{output_file_root}-{find_todays_date()}"
-template = xl.load_workbook(filename=f"{current_directory}/reports/etna/{template_file}")
+template = xl.load_workbook(filename=f"{current_directory}/docs/etna/{template_file}")
 cases = template.sheetnames
 case_results_path = "output/etna"
 cases_cell_A = ["ET100A1","ET100A3","ET110A1","ET110A2"]
