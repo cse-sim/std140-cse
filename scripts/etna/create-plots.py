@@ -173,6 +173,8 @@ for series in output_cases.keys():
                     df_uncertainty_band = df[(df["Date"] >= start_date) & (df["Date"] <= end_date)]
                     y_values_df_uncertainty_band = df_uncertainty_band[f"{case} Heater Energy Consumption (Wh) - {simulated_or_measured}"].astype(float)
                     y_average = sum(y_values_df_uncertainty_band)/len(y_values_df_uncertainty_band)
+                    if case in ["ET100A","ET100B"]:
+                        print(f"{case}: {y_average}")
                     y_upper_band = [y_average*(1+error[f"{series}{cell}"]) for n in range(len(y_values_df_uncertainty_band))]
                     y_lower_band = [y_average*(1-error[f"{series}{cell}"]) for n in range(len(y_values_df_uncertainty_band))]
                     fig.add_trace(go.Scatter(
@@ -195,6 +197,11 @@ for series in output_cases.keys():
                                         opacity=0
                                     ),
                                     ))
+                if case in ["ET100A3","ET100B3"]:
+                    df_uncertainty_band = df[(df["Date"] >= start_date) & (df["Date"] <= end_date)]
+                    y_values_df_uncertainty_band = df_uncertainty_band[f"{case} Heater Energy Consumption (Wh) - {simulated_or_measured}"].astype(float)
+                    y_average = sum(y_values_df_uncertainty_band)/len(y_values_df_uncertainty_band)
+                    print(f"{case}: {y_average}")
         y_max = max(y_max)
         fig.add_trace(go.Scatter(
             x=[start_date,start_date,end_date,end_date],
