@@ -35,7 +35,7 @@ def call_csv(path):
 	return df
 
 measured_data_directory = "docs/etna"
-simulated_data_path = find_measured_file_path("docs/etna")
+simulated_data_path = find_measured_file_path("reports/etna")
 
 measured_data = {
     "ET100":{
