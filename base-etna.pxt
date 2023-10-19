@@ -47,10 +47,10 @@ if cell == "A"
 
     # ET110A1 and ET110A2
     import_file = "ET110A-measured-data.csv"
-    interior_absorptivity_window_glass = 0.500
-    interior_absorptivity_window_frame = 0.343
-    exterior_absorptivity_window_glass = 0.419
-    exterior_absorptivity_window_frame = 0.419
+    interior_solar_absorptivity_window_glass = 0.500
+    interior_solar_absorptivity_window_frame = 0.343
+    exterior_solar_absorptivity_window_glass = 0.419
+    exterior_solar_absorptivity_window_frame = 0.419
     interior_coefficient_window_glass = 7.0
     interior_coefficient_window_inner_frame = 7.0
     $convection_model = "INPUT"
@@ -101,10 +101,10 @@ if cell == "A"
 
     # ET100A1 and ET100A3
     import_file = "ET100A-measured-data.csv"
-    interior_absorptivity_window_glass = 0.129
-    interior_absorptivity_window_frame = 0.343
-    exterior_absorptivity_window_glass = 0.129
-    exterior_absorptivity_window_frame = 0.343
+    interior_solar_absorptivity_window_glass = 0.129
+    interior_solar_absorptivity_window_frame = 0.343
+    exterior_solar_absorptivity_window_glass = 0.129
+    exterior_solar_absorptivity_window_frame = 0.343
     infiltration = 0
     material_conductivity_styrodur_north_wall_door = 0.0563 * $k_c
     material_conductivity_polystyrene_east_wall = 0.0407 * $k_c
@@ -154,10 +154,10 @@ elsif cell == "B"
 
     # ET110B1 and ET110B2
     import_file = "ET110B-measured-data.csv"
-    interior_absorptivity_window_glass = 0.500
-    interior_absorptivity_window_frame = 0.343
-    exterior_absorptivity_window_glass = 0.419
-    exterior_absorptivity_window_frame = 0.419
+    interior_solar_absorptivity_window_glass = 0.500
+    interior_solar_absorptivity_window_frame = 0.343
+    exterior_solar_absorptivity_window_glass = 0.419
+    exterior_solar_absorptivity_window_frame = 0.419
     interior_coefficient_window_glass = 7.0
     interior_coefficient_window_inner_frame = 7.0
     $convection_model = "INPUT"
@@ -208,10 +208,10 @@ elsif cell == "B"
 
     # ET100B1 and ET100B3
     import_file = "ET100B-measured-data.csv"
-    interior_absorptivity_window_glass = 0.129
-    interior_absorptivity_window_frame = 0.343
-    exterior_absorptivity_window_glass = 0.129
-    exterior_absorptivity_window_frame = 0.343
+    interior_solar_absorptivity_window_glass = 0.129
+    interior_solar_absorptivity_window_frame = 0.343
+    exterior_solar_absorptivity_window_glass = 0.129
+    exterior_solar_absorptivity_window_frame = 0.343
     infiltration = 0
     material_conductivity_styrodur_north_wall_door = 0.0518 * $k_c
     material_conductivity_polystyrene_east_wall = 0.0353 * $k_c
@@ -606,19 +606,19 @@ ZONE "Cell"
 <%
 # Surfaces
 surfaces = [
-  {:name=>"CeilingPath1",   :type=>"Ceiling", :area=>14.4025,                                 :temp=>"Tattic",                  :interior_coefficient=>3.6,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.300},
-  {:name=>"CeilingPath2",   :type=>"Ceiling", :area=>1.8900,                                  :temp=>"Tattic",                  :interior_coefficient=>3.6,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.300},
-  {:name=>"FloorPath1",     :type=>"Floor",   :area=>13.3525,                                 :temp=>"Tcellar",                 :interior_coefficient=>5.3,                                     :interior_absorptivity=>0.249,                              :exterior_absorptivity=>0.300},
-  {:name=>"FloorPath2",     :type=>"Floor",   :area=>1.4700,                                  :temp=>"Tcellar",                 :interior_coefficient=>5.3,                                     :interior_absorptivity=>0.249,                              :exterior_absorptivity=>0.300},
-  {:name=>"FloorPath3",     :type=>"Floor",   :area=>1.4700,                                  :temp=>"Tcellar",                 :interior_coefficient=>5.3,                                     :interior_absorptivity=>0.249,                              :exterior_absorptivity=>0.300},
-  {:name=>"NorthWall",      :type=>"Wall",    :area=>7.1494,  :azm=>0,                        :temp=>"Tnorth",                  :interior_coefficient=>10.5,                                    :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.300},
-  {:name=>"NorthWallDoor",  :type=>"Wall",    :area=>1.8281,  :azm=>0,                        :temp=>"Tnorth",                  :interior_coefficient=>10.5,                                    :interior_absorptivity=>0.439,                              :exterior_absorptivity=>0.439},
-  {:name=>lateral_wall,     :type=>"Wall",    :area=>10.1378, :azm=>lateral_wall_azimuth,     :temp=>lateral_wall_temperature,  :interior_coefficient=>7.0,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.419},
-  {:name=>"SouthWall",      :type=>"Wall",    :area=>7.1752,  :azm=>180,                      :temp=>"Tsouth",                  :interior_coefficient=>7.0,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.419},
-  {:name=>medial_wall,      :type=>"Wall",    :area=>11.9401, :azm=>medial_wall_azimuth,      :temp=>medial_wall_temperature,   :interior_coefficient=>5.3,                                     :interior_absorptivity=>0.343,                              :exterior_absorptivity=>0.343},
-  {:name=>"WindowsPath1",   :type=>"Window",  :area=>0.9905,                                  :temp=>"Window",                  :interior_coefficient=>interior_coefficient_window_glass,       :interior_absorptivity=>interior_absorptivity_window_glass, :exterior_absorptivity=>exterior_absorptivity_window_glass},
-  {:name=>"WindowsPath2",   :type=>"Window",  :area=>0.1385,                                  :temp=>"Window",                  :interior_coefficient=>interior_coefficient_window_inner_frame, :interior_absorptivity=>interior_absorptivity_window_frame, :exterior_absorptivity=>exterior_absorptivity_window_frame},
-  {:name=>"WindowsPath3",   :type=>"Window",  :area=>0.6734,                                  :temp=>"Window",                  :interior_coefficient=>12.0,                                    :interior_absorptivity=>interior_absorptivity_window_frame, :exterior_absorptivity=>exterior_absorptivity_window_frame}
+  {:name=>"CeilingPath1",   :type=>"Ceiling", :area=>14.4025,                                 :temp=>"Tattic",                  :interior_coefficient=>3.6,                                     :interior_solar_absorptivity=>0.343,                                    :exterior_solar_absorptivity=>0.300},
+  {:name=>"CeilingPath2",   :type=>"Ceiling", :area=>1.8900,                                  :temp=>"Tattic",                  :interior_coefficient=>3.6,                                     :interior_solar_absorptivity=>0.343,                                    :exterior_solar_absorptivity=>0.300},
+  {:name=>"FloorPath1",     :type=>"Floor",   :area=>13.3525,                                 :temp=>"Tcellar",                 :interior_coefficient=>5.3,                                     :interior_solar_absorptivity=>0.249,                                    :exterior_solar_absorptivity=>0.300},
+  {:name=>"FloorPath2",     :type=>"Floor",   :area=>1.4700,                                  :temp=>"Tcellar",                 :interior_coefficient=>5.3,                                     :interior_solar_absorptivity=>0.249,                                    :exterior_solar_absorptivity=>0.300},
+  {:name=>"FloorPath3",     :type=>"Floor",   :area=>1.4700,                                  :temp=>"Tcellar",                 :interior_coefficient=>5.3,                                     :interior_solar_absorptivity=>0.249,                                    :exterior_solar_absorptivity=>0.300},
+  {:name=>"NorthWall",      :type=>"Wall",    :area=>7.1494,  :azm=>0,                        :temp=>"Tnorth",                  :interior_coefficient=>10.5,                                    :interior_solar_absorptivity=>0.343,                                    :exterior_solar_absorptivity=>0.300},
+  {:name=>"NorthWallDoor",  :type=>"Wall",    :area=>1.8281,  :azm=>0,                        :temp=>"Tnorth",                  :interior_coefficient=>10.5,                                    :interior_solar_absorptivity=>0.439,                                    :exterior_solar_absorptivity=>0.439},
+  {:name=>lateral_wall,     :type=>"Wall",    :area=>10.1378, :azm=>lateral_wall_azimuth,     :temp=>lateral_wall_temperature,  :interior_coefficient=>7.0,                                     :interior_solar_absorptivity=>0.343,                                    :exterior_solar_absorptivity=>0.419},
+  {:name=>"SouthWall",      :type=>"Wall",    :area=>7.1752,  :azm=>180,                      :temp=>"Tsouth",                  :interior_coefficient=>7.0,                                     :interior_solar_absorptivity=>0.343,                                    :exterior_solar_absorptivity=>0.419},
+  {:name=>medial_wall,      :type=>"Wall",    :area=>11.9401, :azm=>medial_wall_azimuth,      :temp=>medial_wall_temperature,   :interior_coefficient=>5.3,                                     :interior_solar_absorptivity=>0.343,                                    :exterior_solar_absorptivity=>0.343},
+  {:name=>"WindowsPath1",   :type=>"Window",  :area=>0.9905,                                  :temp=>"Window",                  :interior_coefficient=>interior_coefficient_window_glass,       :interior_solar_absorptivity=>interior_solar_absorptivity_window_glass, :exterior_solar_absorptivity=>exterior_solar_absorptivity_window_glass},
+  {:name=>"WindowsPath2",   :type=>"Window",  :area=>0.1385,                                  :temp=>"Window",                  :interior_coefficient=>interior_coefficient_window_inner_frame, :interior_solar_absorptivity=>interior_solar_absorptivity_window_frame, :exterior_solar_absorptivity=>exterior_solar_absorptivity_window_frame},
+  {:name=>"WindowsPath3",   :type=>"Window",  :area=>0.6734,                                  :temp=>"Window",                  :interior_coefficient=>12.0,                                    :interior_solar_absorptivity=>interior_solar_absorptivity_window_frame, :exterior_solar_absorptivity=>exterior_solar_absorptivity_window_frame}
 ]
 
 # Surface Constants
@@ -639,9 +639,8 @@ sfExHcModel = INPUT
 <% if constant_interior_coefficients %>
     sfInHcMult = <%= surface[:interior_coefficient] * $w_btu / $m2_ft2 / $k_r %>
 <% end %>
-    sfExAbs = <%= surface[:exterior_absorptivity] %>
-    sfInAbs = <%= surface[:interior_absorptivity] %>
-    sfExEpsLW = 0
+    sfExAbs = <%= surface[:exterior_solar_absorptivity] %>
+    sfInAbs = <%= surface[:interior_solar_absorptivity] %>
     sfInEpsLW = 0
     sfArea = <%= surface[:area] * $m2_ft2 %> 
     sfCon = <%= surface[:name] %>
