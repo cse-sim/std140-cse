@@ -167,6 +167,43 @@ output_columns = {
   "WindowsPath3West Total Heat Flux [Wh/m2]":59,
 }}
 
+output_cases_interior_surface_temperatures = {
+"cases_cell_A":
+{"CeilingPath1 Interior Surface Temperature - Simulation [C]":60,
+"CeilingPath2 Interior Surface Temperature - Simulation [C]":61,
+"FloorPath1 Interior Surface Temperature - Simulation [C]":62,
+"FloorPath2 Interior Surface Temperature - Simulation [C]":63,
+"FloorPath3 Interior Surface Temperature - Simulation [C]":64,
+"NorthWall Interior Surface Temperature - Simulation [C]":65,
+"NorthWallDoor Interior Surface Temperature - Simulation [C]":66,
+"EastWall Interior Surface Temperature - Simulation [C]":67,
+"WindowsPath1East Interior Surface Temperature - Simulation [C]":68,
+"WindowsPath2East Interior Surface Temperature - Simulation [C]":69,
+"WindowsPath3East Interior Surface Temperature - Simulation [C]":70,
+"SouthWall Interior Surface Temperature - Simulation [C]":71,
+"WindowsPath1South Interior Surface Temperature - Simulation [C]":72,
+"WindowsPath2South Interior Surface Temperature - Simulation [C]":73,
+"WindowsPath3South Interior Surface Temperature - Simulation [C]":74,
+"WestWall Interior Surface Temperature - Simulation [C]":75,},
+"cases_cell_B":{
+   "CeilingPath1 Interior Surface Temperature - Simulation [C]":60,
+"CeilingPath2 Interior Surface Temperature - Simulation [C]":61,
+"FloorPath1 Interior Surface Temperature - Simulation [C]":62,
+"FloorPath2 Interior Surface Temperature - Simulation [C]":63,
+"FloorPath3 Interior Surface Temperature - Simulation [C]":64,
+"NorthWall Interior Surface Temperature - Simulation [C]":65,
+"NorthWallDoor Interior Surface Temperature - Simulation [C]":66,
+"EastWall Interior Surface Temperature - Simulation [C]":67,
+"SouthWall Interior Surface Temperature - Simulation [C]":68,
+"WindowsPath1South Interior Surface Temperature - Simulation [C]":69,
+"WindowsPath2South Interior Surface Temperature - Simulation [C]":70,
+"WindowsPath3South Interior Surface Temperature - Simulation [C]":71,
+"WestWall Interior Surface Temperature - Simulation [C]":72,
+"WindowsPath1West Interior Surface Temperature - Simulation [C]":73,
+"WindowsPath2West Interior Surface Temperature - Simulation [C]":74,
+"WindowsPath3West Interior Surface Temperature - Simulation [C]":75,}
+}
+
 def find_case_specifics(case):
   global experiment_dates
   global cases_insulated_windows
@@ -190,7 +227,12 @@ for case in cases:
   case_results = case_results[(case_results["Datetime"] >= start_date) & (case_results["Datetime"] <= end_date)].reset_index()
 
   for index in range(len(case_results)):
-    for output_column, template_column in output_columns[cell].items():
+    if case in ["ET100A3","ET100B3"]:
+      output_columns_final = output_columns[cell].copy()
+      output_columns_final.update(output_cases_interior_surface_temperatures[cell])
+    else:
+       output_columns_final = output_columns[cell].copy()
+    for output_column, template_column in output_columns_final.items():
       case_template.cell(column=template_column, row=index+6).value = case_results.loc[index,output_column] 
 
 print("Done processing cases.")
