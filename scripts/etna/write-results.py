@@ -107,12 +107,12 @@ output_columns = {
   "WestWall Total Heat Flux [Wh/m2]":59
   },
 "cases_cell_B":{
-  "CeilingPath1 Surface Temperature - Simulation [C]":2,
-  "FloorPath1 Surface Temperature - Simulation [C]":3,
-  "NorthWall Surface Temperature - Simulation [C]":4,
-  "EastWall Surface Temperature - Simulation [C]":5,
-  "SouthWall Surface Temperature - Simulation [C]":6,
-  "WestWall Surface Temperature - Simulation [C]":7,
+  "CeilingPath1 Exterior Surface Temperature - Simulation [C]":2,
+  "FloorPath1 Exterior Surface Temperature - Simulation [C]":3,
+  "NorthWall Exterior Surface Temperature - Simulation [C]":4,
+  "EastWall Exterior Surface Temperature - Simulation [C]":5,
+  "SouthWall Exterior Surface Temperature - Simulation [C]":6,
+  "WestWall Exterior Surface Temperature - Simulation [C]":7,
   "Cell Temperature - Simulation [C]":8,
   "Fan-Simulation [Wh]":9,
   "Blower Fan Flow Rate-Simulation [m3/h]":10,
