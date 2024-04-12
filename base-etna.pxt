@@ -366,7 +366,10 @@ MATERIAL "Polystyrene 1 Floor"
   matDens = <%= 16*$rho_c %>
   matSpHt = <%= 1200*$cp_c %>
 
-MATERIAL "Polystyrene 2 Floor" COPY "Polystyrene 1 Floor"
+MATERIAL "Polystyrene 2 Floor"
+  matCond = <%= material_conductivity_polystyrene_floor %>
+  matDens = <%= 18*$rho_c %>
+  matSpHt = <%= 1200*$cp_c %>
 
 MATERIAL "Plastic Lining"
   matCond = <%= 0.124*$k_c %>
