@@ -783,5 +783,8 @@ end
   EXPORTCOL colHead="<%= surface[:name] %> Radiative Heat Flux [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxr * (@xsurf["<%= surface[:name] %>"].sbcI.txr - @xsurf["<%= surface[:name] %>"].sbcI.tsrf) * <%= $m2_ft2 / $w_btu %>
   EXPORTCOL colHead="<%= surface[:name] %> Convective Heat Flux [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxa * (@xsurf["<%= surface[:name] %>"].sbcI.txa - @xsurf["<%= surface[:name] %>"].sbcI.tsrf) * <%= $m2_ft2 / $w_btu %>
 <% end %>
+<% for surface in output_surface_fluxes %>
+  EXPORTCOL colHead="<%= surface[:name] %> Interior Surface Temperature - Simulation [C]" colVal=(@xsurf["<%= surface[:name] %>"].sbcI.tSrf - 32) / 1.8
+<% end %>
 
 RUN
