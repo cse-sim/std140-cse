@@ -30,7 +30,7 @@ class WriteInputData
 		# CSE requires an entire year's worth of temperature data
 		# ETNA temperature data does not encompass an entire year, therefore filler data is used.
 		@FAKE_TEMPERATURE_GUARDS = 10
-		@FAKE_TEMPERATURE_CELL = 35
+		@FAKE_TEMPERATURE_CELL = 10
 		@FAKE_FAN_HOURLY_ENERGY_CONSUMPTION = 0
 		@FAKE_FAN_VOLUMETRIC_FLOW_RATE = 925
 		@FAKE_HEATER_HOURLY_ENERGY_CONSUMPTION = 0
