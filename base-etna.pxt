@@ -769,7 +769,7 @@ end
   EXPORTCOL colHead="Day" colVal=$dayOfMonth
   EXPORTCOL colHead="Hour" colVal=$hour
 <% for surface in input_temperature_surface_checks %>
-  EXPORTCOL colHead="<%= surface[:name] %> Surface Temperature - Simulation [C]" colVal=(@surface["<%= surface[:name] %>"].sfExT - 32) / 1.8
+  EXPORTCOL colHead="<%= surface[:name] %> Exterior Surface Temperature - Simulation [C]" colVal=(@surface["<%= surface[:name] %>"].sfExT - 32) / 1.8
 <% end %>
   EXPORTCOL colHead="Cell Temperature - Simulation [C]" colVal=(@znRes["Cell"].H.tAir - 32) / 1.8
   EXPORTCOL colHead="Fan-Simulation [Wh]" colVal=@gain["Fan"].gnPower / <%= $w_btu %>
