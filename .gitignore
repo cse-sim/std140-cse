@@ -1,3 +1,5 @@
 output/
 ~*.xls*
 ~*.doc*
+/Revised*
+**/__pycache__
