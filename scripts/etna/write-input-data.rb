@@ -17,10 +17,10 @@ class WriteInputData
 
 			# paths for case temperature file and 8760 template file
 		@temperature_files = [
-			{:file_name => "ET100A-Measurements-GMT+1 (071123).csv", :case_name => "ET100A"},
-			{:file_name => "ET100B-Measurements-GMT+1 (071123).csv", :case_name => "ET100B"},
-			{:file_name => "ET110A-Measurements-GMT+1 (071123).csv", :case_name => "ET110A"},
-			{:file_name => "ET110B-Measurements-GMT+1 (071123).csv", :case_name => "ET110B"}
+			{:file_name => "ET100A-Measurements-GMT+1 (071123).csv", :case_name => "ET100A", :case_series => "ET100"},
+			{:file_name => "ET100B-Measurements-GMT+1 (071123).csv", :case_name => "ET100B", :case_series => "ET100"},
+			{:file_name => "ET110A-Measurements-GMT+1 (071123).csv", :case_name => "ET110A", :case_series => "ET110"},
+			{:file_name => "ET110B-Measurements-GMT+1 (071123).csv", :case_name => "ET110B", :case_series => "ET110"}
 		]
 
 		@input_directory = "docs/etna/"
@@ -30,12 +30,17 @@ class WriteInputData
 		# CSE requires an entire year's worth of temperature data
 		# ETNA temperature data does not encompass an entire year, therefore filler data is used.
 		@FAKE_TEMPERATURE_GUARDS = 10
-		@FAKE_TEMPERATURE_CELL = 10
 		@FAKE_FAN_HOURLY_ENERGY_CONSUMPTION = 0
 		@FAKE_FAN_VOLUMETRIC_FLOW_RATE = 925
 		@FAKE_HEATER_HOURLY_ENERGY_CONSUMPTION = 0
 
 		for temperature_file in @temperature_files
+			# set fake cell temeprature depending on case
+			if temperature_file[:case_series] == "ET100"
+				@FAKE_TEMPERATURE_CELL = 35
+			else
+				@FAKE_TEMPERATURE_CELL = 10
+			end
 			temperature_file_path = @input_directory+temperature_file[:file_name]
 			template_file = 'docs/etna/template_8760.csv'
 
