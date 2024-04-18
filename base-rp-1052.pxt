@@ -1,0 +1,144 @@
+<%
+# RP-1052 TC1
+
+# Unit Conversions
+$m_ft = 3.28084
+$m2_ft2 = $m_ft*$m_ft
+$m3_ft3 = $m2_ft2*$m_ft
+$h_min = 60.0
+$k_c = 0.5781759824
+$rho_c = 0.062428
+$cp_c = 0.000239
+$w_btu = 3.412
+$k_r = 9/5.0
+$q_c = $w_btu/$m2_ft2
+$u_c = $q_c/$k_r
+
+# Dimensions
+width = 3*$m_ft
+depth = 3*$m_ft
+height = 3*$m_ft
+floor_area = width*depth
+zone_volume = floor_area*height
+
+def c_f(c)
+  return c*9/5.0 + 32.0
+end
+
+# Internal use
+nsteps = 10
+%>
+
+wfName = "weather/rp-1052/ET110meteoGMT+1_within_Melun-071530_MY.2000_v3.epw"
+nSubSteps = 10
+DT = No
+bldgAzm = 0
+terrainClass = 3
+wuDays = 0
+skyModel = ANISOTROPIC
+skyModelLW = BERDAHLMARTIN
+hConvMod = No
+
+METER "MtrElec"
+
+IMPORTFILE CaseData
+  imFileName = "docs/rp-1052/inputs.csv"
+  imFreq = Hour
+
+// Materials
+
+MATERIAL "Material"
+  matCond = 0.14 * 0.5781759824
+  matDens = 500 * 0.062428
+  matSpHt = 2500 * 0.000239
+
+// Constructions
+
+CONSTRUCTION "Transient"
+  LAYER lrMat="Material" lrThk=0.1 * 3.28084
+
+
+ZONE "Cell"
+  znModel = "CZM"
+  znArea = <%= floor_area %>
+  znVol = <%= zone_volume %>
+  znFloorZ = 0
+  infAC = 0
+  znCeilingHt = <%= height %>
+  znTH = <%= 10 * $k_r + 32 %>
+  znQMxH = 0
+  //znCAir = <%= 0.24 * 0.0773 * zone_volume %>
+  znCAir = 0.0001
+  znHcAirX = 0
+
+<%
+# Surfaces
+surfaces = [
+      {:name=>"Ceiling",         :type=>"Ceiling"},
+      {:name=>"Floor",           :type=>"Floor"},
+      {:name=>"TransientWall",   :type=>"Wall",     :azimuth=> 0},
+      {:name=>"AdiabaticWall1",   :type=>"Wall",    :azimuth=> 90},
+      {:name=>"AdiabaticWall2",   :type=>"Wall",    :azimuth=> 180},
+      {:name=>"AdiabaticWall3",   :type=>"Wall",    :azimuth=> 270},
+]
+%>
+<% for surface in surfaces %>
+  SURFACE <%= surface[:name] %>
+    sfType = <%= surface[:type] %>
+    sfExHcModel = INPUT
+    sfInHcModel = INPUT
+    <% if surface[:name] == "TransientWall" %>
+    sfExHcMult = <%= 20 * 3.412 / $m2_ft2 / $k_r %>
+    sfInHcMult = <%= 20 * 3.412 / $m2_ft2 / $k_r %>
+    sfCon = "Transient"
+    sfExCnd = SPECIFIEDT
+    sfExT = import(CaseData, "Texterior") * 9/5 + 32
+    sfModel = FORWARD_DIFFERENCE
+    <% else %>
+    //sfExHcMult = 0
+    //sfInHcMult = 0
+    sfExHcMult = <%= 20 * 3.412 / $m2_ft2 / $k_r %>
+    sfInHcMult = <%= 20 * 3.412 / $m2_ft2 / $k_r %>
+    sfU = 0.00001
+    sfExCnd = ADIABATIC
+    sfModel = QUICK
+    <% end %>
+    <% if surface[:type] == "Wall" %>
+    sfAzm = <%= surface[:azimuth] %>
+    <% end %>
+    sfExAbs = 0
+    sfInAbs = 0
+    sfExEpsLW = 0
+    sfInEpsLW = 0
+    sfArea = <%= floor_area %>
+
+    sfGrndRefl = 0
+
+<% end %>
+
+EXPORTFILE "Output"
+  xfFileName = "Output.csv"
+  xfFileStat = OVERWRITE
+
+EXPORT
+  exExportfile = "Output"
+  exHeader = ColumnsOnly
+  exFooter = No
+  exType = UDT
+  exFreq = HOUR
+  exDayBeg = JAN 1
+  exDayEnd = DEC 31
+
+// Export Results
+  EXPORTCOL colHead="Month" colVal=$month
+  EXPORTCOL colHead="Day" colVal=$dayOfMonth
+  EXPORTCOL colHead="Hour" colVal=$hour
+  EXPORTCOL colHead="Interior" colVal=(@znRes["Cell"].H.tAir - 32) / 1.8
+  EXPORTCOL colHead="Exterior" colVal=(@surface["TransientWall"].sfExT - 32) / 1.8
+  EXPORTCOL colHead="Interior Surface Temperature [C]" colVal=(@xsurf["TransientWall"].sbcI.tSrf - 32) / 1.8
+  EXPORTCOL colHead="Exterior Surface Temperature [C]" colVal=(@xsurf["TransientWall"].sbcO.tSrf - 32) / 1.8
+  EXPORTCOL colHead="Exterior Surface Heat Flux [Wh/m2]" colVal=(@xsurf["TransientWall"].sbcO.hxr * (@xsurf["TransientWall"].sbcO.txr - @xsurf["TransientWall"].sbcO.tsrf)) + (@xsurf["TransientWall"].sbcO.hxa * (@xsurf["TransientWall"].sbcO.txa - @xsurf["TransientWall"].sbcO.tsrf)) * 3.1547218949589686
+  EXPORTCOL colHead="Exterior Surface Heat Flux [Wh/m2]" colVal=(@xsurf["AdiabaticWall1"].sbcO.hxr * (@xsurf["AdiabaticWall1"].sbcO.txr - @xsurf["AdiabaticWall1"].sbcO.tsrf)) + (@xsurf["AdiabaticWall1"].sbcO.hxa * (@xsurf["AdiabaticWall1"].sbcO.txa - @xsurf["AdiabaticWall1"].sbcO.tsrf)) * 3.1547218949589686
+  EXPORTCOL colHead="Interior Surface Heat Flux [Wh/m2]" colVal=(@xsurf["AdiabaticWall1"].sbcI.hxr * (@xsurf["AdiabaticWall1"].sbcI.txr - @xsurf["AdiabaticWall1"].sbcI.tsrf)) + (@xsurf["AdiabaticWall1"].sbcI.hxa * (@xsurf["AdiabaticWall1"].sbcI.txa - @xsurf["AdiabaticWall1"].sbcI.tsrf)) * 3.1547218949589686
+
+RUN
