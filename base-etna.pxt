@@ -602,6 +602,7 @@ ZONE "Cell"
   infAC = 0
   znCeilingHt = <%= height %>
   znTH = import(CaseData,"TCell") * 9/5 + 32
+  znTC = import(CaseData,"TCell") * 9/5 + 32 + 0.01
   znQMxH = <%= 10000000*$w_btu %>
   znCAir = <%= 0.24*0.077*zone_volume %>
   znHcAirX = import(CaseData,"HWDsafr") * <%= $m3_ft3 / zone_volume %>
