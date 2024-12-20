@@ -9,7 +9,7 @@ def compose(c, tests)
     FileUtils.mkdir_p(output_dir)
   end
 
-  src = ['base-#{tests}.pxt', 'CSE.exe', 'DRYCOLD_CSW2.csv', c]
+  src = ["base-#{tests}.pxt", 'CSE.exe', c]
   target = output_dir + '/in.cse'
 
   puts "================="
@@ -38,6 +38,8 @@ def sim(c, tests)
   target = [output_dir + '/in.rep', output_dir + '/DETAILED.csv']
   elsif tests == 'weather-drivers'
   target = [output_dir + '/in.rep', output_dir + '/HOURLY.csv']
+  elsif tests == 'std-140'
+  target = [output_dir + '/in.rep', output_dir + '/OUTPUT.csv']
   end
 
   success = nil
@@ -55,11 +57,13 @@ def sim(c, tests)
 end
 
 def write_report(tests)
-  src = Dir['output/#{tests}/*/DETAILED.csv'] + ["scripts/#{tests}/write-results.py", "reports/#{tests}/S140outNotes-Template.txt"]
+  src = Dir["output/#{tests}/*/DETAILED.csv"] + ["scripts/#{tests}/write-results.py", "reports/#{tests}/S140outNotes-Template.txt"]
   if tests == 'section-5'
-    target = ['reports/#{tests}/Sec5-2Aout.xlsx', 'reports/#{tests}/S140outNotes.txt']
+    target = ["reports/#{tests}/Sec5-2Aout.xlsx", "reports/#{tests}/S140outNotes.txt"]
   elsif tests == 'weather-drivers'
-    target = ['reports/#{tests}/WeatherDriversResultsSubmittal.xlsx', 'reports/#{tests}/S140outNotes.txt']
+    target = ["reports/#{tests}/WeatherDriversResultsSubmittal.xlsx", "reports/#{tests}/S140outNotes.txt"]
+  elsif tests == 'std-140'
+    target = ["reports/#{tests}/ET100series-Output-GMT+1 (071023a).xlsx", "reports/#{tests}/S140outNotes.txt"]
   end
   puts "\n================="
   puts "     REPORTS     "
@@ -77,7 +81,7 @@ def write_report(tests)
 end
 
 task :sim, [:filter] do |t, args|
-  args.with_defaults(:filter=>'section-5')
+  args.with_defaults(:filter=>'std-140')
   tests = args.fetch(:filter) # 'section-5', 'weather-drivers'
   cases = Dir['cases/' + tests + '/*.*']
   for c in cases
