@@ -194,383 +194,378 @@ floors = [
   {:floor=>2},
   {:floor=>3},
 ]
-
 zones = [
   {
-    :name=>"Corner_Northwest", 
-    :area=>corner_area,
-    :surfaces=>[
+    :name => "Corner_Northwest", 
+    :area => corner_area,
+    :surfaces => [
       {
-        :name=>"Exterior_North",
-        :azimuth=>0,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Exterior"
+        :name => "Exterior_North",
+        :azimuth => 0,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Exterior"
       },
       {
-        :name=>"Perimeter_North",
-        :azimuth=>90,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
+        :name => "Perimeter_North",
+        :azimuth => 90,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
       },
       {
-        :name=>"Perimeter_West",
-        :azimuth=>180,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
+        :name => "Perimeter_West",
+        :azimuth => 180,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
       },
       {
-        :name=>"Exterior_West",
-        :azimuth=>270,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Exterior"
-      },
+        :name => "Exterior_West",
+        :azimuth => 270,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Exterior"
+      }
     ]
   },
   {
-    :name=>"Perimeter_North",
-    :area=>perimeter_ns_area,
-    :surfaces=>[
+    :name => "Perimeter_North",
+    :area => perimeter_ns_area,
+    :surfaces => [
       {
-        :name=>"Exterior_North",
-        :azimuth=>0,
-        :surface_area=>perimeter_ns_length*floor_height,
-        :surface_facing_type=>"Exterior"
+        :name => "Exterior_North",
+        :azimuth => 0,
+        :surface_area => perimeter_ns_length * floor_height,
+        :surface_facing_type => "Exterior"
       },
       {
-        :name=>"Corner_Northeast",
-        :azimuth=>90,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
+        :name => "Corner_Northeast",
+        :azimuth => 90,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
       },
       {
-        :name=>"Core_3",
-        :azimuth=>180,
-        :surface_area=>core_3_width*floor_height,
-        :surface_facing_type=>"Interior"
+        :name => "Core_3",
+        :azimuth => 180,
+        :surface_area => core_3_width * floor_height,
+        :surface_facing_type => "Interior"
       },
       {
-        :name=>"Core_2",
-        :azimuth=>180,
-        :surface_area=>core_2_width*floor_height,
-        :surface_facing_type=>"Interior"
+        :name => "Core_2",
+        :azimuth => 180,
+        :surface_area => core_2_width * floor_height,
+        :surface_facing_type => "Interior"
       },
       {
-        :name=>"Core_1",
-        :azimuth=>180,
-        :surface_area=>core_1_width*floor_height,
-        :surface_facing_type=>"Interior"
+        :name => "Core_1",
+        :azimuth => 180,
+        :surface_area => core_1_width * floor_height,
+        :surface_facing_type => "Interior"
       },
       {
-        :name=>"Corner_Northwest",
-        :azimuth=>270,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-    ]
-    },
-  {
-    :name=>"Corner_Northeast",
-    :area=>corner_area,
-    :surfaces=>[
-      {
-        :name=>"Exterior_North",
-        :azimuth=>0,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Exterior"
-      },
-      {
-        :name=>"Exterior_East",
-        :azimuth=>90,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Exterior"
-      },
-      {
-        :name=>"Perimeter_East",
-        :azimuth=>180,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Perimeter_North",
-        :azimuth=>270,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },]
-  },
-  {
-    :name=>"Perimeter_West",
-    :area=>perimeter_ew_area,
-    :surfaces=>[
-      {
-        :name=>"Corner_Northwest",
-        :azimuth=>0,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Core_1",
-        :azimuth=>90,
-        :surface_area=>perimeter_ew_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Corner_Southwest",
-        :azimuth=>180,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Exterior_West",
-        :azimuth=>270,
-        :surface_area=>perimeter_ew_length*floor_height,
-        :surface_facing_type=>"Exterior"
-      },]
-      },
-  {
-    :name=>"Core_1",
-    :area=>core_1_area},
-    :surfaces=>[
-      {
-        :name=>"Perimeter_North",
-        :azimuth=>0,
-        :surface_area=>core_1_width*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Core_2",
-        :azimuth=>90,
-        :surface_area=>perimeter_ew_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Perimeter_South",
-        :azimuth=>180,
-        :surface_area=>core_1_width*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Perimeter_West",
-        :azimuth=>270,
-        :surface_area=>perimeter_ew_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },]
-  {
-    :name=>"Core_2",
-    :area=>core_2_area},
-    :surfaces=>[
-      {
-        :name=>"Perimeter_North",
-        :azimuth=>0,
-        :surface_area=>core_2_width*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Core_3",
-        :azimuth=>90,
-        :surface_area=>perimeter_ew_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Perimeter_South",
-        :azimuth=>180,
-        :surface_area=>core_2_width*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Core_1",
-        :azimuth=>270,
-        :surface_area=>perimeter_ew_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },]
-  {
-    :name=>"Core_3",
-    :area=>core_3_area},
-    :surfaces=>[
-      {
-        :name=>"Perimeter_North",
-        :azimuth=>0,
-        :surface_area=>core_3_width*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Perimeter_East",
-        :azimuth=>90,
-        :surface_area=>perimeter_ew_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Perimeter_South",
-        :azimuth=>180,
-        :surface_area=>core_3_width*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Core_2",
-        :azimuth=>270,
-        :surface_area=>perimeter_ew_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },],
-
-  {
-    :name=>"Perimeter_East",
-    :area=>perimeter_ew_area,
-    :surfaces=>[
-      {
-        :name=>"Corner_Northeast",
-        :azimuth=>0,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Exterior_East",
-        :azimuth=>90,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Exterior"
-      },
-      {
-        :name=>"Corner_Southeast",
-        :azimuth=>180,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Core_3",
-        :azimuth=>270,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-    ]},
-  {
-    :name=>"Corner_Southwest", 
-    :area=>corner_area,
-    :surfaces=>[
-      {
-        :name=>"Perimeter_West",
-        :azimuth=>0,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Perimeter_South",
-        :azimuth=>90,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Exterior_South",
-        :azimuth=>180,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Exterior"
-      },
-      {
-        :name=>"Exterior_West",
-        :azimuth=>270,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Exterior"
-      },
-    ]
-  },
-
-  {
-    :name=>"Corner_Southeast", 
-    :area=>corner_area,
-    :surfaces=>[
-      {
-        :name=>"Perimeter_East",
-        :azimuth=>0,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Exterior_East",
-        :azimuth=>90,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Exterior"
-      },
-      {
-        :name=>"Exterior_South",
-        :azimuth=>180,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Exterior"
-      },
-      {
-        :name=>"Perimeter_South",
-        :azimuth=>270,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
+        :name => "Corner_Northwest",
+        :azimuth => 270,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      }
     ]
   },
   {
-    :name=>"Perimeter_South",
-    :area=>perimeter_ns_area,
-    :surfaces=>[
+    :name => "Corner_Northeast",
+    :area => corner_area,
+    :surfaces => [
       {
-        :name=>"Core_1",
-        :azimuth=>0,
-        :surface_area=>core_3_width*floor_height,
-        :surface_facing_type=>"Interior"
+        :name => "Exterior_North",
+        :azimuth => 0,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Exterior"
       },
       {
-        :name=>"Core_2",
-        :azimuth=>0,
-        :surface_area=>core_2_width*floor_height,
-        :surface_facing_type=>"Interior"
+        :name => "Exterior_East",
+        :azimuth => 90,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Exterior"
       },
       {
-        :name=>"Core_3",
-        :azimuth=>0,
-        :surface_area=>core_1_width*floor_height,
-        :surface_facing_type=>"Interior"
+        :name => "Perimeter_East",
+        :azimuth => 180,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
       },
       {
-        :name=>"Corner_Southeast",
-        :azimuth=>90,
-        :surface_area=>perimeter_ns_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
-      {
-        :name=>"Exterior_South",
-        :azimuth=>180,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Exterior"
-      },
-      {
-        :name=>"Corner_Southwest",
-        :azimuth=>270,
-        :surface_area=>corner_length*floor_height,
-        :surface_facing_type=>"Interior"
-      },
+        :name => "Perimeter_North",
+        :azimuth => 270,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      }
     ]
-},
-
+  },
+  {
+    :name => "Perimeter_West",
+    :area => perimeter_ew_area,
+    :surfaces => [
+      {
+        :name => "Corner_Northwest",
+        :azimuth => 0,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Core_1",
+        :azimuth => 90,
+        :surface_area => perimeter_ew_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Corner_Southwest",
+        :azimuth => 180,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Exterior_West",
+        :azimuth => 270,
+        :surface_area => perimeter_ew_length * floor_height,
+        :surface_facing_type => "Exterior"
+      }
+    ]
+  },
+  {
+    :name => "Core_1",
+    :area => core_1_area,
+    :surfaces => [
+      {
+        :name => "Perimeter_North",
+        :azimuth => 0,
+        :surface_area => core_1_width * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Core_2",
+        :azimuth => 90,
+        :surface_area => perimeter_ew_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Perimeter_South",
+        :azimuth => 180,
+        :surface_area => core_1_width * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Perimeter_West",
+        :azimuth => 270,
+        :surface_area => perimeter_ew_length * floor_height,
+        :surface_facing_type => "Interior"
+      }
+    ]
+  },
+  {
+    :name => "Core_2",
+    :area => core_2_area,
+    :surfaces => [
+      {
+        :name => "Perimeter_North",
+        :azimuth => 0,
+        :surface_area => core_2_width * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Core_3",
+        :azimuth => 90,
+        :surface_area => perimeter_ew_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Perimeter_South",
+        :azimuth => 180,
+        :surface_area => core_2_width * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Core_1",
+        :azimuth => 270,
+        :surface_area => perimeter_ew_length * floor_height,
+        :surface_facing_type => "Interior"
+      }
+    ]
+  },
+  {
+    :name => "Core_3",
+    :area => core_3_area,
+    :surfaces => [
+      {
+        :name => "Perimeter_North",
+        :azimuth => 0,
+        :surface_area => core_3_width * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Perimeter_East",
+        :azimuth => 90,
+        :surface_area => perimeter_ew_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Perimeter_South",
+        :azimuth => 180,
+        :surface_area => core_3_width * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Core_2",
+        :azimuth => 270,
+        :surface_area => perimeter_ew_length * floor_height,
+        :surface_facing_type => "Interior"
+      }
+    ]
+  },
+  {
+    :name => "Perimeter_East",
+    :area => perimeter_ew_area,
+    :surfaces => [
+      {
+        :name => "Corner_Northeast",
+        :azimuth => 0,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Exterior_East",
+        :azimuth => 90,
+        :surface_area => perimeter_ew_length * floor_height,
+        :surface_facing_type => "Exterior"
+      },
+      {
+        :name => "Corner_Southeast",
+        :azimuth => 180,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Core_3",
+        :azimuth => 270,
+        :surface_area => perimeter_ew_length * floor_height,
+        :surface_facing_type => "Interior"
+      }
+    ]
+  },
+  {
+    :name => "Corner_Southwest", 
+    :area => corner_area,
+    :surfaces => [
+      {
+        :name => "Perimeter_West",
+        :azimuth => 0,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Perimeter_South",
+        :azimuth => 90,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Exterior_South",
+        :azimuth => 180,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Exterior"
+      },
+      {
+        :name => "Exterior_West",
+        :azimuth => 270,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Exterior"
+      }
+    ]
+  },
+  {
+    :name => "Perimeter_South",
+    :area => perimeter_ns_area,
+    :surfaces => [
+      {
+        :name => "Core_1",
+        :azimuth => 0,
+        :surface_area => core_1_width * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Core_2",
+        :azimuth => 0,
+        :surface_area => core_2_width * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Core_3",
+        :azimuth => 0,
+        :surface_area => core_3_width * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Corner_Southeast",
+        :azimuth => 90,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Exterior_South",
+        :azimuth => 180,
+        :surface_area => perimeter_ns_length * floor_height,
+        :surface_facing_type => "Exterior"
+      },
+      {
+        :name => "Corner_Southwest",
+        :azimuth => 270,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      }
+    ]
+  },
+  {
+    :name => "Corner_Southeast", 
+    :area => corner_area,
+    :surfaces => [
+      {
+        :name => "Perimeter_East",
+        :azimuth => 0,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      },
+      {
+        :name => "Exterior_East",
+        :azimuth => 90,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Exterior"
+      },
+      {
+        :name => "Exterior_South",
+        :azimuth => 180,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Exterior"
+      },
+      {
+        :name => "Perimeter_South",
+        :azimuth => 270,
+        :surface_area => corner_length * floor_height,
+        :surface_facing_type => "Interior"
+      }
+    ]
+  },
 ]
 
-corner_area
-perimeter_ew_area
-perimeter_ns_area
-core_1_area
-core_2_area
-core_3_area
-
-plenum_surfaces = [
-  {:name=>}
-]
 %>
 
 <% for floor in floors %>
   <% for zone in zones %>
 
-ZONE <%= "Floor" + floor[:floor].to_s + zone[:name]%>
-  znModel = "CZM"
-  znArea = <%= zone[:area] %>
-  znVol = <%= zone[:area] * floor_height %>
-  znCeilingHt = <%= (floor_height * floor[:floor]) + (plenum_height * (floor[:floor] - 1))  %>
-  znFloorZ = <%= (floor_height + plenum_height) * (floor[:floor] - 1) %>
-  infAC = 0
-  znTH = 20
-  znQMxH = <%= 10000000*$w_btu %>
-  znCAir = <%= 0.24*0.077*zone[:area]*floor_height %>
+  ZONE <%= "Floor" + floor[:floor].to_s + zone[:name]%>
+    znModel = "CZM"
+    znArea = <%= zone[:area] %>
+    znVol = <%= zone[:area] * floor_height %>
+    znCeilingHt = <%= (floor_height * floor[:floor]) + (plenum_height * (floor[:floor] - 1))  %>
+    znFloorZ = <%= (floor_height + plenum_height) * (floor[:floor] - 1) %>
+    infAC = 0
+    znTH = 20
+    znQMxH = <%= 10000000*$w_btu %>
+    znCAir = <%= 0.24*0.077*zone[:area]*floor_height %>
 
     <% for surface in zone[:surfaces] %>
     SURFACE <%= surface[:name] %>
@@ -582,7 +577,6 @@ ZONE <%= "Floor" + floor[:floor].to_s + zone[:name]%>
           sfExCnd = "ADJZN"
           sfAdjZn = <%= surface[:name] %>
           sfCon = "Interior Wall"
-        <% end %>
       <% else %>
         sfExCnd = "AMBIENT"
         sfCon = "Exterior Wall"
@@ -597,10 +591,36 @@ ZONE <%= "Floor" + floor[:floor].to_s + zone[:name]%>
         sfCon = "Slab-On-Grade"
       <% else %>
         sfExCnd = "ADJZN"
-        sfAdjZn = <%= "Floor" + (floor[:floor].to_s - 1) + "Plenum" %>
+        sfAdjZn = <%= "Floor" + (floor[:floor]- 1).to_s + "Plenum" %>
         sfCon = "Interior Floor"
-    
+      <% end %>
+    SURFACE <%= surface[:name] %>
+      sfType = <%= "CEILING" %>
+      sfArea = <%= zone[:area] %>
+      sfExCnd = "ADJZN"
+      sfAdjZn = <%= "Floor" + floor[:floor].to_s + "Plenum" %>
+      sfCon = "Dropped Ceiling"
 
+
+  <% end %>
+ZONE <%= "Floor" + floor[:floor].to_s + "Plenum"%>
+  znModel = "CZM"
+  znArea = <%= zone[:area] %>
+  znVol = <%= zone[:area] * plenum_height %>
+  znCeilingHt = <%= (floor_height + plenum_height) * floor[:floor]  %>
+  znFloorZ = <%= floor_height * floor[:floor] %>
+  infAC = 0
+  znTH = 20
+  znQMxH = <%= 10000000*$w_btu %>
+  znCAir = <%= 0.24*0.077*zone[:area]*plenum_height %>
+  <% for zone in zones %>
+    SURFACE <%= surface[:name] %>
+      sfType = <%= "FLOOR" %>
+      sfArea = <%= zone[:area] %>
+      sfExCnd = "ADJZN"
+      sfAdjZn = <%= "Floor" + (floor[:floor] - 1).to_s + surface[:name]%>
+      sfCon = "Interior Floor"
+    
     SURFACE <%= surface[:name] %>
       sfType = <%= "CEILING" %>
       sfArea = <%= zone[:area] %>
@@ -609,14 +629,11 @@ ZONE <%= "Floor" + floor[:floor].to_s + zone[:name]%>
         sfCon = "Roof"
       <% else %>
         sfExCnd = "ADJZN"
-        sfAdjZn = <%= "Floor" + (floor[:floor].to_s - 1) + "Plenum" %>
+        sfAdjZn = <%= "Floor" + (floor[:floor] - 1).to_s + surface[:name] %>
         sfCon = "Dropped Ceiling"
       <% end %>
 
-    <% end %>
   <% end %>
-  <% for plenum_surface in plenum_surfaces %>
-
 <% end %>
 
 EXPORTFILE "Output"
