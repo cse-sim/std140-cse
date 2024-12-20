@@ -1,0 +1,636 @@
+<%#INTERFACE
+  parameter "case_name"
+  parameter "weather_dependent_infiltration_rate"
+  parameter "adiabatic_floor"
+%>
+
+<%
+# Unit Conversions
+$m_ft = 3.28084
+$m2_ft2 = $m_ft*$m_ft
+$m3_ft3 = $m2_ft2*$m_ft
+$h_min = 60.0
+$k_c = 0.5781759824
+$rho_c = 0.062428
+$cp_c = 0.000239
+$w_btu = 3.412
+$k_r = 9/5.0
+$q_c = $w_btu/$m2_ft2
+$u_c = $q_c/$k_r
+
+def c_f(c)
+  return c*9/5.0 + 32.0
+end
+
+# Internal use
+nsteps = 120
+%>
+
+<%
+# ETNA Case Variables
+if weather_dependent_infiltration_rate
+
+else
+
+end
+
+if adiabatic_floor
+
+else
+
+end
+%>
+
+<%
+# Dimensions
+length = 49.9110*$m_ft
+width = 33.2738*$m_ft
+floor_height = 2.7432*$m_ft
+plenum_height = 1.2192*$m_ft
+
+floor_area = length*width
+floor_volume = floor_area*floor_height
+plenum_volume = floor_area*plenum_height
+
+corner_length = 4.5732*$m_ft
+
+perimeter_ew_length = 24.1274*$m_ft
+perimeter_ew_width = corner_length
+
+perimeter_ns_length = 40.7643*$m_ft
+perimeter_ns_width = corner_length
+
+core_1_width = 18.7790*$m_ft
+core_2_width = 10.9024*$m_ft
+core_3_width = 11.0829*$m_ft
+
+corner_area = corner_length * corner_length 
+perimeter_ew_area = perimeter_ew_length * perimeter_ew_width
+perimeter_ns_area = perimeter_ns_length * perimeter_ns_width
+core_1_area = core_1_width * perimeter_ew_length
+core_2_area = core_2_width * perimeter_ew_length
+core_3_area = core_3_width * perimeter_ew_length
+%>
+
+wfName = "weather/std-140/725650TY.epw"
+nSubSteps = <%= nsteps %>
+DT = No
+bldgAzm = 0
+terrainClass = 3
+wuDays = 0
+skyModel = ANISOTROPIC
+skyModelLW = BERDAHLMARTIN
+hConvMod = No
+jan1DoW = "FRI" // Jan 1 2021
+
+METER "MtrElec"
+
+// Materials
+// Std140
+
+MATERIAL "Roof Metal Deck"
+  matCond = <%= 45.28*$k_c %>
+  matDens = <%= 7824*$rho_c %>
+  matSpHt = <%= 500*$cp_c %>
+
+MATERIAL "Roof Insulation"
+  matCond = <%= 0.020*$k_c %>
+  matDens = <%= 32*$rho_c %>
+  matSpHt = <%= 922*$cp_c %>
+
+MATERIAL "Roof Built-Up Roofing"
+  matCond = <%= 0.16*$k_c %>
+  matDens = <%= 1120*$rho_c %>
+  matSpHt = <%= 1460*$cp_c %>
+
+MATERIAL "Exterior Wall Gypsum Board"
+  matCond = <%= 0.16*$k_c %>
+  matDens = <%= 800*$rho_c %>
+  matSpHt = <%= 1090*$cp_c %>
+
+MATERIAL "Exterior Wall Insulation"
+  matCond = <%= 0.037*$k_c %>
+  matDens = <%= 10*$rho_c %>
+  matSpHt = <%= 838*$cp_c %>
+
+MATERIAL "Exterior Wall Stucco"
+  matCond = <%= 0.72*$k_c %>
+  matDens = <%= 1856*$rho_c %>
+  matSpHt = <%= 840*$cp_c %>
+
+MATERIAL "Exterior Door Opaque Door"
+  matCond = <%= 0.116*$k_c %>
+  matDens = <%= 513*$rho_c %>
+  matSpHt = <%= 1382*$cp_c %>
+
+MATERIAL "Carpet"
+  matCond = <%= 0.08*$k_c %>
+  matDens = <%= 320*$rho_c %>
+  matSpHt = <%= 1380*$cp_c %>
+
+MATERIAL "Concrete Floor"
+  matCond = <%= 2.31*$k_c %>
+  matDens = <%= 2322*$rho_c %>
+  matSpHt = <%= 832*$cp_c %>
+
+MATERIAL "Dropped Ceiling Acoustic Tile"
+  matCond = <%= 0.057*$k_c %>
+  matDens = <%= 288*$rho_c %>
+  matSpHt = <%= 1339*$cp_c %>
+
+MATERIAL "Adiabatic Insulation"
+  matCond = <%= 0.01*$k_c %>
+
+MATERIAL "Interior Wall Gypsum Board"
+  matCond = <%= 0.1603*$k_c %>
+  matDens = <%= 800*$rho_c %>
+  matSpHt = <%= 1089.4*$cp_c %>
+
+MATERIAL "Interior Wall Insulation"
+  matCond = <%= 0.1154*$k_c %>
+  matDens = <%= 512*$rho_c %>
+  matSpHt = <%= 1382.7*$cp_c %>
+
+
+// Constructions
+// Std 140
+
+CONSTRUCTION "Roof"
+  LAYER lrMat= "Roof Metal Deck" lrThk=<%= 0.0008*$m_ft %>
+  LAYER lrMat= "Roof Insulation" lrThk=<%= 0.053*$m_ft %>
+  LAYER lrMat= "Roof Built-Up Roofing" lrThk=<%= 0.0095*$m_ft %>
+
+CONSTRUCTION "Exterior Wall"
+  LAYER lrMat= "Exterior Wall Gypsum Board" lrThk=<%= 0.16*$m_ft %>
+  LAYER lrMat= "Exterior Wall Insulation" lrThk=<%= 0.062*$m_ft %>
+  LAYER lrMat= "Exterior Wall Gypsum Board" lrThk=<%= 0.16*$m_ft %>
+  LAYER lrMat= "Exterior Wall Stucco" lrThk=<%= 0.72*$m_ft %>
+
+CONSTRUCTION "Exterior Door"
+  LAYER lrMat= "Exterior Door Opaque Door" lrThk=<%= 0.116*$m_ft %>
+
+CONSTRUCTION "Interior Floor"
+  LAYER lrMat= "Carpet" lrThk=<%= 0.08*$m_ft %>
+  LAYER lrMat= "Concrete Floor" lrThk=<%= 2.31*$m_ft %>
+
+CONSTRUCTION "Dropped Ceiling"
+  LAYER lrMat= "Dropped Ceiling Acoustic Tile" lrThk=<%= 0.08*$m_ft %>
+
+CONSTRUCTION "Slab-On-Grade"
+  LAYER lrMat= "Carpet" lrThk=<%= 0.01728*$m_ft %>
+  LAYER lrMat= "Concrete Floor" lrThk=<%= 0.20*$m_ft %>
+  LAYER lrMat= "Adiabatic Insulation" lrThk=<%= 1.000*$m_ft %>
+
+CONSTRUCTION "Interior Wall"
+  LAYER lrMat= "Interior Wall Gypsum Board" lrThk=<%= 0.0127*$m_ft %>
+  LAYER lrMat= "Interior Wall Insulation" lrThk=<%= 0.0889*$m_ft %>
+  LAYER lrMat= "Interior Wall Gypsum Board" lrThk=<%= 0.0127*$m_ft %>
+
+<%
+# Zones
+
+floors = [
+  {:floor=>1},
+  {:floor=>2},
+  {:floor=>3},
+]
+
+zones = [
+  {
+    :name=>"Corner_Northwest", 
+    :area=>corner_area,
+    :surfaces=>[
+      {
+        :name=>"Exterior_North",
+        :azimuth=>0,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },
+      {
+        :name=>"Perimeter_North",
+        :azimuth=>90,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Perimeter_West",
+        :azimuth=>180,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Exterior_West",
+        :azimuth=>270,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },
+    ]
+  },
+  {
+    :name=>"Perimeter_North",
+    :area=>perimeter_ns_area,
+    :surfaces=>[
+      {
+        :name=>"Exterior_North",
+        :azimuth=>0,
+        :surface_area=>perimeter_ns_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },
+      {
+        :name=>"Corner_Northeast",
+        :azimuth=>90,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Core_3",
+        :azimuth=>180,
+        :surface_area=>core_3_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Core_2",
+        :azimuth=>180,
+        :surface_area=>core_2_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Core_1",
+        :azimuth=>180,
+        :surface_area=>core_1_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Corner_Northwest",
+        :azimuth=>270,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+    ]
+    },
+  {
+    :name=>"Corner_Northeast",
+    :area=>corner_area,
+    :surfaces=>[
+      {
+        :name=>"Exterior_North",
+        :azimuth=>0,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },
+      {
+        :name=>"Exterior_East",
+        :azimuth=>90,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },
+      {
+        :name=>"Perimeter_East",
+        :azimuth=>180,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Perimeter_North",
+        :azimuth=>270,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },]
+  },
+  {
+    :name=>"Perimeter_West",
+    :area=>perimeter_ew_area,
+    :surfaces=>[
+      {
+        :name=>"Corner_Northwest",
+        :azimuth=>0,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Core_1",
+        :azimuth=>90,
+        :surface_area=>perimeter_ew_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Corner_Southwest",
+        :azimuth=>180,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Exterior_West",
+        :azimuth=>270,
+        :surface_area=>perimeter_ew_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },]
+      },
+  {
+    :name=>"Core_1",
+    :area=>core_1_area},
+    :surfaces=>[
+      {
+        :name=>"Perimeter_North",
+        :azimuth=>0,
+        :surface_area=>core_1_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Core_2",
+        :azimuth=>90,
+        :surface_area=>perimeter_ew_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Perimeter_South",
+        :azimuth=>180,
+        :surface_area=>core_1_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Perimeter_West",
+        :azimuth=>270,
+        :surface_area=>perimeter_ew_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },]
+  {
+    :name=>"Core_2",
+    :area=>core_2_area},
+    :surfaces=>[
+      {
+        :name=>"Perimeter_North",
+        :azimuth=>0,
+        :surface_area=>core_2_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Core_3",
+        :azimuth=>90,
+        :surface_area=>perimeter_ew_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Perimeter_South",
+        :azimuth=>180,
+        :surface_area=>core_2_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Core_1",
+        :azimuth=>270,
+        :surface_area=>perimeter_ew_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },]
+  {
+    :name=>"Core_3",
+    :area=>core_3_area},
+    :surfaces=>[
+      {
+        :name=>"Perimeter_North",
+        :azimuth=>0,
+        :surface_area=>core_3_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Perimeter_East",
+        :azimuth=>90,
+        :surface_area=>perimeter_ew_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Perimeter_South",
+        :azimuth=>180,
+        :surface_area=>core_3_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Core_2",
+        :azimuth=>270,
+        :surface_area=>perimeter_ew_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },],
+
+  {
+    :name=>"Perimeter_East",
+    :area=>perimeter_ew_area,
+    :surfaces=>[
+      {
+        :name=>"Corner_Northeast",
+        :azimuth=>0,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Exterior_East",
+        :azimuth=>90,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },
+      {
+        :name=>"Corner_Southeast",
+        :azimuth=>180,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Core_3",
+        :azimuth=>270,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+    ]},
+  {
+    :name=>"Corner_Southwest", 
+    :area=>corner_area,
+    :surfaces=>[
+      {
+        :name=>"Perimeter_West",
+        :azimuth=>0,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Perimeter_South",
+        :azimuth=>90,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Exterior_South",
+        :azimuth=>180,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },
+      {
+        :name=>"Exterior_West",
+        :azimuth=>270,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },
+    ]
+  },
+
+  {
+    :name=>"Corner_Southeast", 
+    :area=>corner_area,
+    :surfaces=>[
+      {
+        :name=>"Perimeter_East",
+        :azimuth=>0,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Exterior_East",
+        :azimuth=>90,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },
+      {
+        :name=>"Exterior_South",
+        :azimuth=>180,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },
+      {
+        :name=>"Perimeter_South",
+        :azimuth=>270,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+    ]
+  },
+  {
+    :name=>"Perimeter_South",
+    :area=>perimeter_ns_area,
+    :surfaces=>[
+      {
+        :name=>"Core_1",
+        :azimuth=>0,
+        :surface_area=>core_3_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Core_2",
+        :azimuth=>0,
+        :surface_area=>core_2_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Core_3",
+        :azimuth=>0,
+        :surface_area=>core_1_width*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Corner_Southeast",
+        :azimuth=>90,
+        :surface_area=>perimeter_ns_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+      {
+        :name=>"Exterior_South",
+        :azimuth=>180,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Exterior"
+      },
+      {
+        :name=>"Corner_Southwest",
+        :azimuth=>270,
+        :surface_area=>corner_length*floor_height,
+        :surface_facing_type=>"Interior"
+      },
+    ]
+},
+
+]
+
+corner_area
+perimeter_ew_area
+perimeter_ns_area
+core_1_area
+core_2_area
+core_3_area
+
+plenum_surfaces = [
+  {:name=>}
+]
+%>
+
+<% for floor in floors %>
+  <% for zone in zones %>
+
+ZONE <%= "Floor" + floor[:floor].to_s + zone[:name]%>
+  znModel = "CZM"
+  znArea = <%= zone[:area] %>
+  znVol = <%= zone[:area] * floor_height %>
+  znCeilingHt = <%= (floor_height * floor[:floor]) + (plenum_height * (floor[:floor] - 1))  %>
+  znFloorZ = <%= (floor_height + plenum_height) * (floor[:floor] - 1) %>
+  infAC = 0
+  znTH = 20
+  znQMxH = <%= 10000000*$w_btu %>
+  znCAir = <%= 0.24*0.077*zone[:area]*floor_height %>
+
+    <% for surface in zone[:surfaces] %>
+    SURFACE <%= surface[:name] %>
+      sfType = <%= surface[:surface_type] %>
+      sfArea = <%= surface[:surface_area] %>
+      sfAzm = <%= surface[:azimuth] %>
+
+      <% if surface[:surface_facing_type] == "Interior" %>
+          sfExCnd = "ADJZN"
+          sfAdjZn = <%= surface[:name] %>
+          sfCon = "Interior Wall"
+        <% end %>
+      <% else %>
+        sfExCnd = "AMBIENT"
+        sfCon = "Exterior Wall"
+      <% end %>
+    <% end %>
+
+    SURFACE <%= surface[:name] %>
+      sfType = <%= "FLOOR" %>
+      sfArea = <%= zone[:area] %>
+      <% if floor[:floor] == 1 %>
+        sfExCnd = "GROUND"
+        sfCon = "Slab-On-Grade"
+      <% else %>
+        sfExCnd = "ADJZN"
+        sfAdjZn = <%= "Floor" + (floor[:floor].to_s - 1) + "Plenum" %>
+        sfCon = "Interior Floor"
+    
+
+    SURFACE <%= surface[:name] %>
+      sfType = <%= "CEILING" %>
+      sfArea = <%= zone[:area] %>
+      <% if floor[:floor] == 3 %>
+        sfExCnd = "AMBIENT"
+        sfCon = "Roof"
+      <% else %>
+        sfExCnd = "ADJZN"
+        sfAdjZn = <%= "Floor" + (floor[:floor].to_s - 1) + "Plenum" %>
+        sfCon = "Dropped Ceiling"
+      <% end %>
+
+    <% end %>
+  <% end %>
+  <% for plenum_surface in plenum_surfaces %>
+
+<% end %>
+
+EXPORTFILE "Output"
+  xfFileName = "Output.csv"
+  xfFileStat = OVERWRITE
+
+EXPORT
+  exExportfile = "Output"
+  exHeader = ColumnsOnly
+  exFooter = No
+  exType = UDT
+  exFreq = HOUR
+  exDayBeg = JAN 1
+  exDayEnd = DEC 31
+
+
+RUN
