@@ -1,0 +1,5 @@
+:case_name=>"CB1020",
+:weather_dependent_infiltration_rate=>false,
+:adiabatic_floor=>false,
+
+# slab-on-grade is non-adiabatic
