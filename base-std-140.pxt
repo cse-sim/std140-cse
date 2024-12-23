@@ -647,16 +647,16 @@ zones = [
     znQMxH = <%= 10000000*$w_btu %>
     znCAir = <%= 0.24*0.077*zone[:area]*plenum_height %>
     <% for zone in zones %>
-      SURFACE <%= surface[:name] %>
+      SURFACE <%= zone[:name] %>
         sfType = "FLOOR"
         sfArea = <%= zone[:area] %>
         sfExCnd = "ADJZN"
-        sfAdjZn = <%= "Floor" + floor[:floor].to_s + surface[:name]%>
+        sfAdjZn = <%= "Floor" + floor[:floor].to_s + zone[:name]%>
         sfCon = "Interior Floor"
         sfModel = "QUICK"
         sfInAbs = 0.7
       
-      SURFACE <%= surface[:name] %>
+      SURFACE <%= zone[:name] %>
         sfType = "CEILING"
         sfArea = <%= zone[:area] %>
         <% if floor[:floor] == 3 %>
@@ -666,7 +666,7 @@ zones = [
           sfInAbs = 0.7
         <% else %>
           sfExCnd = "ADJZN"
-          sfAdjZn = <%= "Floor" + (floor[:floor] + 1).to_s + surface[:name] %>
+          sfAdjZn = <%= "Floor" + (floor[:floor] + 1).to_s + zone[:name] %>
           sfCon = "Dropped Ceiling"
           sfModel = "QUICK"
           sfInAbs = 0.7
