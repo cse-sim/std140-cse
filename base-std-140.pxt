@@ -203,7 +203,8 @@ zones = [
         :name => "Exterior_North",
         :azimuth => 0,
         :surface_area => corner_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 1
       },
       {
         :name => "Perimeter_North",
@@ -221,7 +222,8 @@ zones = [
         :name => "Exterior_West",
         :azimuth => 270,
         :surface_area => corner_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 1
       }
     ]
   },
@@ -233,7 +235,8 @@ zones = [
         :name => "Exterior_North",
         :azimuth => 0,
         :surface_area => perimeter_ns_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 7
       },
       {
         :name => "Corner_Northeast",
@@ -275,13 +278,15 @@ zones = [
         :name => "Exterior_North",
         :azimuth => 0,
         :surface_area => corner_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 1
       },
       {
         :name => "Exterior_East",
         :azimuth => 90,
         :surface_area => corner_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 1
       },
       {
         :name => "Perimeter_East",
@@ -323,7 +328,8 @@ zones = [
         :name => "Exterior_West",
         :azimuth => 270,
         :surface_area => perimeter_ew_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 4
       }
     ]
   },
@@ -431,7 +437,8 @@ zones = [
         :name => "Exterior_East",
         :azimuth => 90,
         :surface_area => perimeter_ew_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 4
       },
       {
         :name => "Corner_Southeast",
@@ -467,13 +474,15 @@ zones = [
         :name => "Exterior_South",
         :azimuth => 180,
         :surface_area => corner_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 1
       },
       {
         :name => "Exterior_West",
         :azimuth => 270,
         :surface_area => corner_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 1
       }
     ]
   },
@@ -509,7 +518,8 @@ zones = [
         :name => "Exterior_South",
         :azimuth => 180,
         :surface_area => perimeter_ns_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 7
       },
       {
         :name => "Corner_Southwest",
@@ -533,13 +543,15 @@ zones = [
         :name => "Exterior_East",
         :azimuth => 90,
         :surface_area => corner_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 1
       },
       {
         :name => "Exterior_South",
         :azimuth => 180,
         :surface_area => corner_length * floor_height,
-        :surface_facing_type => "Exterior"
+        :surface_facing_type => "Exterior",
+        :number_windows => 1
       },
       {
         :name => "Perimeter_South",
@@ -580,6 +592,12 @@ zones = [
       <% else %>
         sfExCnd = "AMBIENT"
         sfCon = "Exterior Wall"
+        WINDOW
+          wnHeight = <%= 2.7432 * $m_ft %>
+          wnWidth = <%= 2.486 * $m_ft %>
+          wnMult = <%= surface[:number_windows] %>
+          wnU = <%= 3.268 * $w_btu %>
+          wnSHGC = 0.39
       <% end %>
     <% end %>
 
