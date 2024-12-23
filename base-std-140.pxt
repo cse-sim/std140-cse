@@ -581,17 +581,22 @@ zones = [
 
     <% for surface in zone[:surfaces] %>
     SURFACE <%= surface[:name] %>
-      sfType = <%= surface[:surface_type] %>
+      sfType = <%= "WALL" %>
       sfArea = <%= surface[:surface_area] %>
       sfAzm = <%= surface[:azimuth] %>
 
       <% if surface[:surface_facing_type] == "Interior" %>
-          sfExCnd = "ADJZN"
-          sfAdjZn = <%= surface[:name] %>
-          sfCon = "Interior Wall"
+        sfExCnd = "ADJZN"
+        sfAdjZn = <%= surface[:name] %>
+        sfCon = "Interior Wall"
+        sfModel = "QUICK"
+        sfInAbs = 0.7
       <% else %>
         sfExCnd = "AMBIENT"
         sfCon = "Exterior Wall"
+        sfModel = "QUICK"
+        sfExAbs = 0.7
+
         WINDOW
           wnHeight = <%= 2.7432 * $m_ft %>
           wnWidth = <%= 2.486 * $m_ft %>
@@ -601,57 +606,73 @@ zones = [
       <% end %>
     <% end %>
 
-    SURFACE <%= surface[:name] %>
-      sfType = <%= "FLOOR" %>
-      sfArea = <%= zone[:area] %>
-      <% if floor[:floor] == 1 %>
+    <% if floor[:floor] == 1 %>
+      SURFACE <%= "Ground" %>
+        sfType = "FLOOR"
+        sfArea = <%= zone[:area] %>
         sfExCnd = "GROUND"
         sfCon = "Slab-On-Grade"
-      <% else %>
+        sfModel = "FD"
+        sfInAbs = 0.7
+    <% else %>
+      SURFACE <%= "Plenum" %>
+        sfType = "FLOOR"
+        sfArea = <%= zone[:area] %>
         sfExCnd = "ADJZN"
         sfAdjZn = <%= "Floor" + (floor[:floor]- 1).to_s + "Plenum" %>
         sfCon = "Interior Floor"
-      <% end %>
-    SURFACE <%= surface[:name] %>
-      sfType = <%= "CEILING" %>
+        sfModel = "QUICK"
+        sfInAbs = 0.7
+    <% end %>
+
+    SURFACE <%= "Plenum" %>
+      sfType = "CEILING"
       sfArea = <%= zone[:area] %>
       sfExCnd = "ADJZN"
       sfAdjZn = <%= "Floor" + floor[:floor].to_s + "Plenum" %>
       sfCon = "Dropped Ceiling"
-
-
+      sfModel = "QUICK"
+      sfInAbs = 0.7
   <% end %>
-ZONE <%= "Floor" + floor[:floor].to_s + "Plenum"%>
-  znModel = "CZM"
-  znArea = <%= zone[:area] %>
-  znVol = <%= zone[:area] * plenum_height %>
-  znCeilingHt = <%= (floor_height + plenum_height) * floor[:floor]  %>
-  znFloorZ = <%= floor_height * floor[:floor] %>
-  infAC = 0
-  znTH = 20
-  znQMxH = <%= 10000000*$w_btu %>
-  znCAir = <%= 0.24*0.077*zone[:area]*plenum_height %>
-  <% for zone in zones %>
-    SURFACE <%= surface[:name] %>
-      sfType = <%= "FLOOR" %>
-      sfArea = <%= zone[:area] %>
-      sfExCnd = "ADJZN"
-      sfAdjZn = <%= "Floor" + (floor[:floor] - 1).to_s + surface[:name]%>
-      sfCon = "Interior Floor"
-    
-    SURFACE <%= surface[:name] %>
-      sfType = <%= "CEILING" %>
-      sfArea = <%= zone[:area] %>
-      <% if floor[:floor] == 3 %>
-        sfExCnd = "AMBIENT"
-        sfCon = "Roof"
-      <% else %>
+
+
+  ZONE <%= "Floor" + floor[:floor].to_s + "Plenum"%>
+    znModel = "CZM"
+    znArea = <%= zone[:area] %>
+    znVol = <%= zone[:area] * plenum_height %>
+    znCeilingHt = <%= (floor_height + plenum_height) * floor[:floor]  %>
+    znFloorZ = <%= floor_height * floor[:floor] %>
+    infAC = 0
+    znTH = 20
+    znQMxH = <%= 10000000*$w_btu %>
+    znCAir = <%= 0.24*0.077*zone[:area]*plenum_height %>
+    <% for zone in zones %>
+      SURFACE <%= surface[:name] %>
+        sfType = "FLOOR"
+        sfArea = <%= zone[:area] %>
         sfExCnd = "ADJZN"
-        sfAdjZn = <%= "Floor" + (floor[:floor] - 1).to_s + surface[:name] %>
-        sfCon = "Dropped Ceiling"
-      <% end %>
+        sfAdjZn = <%= "Floor" + floor[:floor].to_s + surface[:name]%>
+        sfCon = "Interior Floor"
+        sfModel = "QUICK"
+        sfInAbs = 0.7
+      
+      SURFACE <%= surface[:name] %>
+        sfType = "CEILING"
+        sfArea = <%= zone[:area] %>
+        <% if floor[:floor] == 3 %>
+          sfExCnd = "AMBIENT"
+          sfCon = "Roof"
+          sfModel = "QUICK"
+          sfInAbs = 0.7
+        <% else %>
+          sfExCnd = "ADJZN"
+          sfAdjZn = <%= "Floor" + (floor[:floor] + 1).to_s + surface[:name] %>
+          sfCon = "Dropped Ceiling"
+          sfModel = "QUICK"
+          sfInAbs = 0.7
+        <% end %>
 
-  <% end %>
+    <% end %>
 <% end %>
 
 EXPORTFILE "Output"
