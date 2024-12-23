@@ -598,7 +598,7 @@ zones = [
 <% for floor in floors %>
   <% for zone in zones %>
 
-    <% if zone[:name] == "Plenum" %>
+    <% if zone[:name] == "Plenum" %> # Add plenum zones
       ZONE <%= "Floor" + floor[:floor].to_s + zone[:name]%>
         znModel = "CZM"
         znArea = <%= zone[:area] %>
@@ -609,8 +609,8 @@ zones = [
         znTH = 20
         znQMxH = <%= 10000000*$w_btu %>
         znCAir = <%= 0.24*0.077*zone[:area]*floor_height %>
-      <% for zone in zones %>
-        <% if zone[:name] != "Plenum" %>
+      <% for zone in zones %> # Add all non-plenum zones to plenum zone object as surfaces
+        <% if zone[:name] != "Plenum" %> # Skip plenum zone
           SURFACE <%= zone[:name] %>
             sfType = "FLOOR"
             sfArea = <%= zone[:area] %>
@@ -623,7 +623,7 @@ zones = [
   
         <% end %>
       <% end %>
-        <% for surface in zone[:surfaces] %>
+        <% for surface in zone[:surfaces] %> # Add wall surfaces
         SURFACE <%= surface[:name] %>
           sfType = <%= "WALL" %>
           sfArea = <%= surface[:surface_area] %>
@@ -635,14 +635,14 @@ zones = [
             sfCon = "Interior Wall"
             sfModel = "QUICK"
             sfInAbs = 0.7
-          <% else %>
+          <% else %> # Exterior wall surface
             sfExCnd = "AMBIENT"
             sfCon = "Exterior Wall"
             sfModel = "QUICK"
             sfExAbs = 0.7
           <% end %>
         <% end %>
-    <% else %>
+    <% else %> # Add non-plenum zones
       ZONE <%= "Floor" + floor[:floor].to_s + zone[:name]%>
         znModel = "CZM"
         znArea = <%= zone[:area] %>
@@ -666,7 +666,7 @@ zones = [
             sfCon = "Interior Wall"
             sfModel = "QUICK"
             sfInAbs = 0.7
-          <% else %>
+          <% else %> # Add exterior surfaces
             sfExCnd = "AMBIENT"
             sfCon = "Exterior Wall"
             sfModel = "QUICK"
@@ -684,7 +684,7 @@ zones = [
 
 
 
-    <% if floor[:floor] == 1 %>
+    <% if floor[:floor] == 1 %> # Add ground surface for non-plenum zones on first floor
       SURFACE <%= "Ground" %>
         sfType = "FLOOR"
         sfArea = <%= zone[:area] %>
@@ -692,7 +692,7 @@ zones = [
         sfCon = "Slab-On-Grade"
         sfModel = "FD"
         sfInAbs = 0.7
-    <% else %>
+    <% else %> # Add floor surface for non-plenum surface on second or third floors
       SURFACE <%= "Plenum" %>
         sfType = "FLOOR"
         sfArea = <%= zone[:area] %>
