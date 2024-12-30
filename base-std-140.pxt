@@ -1,7 +1,7 @@
-<%#INTERFACE
-  parameter "case_name"
-  parameter "weather_dependent_infiltration_rate"
-  parameter "adiabatic_floor"
+<% # INTERFACE
+  # parameter "case_name"
+  # parameter "weather_dependent_infiltration_rate"
+  # parameter "adiabatic_floor"
 %>
 
 <%
@@ -27,18 +27,18 @@ nsteps = 120
 %>
 
 <%
-# ETNA Case Variables
-if weather_dependent_infiltration_rate
+# Std 140 Case Variables
+# if weather_dependent_infiltration_rate
 
-else
+# else
 
-end
+# end
 
-if adiabatic_floor
+# if adiabatic_floor
 
-else
+# else
 
-end
+# end
 %>
 
 <%
