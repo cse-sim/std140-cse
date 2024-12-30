@@ -70,6 +70,8 @@ perimeter_ns_area = perimeter_ns_length * perimeter_ns_width
 core_1_area = core_1_width * perimeter_ew_length
 core_2_area = core_2_width * perimeter_ew_length
 core_3_area = core_3_width * perimeter_ew_length
+
+$window_shgc = 0.39
 %>
 
 wfName = "weather/std-140/725650TY.epw"
