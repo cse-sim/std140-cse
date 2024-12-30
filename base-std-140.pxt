@@ -45,12 +45,12 @@ nsteps = 120
 # Dimensions
 length = 49.9110*$m_ft
 width = 33.2738*$m_ft
-floor_height = 2.7432*$m_ft
-plenum_height = 1.2192*$m_ft
+$floor_height = 2.7432*$m_ft
+$plenum_height = 1.2192*$m_ft
 
 floor_area = length*width
-floor_volume = floor_area*floor_height
-plenum_volume = floor_area*plenum_height
+floor_volume = floor_area*$floor_height
+plenum_volume = floor_area*$plenum_height
 
 corner_length = 4.5732*$m_ft
 
