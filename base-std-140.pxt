@@ -203,6 +203,10 @@ zones = [
     :area => corner_area,
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [11,15,15],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [6.14,8.61,8.61],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_density => [13.99,15.07,15.07]
     :surfaces => [
       {
         :name => "Exterior_North",
@@ -237,6 +241,10 @@ zones = [
     :area => perimeter_ns_area,
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [10,10,10],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [7.1,7.53,7.53],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_density => [11.84,11.84,11.84]
     :surfaces => [
       {
         :name => "Exterior_North",
@@ -282,6 +290,10 @@ zones = [
     :area => corner_area,
     :occupancy_schedule => ["B","B","B"],
     :occupancy => [5,5,5],
+    :lighting_schedule => ["F","F","F"],
+    :lighting_power_density => [3.66,3.66,3.66],
+    :plug_load_schedule => ["J","J","J"],
+    :plug_load_density => [9.69,9.69,9.69]
     :surfaces => [
       {
         :name => "Exterior_North",
@@ -316,6 +328,10 @@ zones = [
     :area => perimeter_ew_area,
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [59,6,6],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [6.14,7.53,7.53],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_density => [13.99,11.84,11.84]
     :surfaces => [
       {
         :name => "Corner_Northwest",
@@ -349,6 +365,10 @@ zones = [
     :area => core_1_area,
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [10,10,10],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [7.1,7.1,7.1],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_density => [11.84,11.84,11.84]
     :surfaces => [
       {
         :name => "Perimeter_North",
@@ -381,6 +401,10 @@ zones = [
     :area => core_2_area,
     :occupancy_schedule => ["C","C","C"],
     :occupancy => [0,0,0],
+    :lighting_schedule => ["G","G","G"],
+    :lighting_power_density => [1.51,1.51,1.51],
+    :plug_load_schedule => ["K","K","K"],
+    :plug_load_density => [7.64,7.64,7.64]
     :surfaces => [
       {
         :name => "Perimeter_North",
@@ -413,6 +437,10 @@ zones = [
     :area => core_3_area,
     :occupancy_schedule => ["D","D","D"],
     :occupancy => [25,25,25],
+    :lighting_schedule => ["H","H","H"],
+    :lighting_power_density => [,,],
+    :plug_load_schedule => ["L","L","L"],
+    :plug_load_density => [1.29,1.29,1.29]
     :surfaces => [
       {
         :name => "Perimeter_North",
@@ -445,6 +473,10 @@ zones = [
     :area => perimeter_ew_area,
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [6,6,6],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [7.53,7.53,7.53],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_density => [11.84,11.84,11.84]
     :surfaces => [
       {
         :name => "Corner_Northeast",
@@ -478,6 +510,10 @@ zones = [
     :area => corner_area,
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [11,11,11],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [6.14,6.14,6.14],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_density => [13.99,13.99,13.99]
     :surfaces => [
       {
         :name => "Perimeter_West",
@@ -512,6 +548,10 @@ zones = [
     :area => perimeter_ns_area,
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [10,10,10],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [7.1,7.1,7.1],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_density => [11.84,11.84,11.84]
     :surfaces => [
       {
         :name => "Core_1",
@@ -557,6 +597,10 @@ zones = [
     :area => corner_area,
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [11,11,11],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [6.14,6.14,6.14],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_density => [13.99,13.99,13.99]
     :surfaces => [
       {
         :name => "Perimeter_East",
@@ -634,7 +678,68 @@ zones = [
   else # occupancy schedule "D"
     return "select($ISWEHOL,0,default hourval(0,0,0,0,0,0,0,0.20,0.47,0.78,0.78,0.78,0.66,0.66,0.78,0.78,0.78,0.47,0.20,0,0,0,0,0))"
   end
+end
+
+def set_lighting_schedule(lighting_schedule)
+  if lighting_schedule == "E"
+    return "select($ISWEHOL,hourval(0.05,0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.30,0.30,0.30,0.30,0.15,0.15,0.15,0.15,0.15,0.05,0.05,0.05,0.05,0.05,0.05,0.05),0,default hourval(0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.30,0.20,0.20,0.10,0.05))"
+  elsif lighting_schedule == "F"
+    return "select($ISWEHOL,hourval(0.05,0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.30,0.30,0.30,0.30,0.15,0.15,0.15,0.15,0.15,0.05,0.05,0.05,0.05,0.05,0.05,0.05),0,default hourval(0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.10,0.10,0.10,0.10,0.90,0.90,0.90,0.90,0.30,0.30,0.30,0.30,0.30,0.20,0.20,0.10,0.05))"
+  elsif lighting_schedule == "G"
+    return "select($ISWEHOL,hourval(0.04,0.04,0.04,0.04,0.04,0.04,0.08,0.10,0.30,0.30,0.30,0.30,0.15,0.15,0.15,0.15,0.15,0.05,0.05,0.04,0.04,0.04,0.04,0.04),0,default hourval(0.04,0.04,0.04,0.04,0.04,0.08,0.08,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.24,0.16,0.16,0.08,0.04))"
+  else # occupancy schedule "H"
+    return "select($ISWEHOL,hourval(0.05,0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.30,0.30,0.30,0.30,0.15,0.15,0.15,0.15,0.15,0.05,0.05,0.05,0.05,0.05,0.05,0.05),0,default hourval(0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.55,0.87,0.87,0.87,0.87,0.87,0.87,0.87,0.87,0.87,0.87,0.55,0.30,0.20,0.20,0.10,0.05))"
+  end
+end
+
+def set_plug_load_schedule(plug_load_schedule)
+  if plug_load_schedule == "I"
+    return "select($ISWEHOL,hourval(0.23,0.23,0.23,0.23,0.23,0.23,0.38,0.38,0.48,0.48,0.48,0.48,0.33,0.33,0.33,0.33,0.33,0.29,0.29,0.23,0.23,0.23,0.23,0.23),0,default hourval(0.31,0.31,0.31,0.31,0.31,0.31,0.38,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.38,0.38,0.38,0.38))"
+  elsif plug_load_schedule == "J"
+    return "select($ISWEHOL,hourval(0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07),0,default hourval(0.07,0.07,0.07,0.07,0.07,0.07,0.30,0.77,0.90,0.90,0.90,0.90,0.90,0.90,0.77,0.30,0.30,0.77,0.90,0.90,0.90,0.90,0.77,0.30))"
+  elsif plug_load_schedule == "K"
+    return "select($ISWEHOL,hourval(0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.10,0.10,0.10,0.10,0.10,0.10,0.10,0.10,0.06,0.06,0.06,0.06,0.06,0.06,0.06),0,default hourval(0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.06,0.06,0.06,0.06))"
+  else # occupancy schedule "L"
+    return "select($ISWEHOL,hourval(0.09,0.09,0.09,0.09,0.09,0.09,0.14,0.14,0.17,0.17,0.17,0.17,0.12,0.12,0.12,0.12,0.12,0.11,0.11,0.09,0.09,0.09,0.09,0.09),0,default hourval(0.14,0.14,0.14,0.14,0.14,0.14,0.16,0.16,0.35,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.38,0.20,0.20,0.16,0.16,0.16,0.16))"
+  end
+end 
+
+def set_ventilation_schedule(schedule)
+  if schedule == "M1"
+    return "select($ISWEHOL,0,default hourval(0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0))"
+  else # schedule == "M2"
+    return "hourval(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)"
+  end
+end
+
+
+def set_infiltration_schedule(schedule)
+  if schedule == "N1"
+    return "select($ISWEHOL,0,default hourval(1,1,1,1,1,1,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,1,1))"
+  elsif schedule == "N2"
+    return "hourval(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)"
+  else # schedule == "N3"
+    return "hourval(0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25)"
+  end
+end
+
+
+def set_cooling_schedule(zone)
+  if zone == "O" # Cooling except Top/Middle/Bottom_Core_2
+    return "select($ISWEHOL,0,default hourval(26.67,26.67,26.67,26.67,26.67,26.67,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,26.67,26.67))"
+  else # Cooling Top/Middle/Bottom_Core_2
+    return "hourval(23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89)"
+  end
+end
+
+def set_heating_schedule(zone)
+  if zone == "Q" # Heating except Top/Middle/Bottom_Core_2
+    return "select($ISWEHOL,0,default hourval(15.56,15.56,15.56,15.56,15.56,15.56,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,15.56,15.56))"
+  else # Heating Top/Middle/Bottom_Core_2
+    return "hourval(21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11)"
+  end
 end %>
+
 
 <% def set_zone_volume_and_height_dimensions(zone,floor) %>
 <% if zone[:name] == "Plenum" %>
@@ -643,13 +748,14 @@ end %>
   znFloorZ = <%= $floor_height * floor %>
 <% else %>
   znVol = <%= zone[:area] * $floor_height %>
-  znCeilingHt = <%= ($floor_height * floor) + ($plenum_height * (floor - 1))  %>
-  znFloorZ = <%= ($floor_height + $plenum_height) * (floor - 1) %>
+  znCeilingHt = <%= ($floor_height * floor) + ($plenum_height * (floor))  %>
+  znFloorZ = <%= ($floor_height + $plenum_height) * (floor) %>
 <% end %>
 
 <% end %>
 
 <% for floor in floors %>
+  <% floor_index = floor_index
   <% for zone in zones %>
     <% zone_name = zone[:name] %>
 
@@ -717,11 +823,23 @@ end %>
           <% end %>
         <% end %>
     <% else # Add non-plenum zones %>
-      <% # Set gains for occupancy, lighting, ventilation
-      occupancy_schedule = zone[:occupancy_schedule][floor-1] 
-      occupancy = zone[:occupancy][floor - 1] %>
+      <% # Set gains for occupancy, lighting, and plug loads
+      occupancy_schedule = zone[:occupancy_schedule][floor_index] 
+      occupancy = zone[:occupancy][floor_index] 
+      lighting_schedule = zone[:lighting_schedule][floor_index] 
+      lighting_power_density = zone[:lighting_power_density][floor_index]
+      plug_load_schedule = zone[:plug_load_schedule][floor_index]
+      plug_load_power_density = zone[:plug_load_power_density][floor_index] %>
       GAIN <%= "OccupancySchedule" + occupancy_schedule %> 
         gnPower = <%= $occupant_power * occupancy %> * <%= set_occupancy_schedule(occupancy_schedule) %>
+        gnFrRad = 0.50
+        gnFrLat = 0.45
+      GAIN <%= "LightingSchedule" + Lighting_schedule %> 
+        gnPower = <%= $lighting_power_density %> * <%= set_lighting_schedule(lighting_schedule) %>
+        gnFrRad = 0.50
+        gnFrLat = 0.45
+      GAIN <%= "PlugLoadSchedule" + plug_load_schedule %> 
+        gnPower = <%= $plug_load_power_density %> * <%= set_lighting_schedule(plug_load_schedule) %>
         gnFrRad = 0.50
         gnFrLat = 0.45
       <% for surface in zone[:surfaces] %>
@@ -774,7 +892,7 @@ end %>
           sfType = "FLOOR"
           sfArea = <%= zone[:area] %>
           sfExCnd = "ADJZN"
-          sfAdjZn = <%= "Floor" + (floor- 1).to_s + "Plenum" %>
+          sfAdjZn = <%= "Floor" + (floor - 1).to_s + "Plenum" %>
           sfCon = "Interior Floor"
           sfModel = "QUICK"
           <% set_common_surface_variables() %>
