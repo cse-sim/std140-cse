@@ -44,7 +44,7 @@ Information for Item 8 shall be permitted, but is not required.
 
 2. SOFTWARE NAME: California Simulation Engine (CSE)
 
-3. SOFTWARE VERSION (unique software version identifier): 0.868.1
+3. SOFTWARE VERSION (unique software version identifier): 0.923.0
 
 4. OPERATING SYSTEM REQUIREMENTS: Windows XP and later
 
