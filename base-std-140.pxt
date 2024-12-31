@@ -699,6 +699,7 @@ for floor in floors
           sfModel = "FORWARD_DIFFERENCE"
         <% set_common_surface_variables() %>
       <% end %>
+        <% for surface in zone[:surfaces] # Add wall surfaces %>
         SURFACE <%= surface[:name] %>
           sfType = <%= "WALL" %>
           sfArea = <%= surface[:surface_area] %>
