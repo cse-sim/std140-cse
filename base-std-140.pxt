@@ -662,6 +662,13 @@ end %>
   end
 end 
 
+def set_zone_type(zone_name)
+  if zone_name == "Plenum"
+    return "UZM"
+  else # non-plenun zone type
+    return "CZM"
+  end
+end 
 
 def set_zone_volume_and_height_dimensions(zone,floor)
   if zone[:name] == "Plenum" %>
@@ -681,7 +688,7 @@ for floor in floors
     zone_name = zone[:name]
     zone_floor_area = zone[:area] %>
     ZONE <%= "Floor" + floor.to_s + zone_name %>
-      znModel = "CZM"
+      znModel = <%= set_zone_type(zone_name) %>
       znArea = <%= zone_floor_area %>
       infAC = 0
       <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
