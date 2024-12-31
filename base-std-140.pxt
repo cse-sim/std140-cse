@@ -858,12 +858,12 @@ end %>
         gnFrLat = 0.45
       GAIN <%= "LightingSchedule" + Lighting_schedule %> 
         gnPower = <%= lighting_power_density * zone_floor_area %> * <%= set_lighting_schedule(lighting_schedule) %>
-        gnFrRad = 0.50
-        gnFrLat = 0.45
+        gnFrRad = 0.70
+        gnFrLat = 0
       GAIN <%= "PlugLoadSchedule" + plug_load_schedule %> 
         gnPower = <%= plug_load_power_density * zone_floor_area %> * <%= set_lighting_schedule(plug_load_schedule) %>
         gnFrRad = 0.50
-        gnFrLat = 0.45
+        gnFrLat = 0
       <% for surface in zone[:surfaces] %>
       SURFACE <%= surface[:name] %>
         sfType = <%= "WALL" %>
