@@ -708,12 +708,12 @@ for floor in floors
             sfExCnd = "ADJZN"
             sfAdjZn = <%= "Floor" + (floor).to_s + surface[:name] %>
             sfCon = "Interior Wall"
-            sfModel = "QUICK"
+            sfModel = FORWARD_DIFFERENCE
             <% set_common_surface_variables() %>
           <% else # Exterior wall surface %> 
             sfExCnd = "AMBIENT"
             sfCon = "Exterior Wall"
-            sfModel = "QUICK"
+            sfModel = FORWARD_DIFFERENCE
             <% set_common_surface_variables() %>
           <% end %>
         <% end %>
@@ -747,12 +747,12 @@ for floor in floors
           sfExCnd = "ADJZN"
           sfAdjZn = <%= "Floor" + (floor).to_s + surface[:name] %>
           sfCon = "Interior Wall"
-          sfModel = "QUICK"
+          sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
         <% else # Add Add non-plenum zone exterior surfaces %> 
           sfExCnd = "AMBIENT"
           sfCon = "Exterior Wall"
-          sfModel = "QUICK"
+          sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
 
           WINDOW <%= "Floor" + (floor).to_s + surface[:name] %>
@@ -779,7 +779,7 @@ for floor in floors
           sfArea = <%= zone[:area] %>
           sfExCnd = "ADIABATIC"
           sfCon = "Slab-On-Grade"
-          sfModel = "FD"
+          sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
         
       <% else # Add floor surface for non-plenum surface on second or third floors %>
@@ -789,7 +789,7 @@ for floor in floors
           sfExCnd = "ADJZN"
           sfAdjZn = <%= "Floor" + (floor - 1).to_s + "Plenum" %>
           sfCon = "Interior Floor"
-          sfModel = "QUICK"
+          sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
       <% end %>
 
@@ -799,7 +799,7 @@ for floor in floors
           sfExCnd = "ADJZN"
           sfAdjZn = <%= "Floor" + floor.to_s + "Plenum" %>
           sfCon = "Dropped Ceiling"
-          sfModel = "QUICK"
+          sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
     <% end %>
   <% end %>
