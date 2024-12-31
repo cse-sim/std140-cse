@@ -932,18 +932,18 @@ end %>
   <% end %>
 <% end %>
 
-EXPORTFILE "Output"
-  xfFileName = "Output.csv"
-  xfFileStat = OVERWRITE
+// EXPORTFILE "Output"
+  // xfFileName = "Output.csv"
+  // xfFileStat = OVERWRITE
 
-EXPORT
-  exExportfile = "Output"
-  exHeader = ColumnsOnly
-  exFooter = No
-  exType = UDT
-  exFreq = HOUR
-  exDayBeg = JAN 1
-  exDayEnd = DEC 31
+// EXPORT
+  // exExportfile = "Output"
+  // exHeader = ColumnsOnly
+  // exFooter = No
+  // exType = UDT
+  // exFreq = HOUR
+  // exDayBeg = JAN 1
+  // exDayEnd = DEC 31
 
 
 RUN
