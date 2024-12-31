@@ -23,7 +23,7 @@ def convert_celsius_to_fahrenheit(celsius)
 end
 
 # Internal use
-nsteps = 10
+nsteps = 6
 %>
 
 <%
@@ -277,12 +277,6 @@ zones = [
         :surface_area => core_1_width * $floor_height,
         :surface_facing_type => "Interior"
       },
-      {
-        :name => "Corner_Northwest",
-        :azimuth => 270,
-        :surface_area => corner_length * $floor_height,
-        :surface_facing_type => "Interior"
-      }
     ]
   },
   {
@@ -315,12 +309,6 @@ zones = [
         :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
-      {
-        :name => "Perimeter_North",
-        :azimuth => 270,
-        :surface_area => corner_length * $floor_height,
-        :surface_facing_type => "Interior"
-      }
     ]
   },
   {
@@ -333,12 +321,6 @@ zones = [
     :plug_load_schedule => ["I","I","I"],
     :plug_load_power_density => [13.99,11.84,11.84],
     :surfaces => [
-      {
-        :name => "Corner_Northwest",
-        :azimuth => 0,
-        :surface_area => corner_length * $floor_height,
-        :surface_facing_type => "Interior"
-      },
       {
         :name => "Core_1",
         :azimuth => 90,
@@ -371,12 +353,6 @@ zones = [
     :plug_load_power_density => [11.84,11.84,11.84],
     :surfaces => [
       {
-        :name => "Perimeter_North",
-        :azimuth => 0,
-        :surface_area => core_1_width * $floor_height,
-        :surface_facing_type => "Interior"
-      },
-      {
         :name => "Core_2",
         :azimuth => 90,
         :surface_area => perimeter_ew_length * $floor_height,
@@ -388,12 +364,6 @@ zones = [
         :surface_area => core_1_width * $floor_height,
         :surface_facing_type => "Interior"
       },
-      {
-        :name => "Perimeter_West",
-        :azimuth => 270,
-        :surface_area => perimeter_ew_length * $floor_height,
-        :surface_facing_type => "Interior"
-      }
     ]
   },
   {
@@ -407,12 +377,6 @@ zones = [
     :plug_load_power_density => [7.64,7.64,7.64],
     :surfaces => [
       {
-        :name => "Perimeter_North",
-        :azimuth => 0,
-        :surface_area => core_2_width * $floor_height,
-        :surface_facing_type => "Interior"
-      },
-      {
         :name => "Core_3",
         :azimuth => 90,
         :surface_area => perimeter_ew_length * $floor_height,
@@ -424,12 +388,6 @@ zones = [
         :surface_area => core_2_width * $floor_height,
         :surface_facing_type => "Interior"
       },
-      {
-        :name => "Core_1",
-        :azimuth => 270,
-        :surface_area => perimeter_ew_length * $floor_height,
-        :surface_facing_type => "Interior"
-      }
     ]
   },
   {
@@ -443,12 +401,6 @@ zones = [
     :plug_load_power_density => [10.55,10.55,10.55],
     :surfaces => [
       {
-        :name => "Perimeter_North",
-        :azimuth => 0,
-        :surface_area => core_3_width * $floor_height,
-        :surface_facing_type => "Interior"
-      },
-      {
         :name => "Perimeter_East",
         :azimuth => 90,
         :surface_area => perimeter_ew_length * $floor_height,
@@ -460,12 +412,6 @@ zones = [
         :surface_area => core_3_width * $floor_height,
         :surface_facing_type => "Interior"
       },
-      {
-        :name => "Core_2",
-        :azimuth => 270,
-        :surface_area => perimeter_ew_length * $floor_height,
-        :surface_facing_type => "Interior"
-      }
     ]
   },
   {
@@ -479,12 +425,6 @@ zones = [
     :plug_load_power_density => [11.84,11.84,11.84],
     :surfaces => [
       {
-        :name => "Corner_Northeast",
-        :azimuth => 0,
-        :surface_area => corner_length * $floor_height,
-        :surface_facing_type => "Interior"
-      },
-      {
         :name => "Exterior_East",
         :azimuth => 90,
         :surface_area => perimeter_ew_length * $floor_height,
@@ -497,12 +437,6 @@ zones = [
         :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
-      {
-        :name => "Core_3",
-        :azimuth => 270,
-        :surface_area => perimeter_ew_length * $floor_height,
-        :surface_facing_type => "Interior"
-      }
     ]
   },
   {
@@ -515,12 +449,6 @@ zones = [
     :plug_load_schedule => ["I","I","I"],
     :plug_load_power_density => [13.99,13.99,13.99],
     :surfaces => [
-      {
-        :name => "Perimeter_West",
-        :azimuth => 0,
-        :surface_area => corner_length * $floor_height,
-        :surface_facing_type => "Interior"
-      },
       {
         :name => "Perimeter_South",
         :azimuth => 90,
@@ -554,24 +482,6 @@ zones = [
     :plug_load_power_density => [11.84,11.84,11.84],
     :surfaces => [
       {
-        :name => "Core_1",
-        :azimuth => 0,
-        :surface_area => core_1_width * $floor_height,
-        :surface_facing_type => "Interior"
-      },
-      {
-        :name => "Core_2",
-        :azimuth => 0,
-        :surface_area => core_2_width * $floor_height,
-        :surface_facing_type => "Interior"
-      },
-      {
-        :name => "Core_3",
-        :azimuth => 0,
-        :surface_area => core_3_width * $floor_height,
-        :surface_facing_type => "Interior"
-      },
-      {
         :name => "Corner_Southeast",
         :azimuth => 90,
         :surface_area => corner_length * $floor_height,
@@ -584,12 +494,6 @@ zones = [
         :surface_facing_type => "Exterior",
         :number_windows => 7
       },
-      {
-        :name => "Corner_Southwest",
-        :azimuth => 270,
-        :surface_area => corner_length * $floor_height,
-        :surface_facing_type => "Interior"
-      }
     ]
   },
   {
@@ -602,12 +506,6 @@ zones = [
     :plug_load_schedule => ["I","I","I"],
     :plug_load_power_density => [13.99,13.99,13.99],
     :surfaces => [
-      {
-        :name => "Perimeter_East",
-        :azimuth => 0,
-        :surface_area => corner_length * $floor_height,
-        :surface_facing_type => "Interior"
-      },
       {
         :name => "Exterior_East",
         :azimuth => 90,
@@ -622,12 +520,6 @@ zones = [
         :surface_facing_type => "Exterior",
         :number_windows => 1
       },
-      {
-        :name => "Perimeter_South",
-        :azimuth => 270,
-        :surface_area => corner_length * $floor_height,
-        :surface_facing_type => "Interior"
-      }
     ]
   },
   {
@@ -798,39 +690,14 @@ for floor in floors
     
 
     <% if zone_name == "Plenum" # Add plenum zones %>
-      <% for plenum_adjacent_zone_surface in zones # Add all non-plenum zones to plenum zone object as surfaces %>
-        <% plenum_adjacent_zone_surface_name = plenum_adjacent_zone_surface[:name] %>
-        <% if plenum_adjacent_zone_surface_name != "Plenum" # Skip plenum zone %>
-          SURFACE <%= "Floor" + floor.to_s + plenum_adjacent_zone_surface_name %>
-            sfType = "FLOOR"
-            sfArea = <%= plenum_adjacent_zone_surface[:area] %>
-            sfExCnd = "ADJZN"
-            sfAdjZn = <%= "Floor" + floor.to_s + plenum_adjacent_zone_surface_name %>
-            sfCon = "Dropped Ceiling"
-            sfModel = "QUICK"
-            <% set_common_surface_variables() %>
-          <% if floor == 3 # TODO: need to simplify Floor3Plenum ceiling to one surface%>
-          SURFACE <%= "Roof" + plenum_adjacent_zone_surface_name %>
-            sfType = "CEILING"
-            sfArea = <%= plenum_adjacent_zone_surface[:area] %>
-            sfExCnd = "AMBIENT"
-            sfCon = "Roof"
-            sfModel = "QUICK"
-            <% set_common_surface_variables() %>
-            
-          <% else %>
-          SURFACE <%= "Floor" + (floor + 1).to_s + plenum_adjacent_zone_surface_name %>
-            sfType = "CEILING"
-            sfArea = <%= plenum_adjacent_zone_surface[:area] %>
-            sfExCnd = "ADJZN"
-            sfAdjZn = <%= "Floor" + (floor + 1).to_s + plenum_adjacent_zone_surface_name %>
-            sfCon = "Interior Floor"
-            sfModel = "QUICK"
-            <% set_common_surface_variables() %>
-          <% end %>
-
-        <% end %>
-      <% end %>
+      <% if floor == 3 %>
+        SURFACE "Roof"
+          sfType = "CEILING"
+          sfArea = <%= floor_area %>
+          sfExCnd = "AMBIENT"
+          sfCon = "Roof"
+          sfModel = "QUICK"
+        <% set_common_surface_variables() %>
         <% for surface in zone[:surfaces] # Add wall surfaces %> 
         SURFACE <%= surface[:name] %>
           sfType = <%= "WALL" %>
@@ -841,12 +708,12 @@ for floor in floors
             sfExCnd = "ADJZN"
             sfAdjZn = <%= "Floor" + (floor).to_s + surface[:name] %>
             sfCon = "Interior Wall"
-            sfModel = "QUICK"
+            sfModel = FORWARD_DIFFERENCE
             <% set_common_surface_variables() %>
           <% else # Exterior wall surface %> 
             sfExCnd = "AMBIENT"
             sfCon = "Exterior Wall"
-            sfModel = "QUICK"
+            sfModel = FORWARD_DIFFERENCE
             <% set_common_surface_variables() %>
           <% end %>
         <% end %>
@@ -880,12 +747,12 @@ for floor in floors
           sfExCnd = "ADJZN"
           sfAdjZn = <%= "Floor" + (floor).to_s + surface[:name] %>
           sfCon = "Interior Wall"
-          sfModel = "QUICK"
+          sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
         <% else # Add Add non-plenum zone exterior surfaces %> 
           sfExCnd = "AMBIENT"
           sfCon = "Exterior Wall"
-          sfModel = "QUICK"
+          sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
 
           WINDOW <%= "Floor" + (floor).to_s + surface[:name] %>
@@ -907,12 +774,12 @@ for floor in floors
 
 
       <% if floor == 1 # Add ground surface for non-plenum zones on first floor %> 
-        SURFACE <%= "Ground" %>
+        SURFACE <%= "Ground" + zone_name %>
           sfType = "FLOOR"
           sfArea = <%= zone[:area] %>
           sfExCnd = "ADIABATIC"
           sfCon = "Slab-On-Grade"
-          sfModel = "FD"
+          sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
         
       <% else # Add floor surface for non-plenum surface on second or third floors %>
@@ -922,7 +789,7 @@ for floor in floors
           sfExCnd = "ADJZN"
           sfAdjZn = <%= "Floor" + (floor - 1).to_s + "Plenum" %>
           sfCon = "Interior Floor"
-          sfModel = "QUICK"
+          sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
       <% end %>
 
@@ -932,7 +799,7 @@ for floor in floors
           sfExCnd = "ADJZN"
           sfAdjZn = <%= "Floor" + floor.to_s + "Plenum" %>
           sfCon = "Dropped Ceiling"
-          sfModel = "QUICK"
+          sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
     <% end %>
   <% end %>
