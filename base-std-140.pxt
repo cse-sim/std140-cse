@@ -18,8 +18,8 @@ $k_r = 9/5.0
 $q_c = $w_btu/$m2_ft2
 $u_c = $q_c/$k_r
 
-def c_f(c)
-  return c*9/5.0 + 32.0
+def convert_celsius_to_fahrenheit(celsius)
+  return celsius * 9/5.0 + 32.0
 end
 
 # Internal use
