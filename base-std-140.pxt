@@ -862,7 +862,7 @@ for floor in floors
         gnPower = <%= $occupant_power * occupancy %> * <%= set_occupancy_schedule(occupancy_schedule) %>
         gnFrRad = 0.50
         gnFrLat = 0.45
-      GAIN <%= "LightingSchedule" + Lighting_schedule %> 
+      GAIN <%= "LightingSchedule" + lighting_schedule %> 
         gnPower = <%= lighting_power_density * zone_floor_area %> * <%= set_lighting_schedule(lighting_schedule) %>
         gnFrRad = 0.70
         gnFrLat = 0
