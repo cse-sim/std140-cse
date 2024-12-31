@@ -206,7 +206,7 @@ zones = [
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,8.61,8.61],
     :plug_load_schedule => ["I","I","I"],
-    :plug_load_density => [13.99,15.07,15.07]
+    :plug_load_power_density => [13.99,15.07,15.07],
     :surfaces => [
       {
         :name => "Exterior_North",
@@ -244,7 +244,7 @@ zones = [
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.1,7.53,7.53],
     :plug_load_schedule => ["I","I","I"],
-    :plug_load_density => [11.84,11.84,11.84]
+    :plug_load_power_density => [11.84,11.84,11.84],
     :surfaces => [
       {
         :name => "Exterior_North",
@@ -293,7 +293,7 @@ zones = [
     :lighting_schedule => ["F","F","F"],
     :lighting_power_density => [3.66,3.66,3.66],
     :plug_load_schedule => ["J","J","J"],
-    :plug_load_density => [9.69,9.69,9.69]
+    :plug_load_power_density => [9.69,9.69,9.69],
     :surfaces => [
       {
         :name => "Exterior_North",
@@ -331,7 +331,7 @@ zones = [
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,7.53,7.53],
     :plug_load_schedule => ["I","I","I"],
-    :plug_load_density => [13.99,11.84,11.84]
+    :plug_load_power_density => [13.99,11.84,11.84],
     :surfaces => [
       {
         :name => "Corner_Northwest",
@@ -368,7 +368,7 @@ zones = [
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.1,7.1,7.1],
     :plug_load_schedule => ["I","I","I"],
-    :plug_load_density => [11.84,11.84,11.84]
+    :plug_load_power_density => [11.84,11.84,11.84],
     :surfaces => [
       {
         :name => "Perimeter_North",
@@ -404,7 +404,7 @@ zones = [
     :lighting_schedule => ["G","G","G"],
     :lighting_power_density => [1.51,1.51,1.51],
     :plug_load_schedule => ["K","K","K"],
-    :plug_load_density => [7.64,7.64,7.64]
+    :plug_load_power_density => [7.64,7.64,7.64],
     :surfaces => [
       {
         :name => "Perimeter_North",
@@ -438,9 +438,9 @@ zones = [
     :occupancy_schedule => ["D","D","D"],
     :occupancy => [25,25,25],
     :lighting_schedule => ["H","H","H"],
-    :lighting_power_density => [,,],
+    :lighting_power_density => [1.29,1.29,1.29],
     :plug_load_schedule => ["L","L","L"],
-    :plug_load_density => [1.29,1.29,1.29]
+    :plug_load_power_density => [10.55,10.55,10.55],
     :surfaces => [
       {
         :name => "Perimeter_North",
@@ -476,7 +476,7 @@ zones = [
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.53,7.53,7.53],
     :plug_load_schedule => ["I","I","I"],
-    :plug_load_density => [11.84,11.84,11.84]
+    :plug_load_power_density => [11.84,11.84,11.84],
     :surfaces => [
       {
         :name => "Corner_Northeast",
@@ -513,7 +513,7 @@ zones = [
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,6.14,6.14],
     :plug_load_schedule => ["I","I","I"],
-    :plug_load_density => [13.99,13.99,13.99]
+    :plug_load_power_density => [13.99,13.99,13.99],
     :surfaces => [
       {
         :name => "Perimeter_West",
@@ -551,7 +551,7 @@ zones = [
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.1,7.1,7.1],
     :plug_load_schedule => ["I","I","I"],
-    :plug_load_density => [11.84,11.84,11.84]
+    :plug_load_power_density => [11.84,11.84,11.84],
     :surfaces => [
       {
         :name => "Core_1",
@@ -600,7 +600,7 @@ zones = [
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,6.14,6.14],
     :plug_load_schedule => ["I","I","I"],
-    :plug_load_density => [13.99,13.99,13.99]
+    :plug_load_power_density => [13.99,13.99,13.99],
     :surfaces => [
       {
         :name => "Perimeter_East",
