@@ -738,6 +738,28 @@ def set_heating_schedule(heating_schedule)
   else # heating schedule "Q"
     return "hourval(21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11)"
   end
+end
+
+def set_heating_and_cooling_schedules_and_capacities(zone_name)
+  if zone_name == "Core_2"
+    cooling_schedule = "P"
+    heating_schedule = "R"
+  else # non-Core_2 zones; Plenum schedules are set, but are not used
+    cooling_schedule = "O"
+    heating_schedule = "Q"
+  end
+
+  if zone_name == "Plenum" %>
+    znTC = 200
+    znTH = 1
+    znQMxC = 0
+    znQMxH = 0
+  <% else # non-plenum zones %>
+    znTC = <%= 9.0/5.0 %> * <%= set_cooling_schedule(cooling_schedule) %> + <%= 32.0 %>
+    znTH = <%= 9.0/5.0 %> * <%= set_heating_schedule(heating_schedule) %> + <%= 32.0 %>
+    znQMxC = <%= 1000000 * $w_btu %>
+    znQMxH = <%= 1000000 * $w_btu %>
+  <% end
 end %>
 
 
