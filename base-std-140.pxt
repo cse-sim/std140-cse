@@ -698,7 +698,7 @@ for floor in floors
           sfCon = "Roof"
           sfModel = "QUICK"
         <% set_common_surface_variables() %>
-        <% for surface in zone[:surfaces] # Add wall surfaces %> 
+      <% end %>
         SURFACE <%= surface[:name] %>
           sfType = <%= "WALL" %>
           sfArea = <%= surface[:surface_area] %>
