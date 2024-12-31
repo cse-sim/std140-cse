@@ -704,38 +704,38 @@ def set_plug_load_schedule(plug_load_schedule)
   end
 end 
 
-def set_ventilation_schedule(schedule)
-  if schedule == "M1"
+def set_ventilation_schedule(ventilation_schedule)
+  if ventilation_schedule == "M1"
     return "select($ISWEHOL,0,default hourval(0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0))"
-  else # schedule == "M2"
+  else # ventilation schedule "M2"
     return "hourval(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)"
   end
 end
 
 
-def set_infiltration_schedule(schedule)
-  if schedule == "N1"
+def set_infiltration_schedule(infiltration_schedule)
+  if infiltration_schedule == "N1"
     return "select($ISWEHOL,0,default hourval(1,1,1,1,1,1,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,1,1))"
-  elsif schedule == "N2"
+  elsif infiltration_schedule == "N2"
     return "hourval(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)"
-  else # schedule == "N3"
+  else # infiltration schedule "N3"
     return "hourval(0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25)"
   end
 end
 
 
-def set_cooling_schedule(zone)
-  if zone == "O" # Cooling except Top/Middle/Bottom_Core_2
-    return "select($ISWEHOL,0,default hourval(26.67,26.67,26.67,26.67,26.67,26.67,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,26.67,26.67))"
-  else # Cooling Top/Middle/Bottom_Core_2
+def set_cooling_schedule(cooling_schedule)
+  if cooling_schedule == "O"
+    return "select($ISWEHOL, hourval(26.67,26.67,26.67,26.67,26.67,26.67,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,26.67,26.67), default hourval(26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67))"
+  else # cooling schedule "P"
     return "hourval(23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89)"
   end
 end
 
-def set_heating_schedule(zone)
-  if zone == "Q" # Heating except Top/Middle/Bottom_Core_2
-    return "select($ISWEHOL,0,default hourval(15.56,15.56,15.56,15.56,15.56,15.56,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,15.56,15.56))"
-  else # Heating Top/Middle/Bottom_Core_2
+def set_heating_schedule(heating_schedule)
+  if heating_schedule == "Q"
+    return "select($ISWEHOL, hourval(15.56,15.56,15.56,15.56,15.56,15.56,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,15.56,15.56), default hourval(15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56))"
+  else # heating schedule "Q"
     return "hourval(21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11)"
   end
 end %>
