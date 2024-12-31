@@ -201,12 +201,16 @@ zones = [
   {
     :name => "Corner_Northwest", 
     :area => corner_area,
+    :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [11,15,15],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,8.61,8.61],
     :plug_load_schedule => ["I","I","I"],
     :plug_load_power_density => [13.99,15.07,15.07],
+    :ventilation_schedule => "M1",
+    :people_outdoor_air_rate => [8.5,8.5,8.5],
+    :area_outdoor_air_rate => [1.10,1.10,1.10],
     :surfaces => [
       {
         :name => "Exterior_North",
@@ -239,12 +243,16 @@ zones = [
   {
     :name => "Perimeter_North",
     :area => perimeter_ns_area,
+    :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [10,10,10],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.1,7.53,7.53],
     :plug_load_schedule => ["I","I","I"],
     :plug_load_power_density => [11.84,11.84,11.84],
+    :ventilation_schedule => "M1",
+    :people_outdoor_air_rate => [8.5,8.5,8.5],
+    :area_outdoor_air_rate => [1.10,1.10,1.10],
     :surfaces => [
       {
         :name => "Exterior_North",
@@ -282,12 +290,16 @@ zones = [
   {
     :name => "Corner_Northeast",
     :area => corner_area,
+    :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["B","B","B"],
     :occupancy => [5,5,5],
     :lighting_schedule => ["F","F","F"],
     :lighting_power_density => [3.66,3.66,3.66],
     :plug_load_schedule => ["J","J","J"],
     :plug_load_power_density => [9.69,9.69,9.69],
+    :ventilation_schedule => "M1",
+    :people_outdoor_air_rate => [8.5,8.5,8.5],
+    :area_outdoor_air_rate => [1.10,1.10,1.10],
     :surfaces => [
       {
         :name => "Exterior_North",
@@ -314,12 +326,16 @@ zones = [
   {
     :name => "Perimeter_West",
     :area => perimeter_ew_area,
+    :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [59,6,6],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,7.53,7.53],
     :plug_load_schedule => ["I","I","I"],
     :plug_load_power_density => [13.99,11.84,11.84],
+    :ventilation_schedule => "M1",
+    :people_outdoor_air_rate => [8.5,8.5,8.5],
+    :area_outdoor_air_rate => [1.10,1.10,1.10],
     :surfaces => [
       {
         :name => "Core_1",
@@ -345,12 +361,16 @@ zones = [
   {
     :name => "Core_1",
     :area => core_1_area,
+    :infiltration_ach => [0.75,0,0],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [10,10,10],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.1,7.1,7.1],
     :plug_load_schedule => ["I","I","I"],
     :plug_load_power_density => [11.84,11.84,11.84],
+    :ventilation_schedule => "M1",
+    :people_outdoor_air_rate => [8.5,8.5,8.5],
+    :area_outdoor_air_rate => [1.10,1.10,1.10],
     :surfaces => [
       {
         :name => "Core_2",
@@ -369,12 +389,16 @@ zones = [
   {
     :name => "Core_2",
     :area => core_2_area,
+    :infiltration_ach => [0.75,0,0],
     :occupancy_schedule => ["C","C","C"],
     :occupancy => [0,0,0],
     :lighting_schedule => ["G","G","G"],
     :lighting_power_density => [1.51,1.51,1.51],
     :plug_load_schedule => ["K","K","K"],
     :plug_load_power_density => [7.64,7.64,7.64],
+    :ventilation_schedule => "M1",
+    :people_outdoor_air_rate => [8.5,8.5,8.5],
+    :area_outdoor_air_rate => [1.10,1.10,1.10],
     :surfaces => [
       {
         :name => "Core_3",
@@ -393,12 +417,16 @@ zones = [
   {
     :name => "Core_3",
     :area => core_3_area,
+    :infiltration_ach => [0.75,0,0],
     :occupancy_schedule => ["D","D","D"],
     :occupancy => [25,25,25],
     :lighting_schedule => ["H","H","H"],
     :lighting_power_density => [1.29,1.29,1.29],
     :plug_load_schedule => ["L","L","L"],
     :plug_load_power_density => [10.55,10.55,10.55],
+    :ventilation_schedule => "M1",
+    :people_outdoor_air_rate => [8.5,8.5,8.5],
+    :area_outdoor_air_rate => [1.10,1.10,1.10],
     :surfaces => [
       {
         :name => "Perimeter_East",
@@ -417,12 +445,16 @@ zones = [
   {
     :name => "Perimeter_East",
     :area => perimeter_ew_area,
+    :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [6,6,6],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.53,7.53,7.53],
     :plug_load_schedule => ["I","I","I"],
     :plug_load_power_density => [11.84,11.84,11.84],
+    :ventilation_schedule => "M1",
+    :people_outdoor_air_rate => [8.5,8.5,8.5],
+    :area_outdoor_air_rate => [1.10,1.10,1.10],
     :surfaces => [
       {
         :name => "Exterior_East",
@@ -442,12 +474,16 @@ zones = [
   {
     :name => "Corner_Southwest", 
     :area => corner_area,
+    :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [11,11,11],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,6.14,6.14],
     :plug_load_schedule => ["I","I","I"],
     :plug_load_power_density => [13.99,13.99,13.99],
+    :ventilation_schedule => "M1",
+    :people_outdoor_air_rate => [8.5,8.5,8.5],
+    :area_outdoor_air_rate => [1.10,1.10,1.10],
     :surfaces => [
       {
         :name => "Perimeter_South",
@@ -474,12 +510,16 @@ zones = [
   {
     :name => "Perimeter_South",
     :area => perimeter_ns_area,
+    :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [10,10,10],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.1,7.1,7.1],
     :plug_load_schedule => ["I","I","I"],
     :plug_load_power_density => [11.84,11.84,11.84],
+    :ventilation_schedule => "M1",
+    :people_outdoor_air_rate => [8.5,8.5,8.5],
+    :area_outdoor_air_rate => [1.10,1.10,1.10],
     :surfaces => [
       {
         :name => "Corner_Southeast",
@@ -499,12 +539,16 @@ zones = [
   {
     :name => "Corner_Southeast", 
     :area => corner_area,
+    :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [11,11,11],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,6.14,6.14],
     :plug_load_schedule => ["I","I","I"],
     :plug_load_power_density => [13.99,13.99,13.99],
+    :ventilation_schedule => "M1",
+    :people_outdoor_air_rate => [8.5,8.5,8.5],
+    :area_outdoor_air_rate => [1.10,1.10,1.10],
     :surfaces => [
       {
         :name => "Exterior_East",
@@ -525,6 +569,7 @@ zones = [
   {
     :name => "Plenum", 
     :area => floor_area,
+    :infiltration_ach => [0.21,0.21,1.90],
     :surfaces => [
       {
         :name => "Exterior_North",
@@ -641,12 +686,7 @@ def set_heating_and_cooling_schedules_and_capacities(zone_name)
     heating_schedule = "Q"
   end
 
-  if zone_name == "Plenum" %>
-    znTC = 200
-    znTH = 1
-    znQMxC = 0
-    znQMxH = 0
-  <% else # non-plenum zones %>
+  if zone_name != "Plenum" # non-plenum zones %>
     znTC = <%= 9.0/5.0 %> * <%= set_cooling_schedule(cooling_schedule) %> + <%= 32.0 %>
     znTH = <%= 9.0/5.0 %> * <%= set_heating_schedule(heating_schedule) %> + <%= 32.0 %>
     znQMxC = <%= -1000000 * $w_btu %>
@@ -659,14 +699,6 @@ end %>
     return $plenum_height
   else # non-plenum floor height
     return $floor_height
-  end
-end 
-
-def set_zone_type(zone_name)
-  if zone_name == "Plenum"
-    return "UZM"
-  else # non-plenun zone type
-    return "CZM"
   end
 end 
 
@@ -684,19 +716,18 @@ end
 
 for floor in floors
   floor_index = floor - 1
-  for zone in zones
+  for zone in zones 
     zone_name = zone[:name]
-    zone_floor_area = zone[:area] %>
-    ZONE <%= "Floor" + floor.to_s + zone_name %>
-      znModel = <%= set_zone_type(zone_name) %>
-      znArea = <%= zone_floor_area %>
-      infAC = 0
-      <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
-      znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
-      <% set_zone_volume_and_height_dimensions(zone,floor) %>
-    
+    zone_floor_area = zone[:area] 
+    if zone_name == "Plenum" # Add plenum zones %>
 
-    <% if zone_name == "Plenum" # Add plenum zones %>
+      ZONE <%= "Floor" + floor.to_s + zone_name %>
+        znModel = "UZM"
+        znArea = <%= zone_floor_area %>
+        infAC = 0
+        znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
+        znHcAirX = 0
+        <% set_zone_volume_and_height_dimensions(zone,floor) %>
       <% if floor == 3 %>
         SURFACE "Roof"
           sfType = "CEILING"
@@ -732,7 +763,21 @@ for floor in floors
       lighting_schedule = zone[:lighting_schedule][floor_index] 
       lighting_power_density = zone[:lighting_power_density][floor_index]
       plug_load_schedule = zone[:plug_load_schedule][floor_index]
-      plug_load_power_density = zone[:plug_load_power_density][floor_index] %>
+      plug_load_power_density = zone[:plug_load_power_density][floor_index]
+      ventilation_schedule = zone[:ventilation_schedule]
+      people_outdoor_air_rate = zone[:people_outdoor_air_rate][floor_index]
+      area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index] %>
+
+      ZONE <%= "Floor" + floor.to_s + zone_name %>
+        znModel = "CZM"
+        znArea = <%= zone_floor_area %>
+        infAC = <%= zone[:infiltration_ach][floor_index] %>
+        <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
+        znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
+        <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
+        znHcAirX = <%= occupancy * people_outdoor_air_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %> + <%= zone_floor_area * area_outdoor_air_rate %>
+        <% set_zone_volume_and_height_dimensions(zone,floor) %>
+
       GAIN <%= "OccupancySchedule" + occupancy_schedule %> 
         gnPower = <%= $occupant_power * occupancy %> * <%= set_occupancy_schedule(occupancy_schedule) %>
         gnFrRad = 0.50
