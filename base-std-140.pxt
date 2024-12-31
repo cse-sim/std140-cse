@@ -775,10 +775,10 @@ def set_zone_volume_and_height_dimensions(zone,floor)
   if zone[:name] == "Plenum" %>
     znVol = <%= zone[:area] * $plenum_height %>
     znCeilingHt = <%= ($floor_height + $plenum_height) * floor  %>
-    znFloorZ = <%= $floor_height * floor %>
+    znFloorZ = <%= ($floor_height * floor) + ($plenum_height * (floor - 1)) %>
   <% else %>
     znVol = <%= zone[:area] * $floor_height %>
-    znCeilingHt = <%= ($floor_height * floor) + ($plenum_height * (floor))  %>
+    znCeilingHt = <%= ($floor_height * floor) + ($plenum_height * (floor - 1))  %>
     znFloorZ = <%= ($floor_height + $plenum_height) * (floor-1) %>
   <% end
 end
