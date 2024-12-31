@@ -690,39 +690,14 @@ for floor in floors
     
 
     <% if zone_name == "Plenum" # Add plenum zones %>
-      <% for plenum_adjacent_zone_surface in zones # Add all non-plenum zones to plenum zone object as surfaces %>
-        <% plenum_adjacent_zone_surface_name = plenum_adjacent_zone_surface[:name] %>
-        <% if plenum_adjacent_zone_surface_name != "Plenum" # Skip plenum zone %>
-          SURFACE <%= "Floor" + floor.to_s + plenum_adjacent_zone_surface_name %>
-            sfType = "FLOOR"
-            sfArea = <%= plenum_adjacent_zone_surface[:area] %>
-            sfExCnd = "ADJZN"
-            sfAdjZn = <%= "Floor" + floor.to_s + plenum_adjacent_zone_surface_name %>
-            sfCon = "Dropped Ceiling"
-            sfModel = "QUICK"
-            <% set_common_surface_variables() %>
-          <% if floor == 3 # TODO: need to simplify Floor3Plenum ceiling to one surface%>
-          SURFACE <%= "Roof" + plenum_adjacent_zone_surface_name %>
-            sfType = "CEILING"
-            sfArea = <%= plenum_adjacent_zone_surface[:area] %>
-            sfExCnd = "AMBIENT"
-            sfCon = "Roof"
-            sfModel = "QUICK"
-            <% set_common_surface_variables() %>
-            
-          <% else %>
-          SURFACE <%= "Floor" + (floor + 1).to_s + plenum_adjacent_zone_surface_name %>
-            sfType = "CEILING"
-            sfArea = <%= plenum_adjacent_zone_surface[:area] %>
-            sfExCnd = "ADJZN"
-            sfAdjZn = <%= "Floor" + (floor + 1).to_s + plenum_adjacent_zone_surface_name %>
-            sfCon = "Interior Floor"
-            sfModel = "QUICK"
-            <% set_common_surface_variables() %>
-          <% end %>
-
-        <% end %>
-      <% end %>
+      <% if floor == 3 %>
+        SURFACE "Roof"
+          sfType = "CEILING"
+          sfArea = <%= floor_area %>
+          sfExCnd = "AMBIENT"
+          sfCon = "Roof"
+          sfModel = "QUICK"
+        <% set_common_surface_variables() %>
         <% for surface in zone[:surfaces] # Add wall surfaces %> 
         SURFACE <%= surface[:name] %>
           sfType = <%= "WALL" %>
