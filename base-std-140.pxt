@@ -774,7 +774,7 @@ for floor in floors
 
 
       <% if floor == 1 # Add ground surface for non-plenum zones on first floor %> 
-        SURFACE <%= "Ground" %>
+        SURFACE <%= "Ground" + zone_name %>
           sfType = "FLOOR"
           sfArea = <%= zone[:area] %>
           sfExCnd = "ADIABATIC"
