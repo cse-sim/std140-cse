@@ -762,32 +762,38 @@ def set_heating_and_cooling_schedules_and_capacities(zone_name)
   <% end
 end %>
 
+<% def get_zone_height(zone_name)
+  if zone_name == "Plenum"
+    return $plenum_height
+  else # non-plenum floor height
+    return $floor_height
+  end
+end 
 
-<% def set_zone_volume_and_height_dimensions(zone,floor) %>
-<% if zone[:name] == "Plenum" %>
-  znVol = <%= zone[:area] * $plenum_height %>
-  znCeilingHt = <%= ($floor_height + $plenum_height) * floor  %>
-  znFloorZ = <%= $floor_height * floor %>
-<% else %>
-  znVol = <%= zone[:area] * $floor_height %>
-  znCeilingHt = <%= ($floor_height * floor) + ($plenum_height * (floor))  %>
-  znFloorZ = <%= ($floor_height + $plenum_height) * (floor) %>
-<% end %>
 
-<% end %>
+def set_zone_volume_and_height_dimensions(zone,floor)
+  if zone[:name] == "Plenum" %>
+    znVol = <%= zone[:area] * $plenum_height %>
+    znCeilingHt = <%= ($floor_height + $plenum_height) * floor  %>
+    znFloorZ = <%= $floor_height * floor %>
+  <% else %>
+    znVol = <%= zone[:area] * $floor_height %>
+    znCeilingHt = <%= ($floor_height * floor) + ($plenum_height * (floor))  %>
+    znFloorZ = <%= ($floor_height + $plenum_height) * (floor-1) %>
+  <% end
+end
 
-<% for floor in floors %>
-  <% floor_index = floor_index
-  <% for zone in zones %>
-    <% zone_name = zone[:name] %>
-
+for floor in floors
+  floor_index = floor - 1
+  for zone in zones
+    zone_name = zone[:name]
+    zone_floor_area = zone[:area] %>
     ZONE <%= "Floor" + floor.to_s + zone_name %>
       znModel = "CZM"
-      znArea = <%= zone[:area] %>
+      znArea = <%= zone_floor_area %>
       infAC = 0
-      znTH = 20
-      znQMxH = <%= 10000000*$w_btu %>
-      znCAir = <%= 0.24*0.077*zone[:area]*$floor_height %>
+      <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
+      znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
       <% set_zone_volume_and_height_dimensions(zone,floor) %>
     
 
