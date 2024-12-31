@@ -757,7 +757,7 @@ def set_heating_and_cooling_schedules_and_capacities(zone_name)
   <% else # non-plenum zones %>
     znTC = <%= 9.0/5.0 %> * <%= set_cooling_schedule(cooling_schedule) %> + <%= 32.0 %>
     znTH = <%= 9.0/5.0 %> * <%= set_heating_schedule(heating_schedule) %> + <%= 32.0 %>
-    znQMxC = <%= 1000000 * $w_btu %>
+    znQMxC = <%= -1000000 * $w_btu %>
     znQMxH = <%= 1000000 * $w_btu %>
   <% end
 end %>
