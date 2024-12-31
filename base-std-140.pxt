@@ -696,7 +696,7 @@ for floor in floors
           sfArea = <%= floor_area %>
           sfExCnd = "AMBIENT"
           sfCon = "Roof"
-          sfModel = "QUICK"
+          sfModel = "FORWARD_DIFFERENCE"
         <% set_common_surface_variables() %>
       <% end %>
         SURFACE <%= surface[:name] %>
