@@ -783,7 +783,7 @@ for floor in floors
           <% set_common_surface_variables() %>
         
       <% else # Add floor surface for non-plenum surface on second or third floors %>
-        SURFACE <%= "Floor" + (floor).to_s + "Plenum" %>
+        SURFACE <%= "Floor" + (floor - 1).to_s + "Plenum" %>
           sfType = "FLOOR"
           sfArea = <%= zone[:area] %>
           sfExCnd = "ADJZN"
@@ -793,7 +793,7 @@ for floor in floors
           <% set_common_surface_variables() %>
       <% end %>
 
-        SURFACE <%= "Floor" + (floor + 1).to_s + "Plenum" %>
+      SURFACE <%= "Floor" + floor.to_s + "Plenum" %>
           sfType = "CEILING"
           sfArea = <%= zone[:area] %>
           sfExCnd = "ADJZN"
