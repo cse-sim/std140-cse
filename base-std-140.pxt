@@ -1,7 +1,7 @@
-<%#INTERFACE
-  parameter "case_name"
-  parameter "weather_dependent_infiltration_rate"
-  parameter "adiabatic_floor"
+<% # INTERFACE
+  # parameter "case_name"
+  # parameter "weather_dependent_infiltration_rate"
+  # parameter "adiabatic_floor"
 %>
 
 <%
@@ -18,39 +18,39 @@ $k_r = 9/5.0
 $q_c = $w_btu/$m2_ft2
 $u_c = $q_c/$k_r
 
-def c_f(c)
-  return c*9/5.0 + 32.0
+def convert_celsius_to_fahrenheit(celsius)
+  return celsius * 9/5.0 + 32.0
 end
 
 # Internal use
-nsteps = 120
+nsteps = 10
 %>
 
 <%
-# ETNA Case Variables
-if weather_dependent_infiltration_rate
+# Std 140 Case Variables
+# if weather_dependent_infiltration_rate
 
-else
+# else
 
-end
+# end
 
-if adiabatic_floor
+# if adiabatic_floor
 
-else
+# else
 
-end
+# end
 %>
 
 <%
 # Dimensions
 length = 49.9110*$m_ft
 width = 33.2738*$m_ft
-floor_height = 2.7432*$m_ft
-plenum_height = 1.2192*$m_ft
+$floor_height = 2.7432*$m_ft
+$plenum_height = 1.2192*$m_ft
 
 floor_area = length*width
-floor_volume = floor_area*floor_height
-plenum_volume = floor_area*plenum_height
+floor_volume = floor_area*$floor_height
+plenum_volume = floor_area*$plenum_height
 
 corner_length = 4.5732*$m_ft
 
@@ -70,6 +70,12 @@ perimeter_ns_area = perimeter_ns_length * perimeter_ns_width
 core_1_area = core_1_width * perimeter_ew_length
 core_2_area = core_2_width * perimeter_ew_length
 core_3_area = core_3_width * perimeter_ew_length
+
+$window_width = 2.486 * $m_ft
+$window_height = 2.7432 * $m_ft
+
+$window_shgc = 0.39
+$occupant_power = 120*$w_btu
 %>
 
 wfName = "weather/std-140/725650TY.epw"
@@ -189,39 +195,42 @@ CONSTRUCTION "Interior Wall"
 <%
 # Zones
 
-floors = [
-  {:floor=>1},
-  {:floor=>2},
-  {:floor=>3},
-]
+floors = [1,2,3]
+
 zones = [
   {
     :name => "Corner_Northwest", 
     :area => corner_area,
+    :occupancy_schedule => ["A","A","A"],
+    :occupancy => [11,15,15],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [6.14,8.61,8.61],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_power_density => [13.99,15.07,15.07],
     :surfaces => [
       {
         :name => "Exterior_North",
         :azimuth => 0,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 1
       },
       {
         :name => "Perimeter_North",
         :azimuth => 90,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Perimeter_West",
         :azimuth => 180,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Exterior_West",
         :azimuth => 270,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 1
       }
@@ -230,42 +239,48 @@ zones = [
   {
     :name => "Perimeter_North",
     :area => perimeter_ns_area,
+    :occupancy_schedule => ["A","A","A"],
+    :occupancy => [10,10,10],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [7.1,7.53,7.53],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_power_density => [11.84,11.84,11.84],
     :surfaces => [
       {
         :name => "Exterior_North",
         :azimuth => 0,
-        :surface_area => perimeter_ns_length * floor_height,
+        :surface_area => perimeter_ns_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 7
       },
       {
         :name => "Corner_Northeast",
         :azimuth => 90,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Core_3",
         :azimuth => 180,
-        :surface_area => core_3_width * floor_height,
+        :surface_area => core_3_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Core_2",
         :azimuth => 180,
-        :surface_area => core_2_width * floor_height,
+        :surface_area => core_2_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Core_1",
         :azimuth => 180,
-        :surface_area => core_1_width * floor_height,
+        :surface_area => core_1_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Corner_Northwest",
         :azimuth => 270,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       }
     ]
@@ -273,31 +288,37 @@ zones = [
   {
     :name => "Corner_Northeast",
     :area => corner_area,
+    :occupancy_schedule => ["B","B","B"],
+    :occupancy => [5,5,5],
+    :lighting_schedule => ["F","F","F"],
+    :lighting_power_density => [3.66,3.66,3.66],
+    :plug_load_schedule => ["J","J","J"],
+    :plug_load_power_density => [9.69,9.69,9.69],
     :surfaces => [
       {
         :name => "Exterior_North",
         :azimuth => 0,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 1
       },
       {
         :name => "Exterior_East",
         :azimuth => 90,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 1
       },
       {
         :name => "Perimeter_East",
         :azimuth => 180,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Perimeter_North",
         :azimuth => 270,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       }
     ]
@@ -305,29 +326,35 @@ zones = [
   {
     :name => "Perimeter_West",
     :area => perimeter_ew_area,
+    :occupancy_schedule => ["A","A","A"],
+    :occupancy => [59,6,6],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [6.14,7.53,7.53],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_power_density => [13.99,11.84,11.84],
     :surfaces => [
       {
         :name => "Corner_Northwest",
         :azimuth => 0,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Core_1",
         :azimuth => 90,
-        :surface_area => perimeter_ew_length * floor_height,
+        :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Corner_Southwest",
         :azimuth => 180,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Exterior_West",
         :azimuth => 270,
-        :surface_area => perimeter_ew_length * floor_height,
+        :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 4
       }
@@ -336,29 +363,35 @@ zones = [
   {
     :name => "Core_1",
     :area => core_1_area,
+    :occupancy_schedule => ["A","A","A"],
+    :occupancy => [10,10,10],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [7.1,7.1,7.1],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_power_density => [11.84,11.84,11.84],
     :surfaces => [
       {
         :name => "Perimeter_North",
         :azimuth => 0,
-        :surface_area => core_1_width * floor_height,
+        :surface_area => core_1_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Core_2",
         :azimuth => 90,
-        :surface_area => perimeter_ew_length * floor_height,
+        :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Perimeter_South",
         :azimuth => 180,
-        :surface_area => core_1_width * floor_height,
+        :surface_area => core_1_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Perimeter_West",
         :azimuth => 270,
-        :surface_area => perimeter_ew_length * floor_height,
+        :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Interior"
       }
     ]
@@ -366,29 +399,35 @@ zones = [
   {
     :name => "Core_2",
     :area => core_2_area,
+    :occupancy_schedule => ["C","C","C"],
+    :occupancy => [0,0,0],
+    :lighting_schedule => ["G","G","G"],
+    :lighting_power_density => [1.51,1.51,1.51],
+    :plug_load_schedule => ["K","K","K"],
+    :plug_load_power_density => [7.64,7.64,7.64],
     :surfaces => [
       {
         :name => "Perimeter_North",
         :azimuth => 0,
-        :surface_area => core_2_width * floor_height,
+        :surface_area => core_2_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Core_3",
         :azimuth => 90,
-        :surface_area => perimeter_ew_length * floor_height,
+        :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Perimeter_South",
         :azimuth => 180,
-        :surface_area => core_2_width * floor_height,
+        :surface_area => core_2_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Core_1",
         :azimuth => 270,
-        :surface_area => perimeter_ew_length * floor_height,
+        :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Interior"
       }
     ]
@@ -396,29 +435,35 @@ zones = [
   {
     :name => "Core_3",
     :area => core_3_area,
+    :occupancy_schedule => ["D","D","D"],
+    :occupancy => [25,25,25],
+    :lighting_schedule => ["H","H","H"],
+    :lighting_power_density => [1.29,1.29,1.29],
+    :plug_load_schedule => ["L","L","L"],
+    :plug_load_power_density => [10.55,10.55,10.55],
     :surfaces => [
       {
         :name => "Perimeter_North",
         :azimuth => 0,
-        :surface_area => core_3_width * floor_height,
+        :surface_area => core_3_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Perimeter_East",
         :azimuth => 90,
-        :surface_area => perimeter_ew_length * floor_height,
+        :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Perimeter_South",
         :azimuth => 180,
-        :surface_area => core_3_width * floor_height,
+        :surface_area => core_3_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Core_2",
         :azimuth => 270,
-        :surface_area => perimeter_ew_length * floor_height,
+        :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Interior"
       }
     ]
@@ -426,30 +471,36 @@ zones = [
   {
     :name => "Perimeter_East",
     :area => perimeter_ew_area,
+    :occupancy_schedule => ["A","A","A"],
+    :occupancy => [6,6,6],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [7.53,7.53,7.53],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_power_density => [11.84,11.84,11.84],
     :surfaces => [
       {
         :name => "Corner_Northeast",
         :azimuth => 0,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Exterior_East",
         :azimuth => 90,
-        :surface_area => perimeter_ew_length * floor_height,
+        :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 4
       },
       {
         :name => "Corner_Southeast",
         :azimuth => 180,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Core_3",
         :azimuth => 270,
-        :surface_area => perimeter_ew_length * floor_height,
+        :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Interior"
       }
     ]
@@ -457,30 +508,36 @@ zones = [
   {
     :name => "Corner_Southwest", 
     :area => corner_area,
+    :occupancy_schedule => ["A","A","A"],
+    :occupancy => [11,11,11],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [6.14,6.14,6.14],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_power_density => [13.99,13.99,13.99],
     :surfaces => [
       {
         :name => "Perimeter_West",
         :azimuth => 0,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Perimeter_South",
         :azimuth => 90,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Exterior_South",
         :azimuth => 180,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 1
       },
       {
         :name => "Exterior_West",
         :azimuth => 270,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 1
       }
@@ -489,42 +546,48 @@ zones = [
   {
     :name => "Perimeter_South",
     :area => perimeter_ns_area,
+    :occupancy_schedule => ["A","A","A"],
+    :occupancy => [10,10,10],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [7.1,7.1,7.1],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_power_density => [11.84,11.84,11.84],
     :surfaces => [
       {
         :name => "Core_1",
         :azimuth => 0,
-        :surface_area => core_1_width * floor_height,
+        :surface_area => core_1_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Core_2",
         :azimuth => 0,
-        :surface_area => core_2_width * floor_height,
+        :surface_area => core_2_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Core_3",
         :azimuth => 0,
-        :surface_area => core_3_width * floor_height,
+        :surface_area => core_3_width * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Corner_Southeast",
         :azimuth => 90,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Exterior_South",
         :azimuth => 180,
-        :surface_area => perimeter_ns_length * floor_height,
+        :surface_area => perimeter_ns_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 7
       },
       {
         :name => "Corner_Southwest",
         :azimuth => 270,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       }
     ]
@@ -532,32 +595,68 @@ zones = [
   {
     :name => "Corner_Southeast", 
     :area => corner_area,
+    :occupancy_schedule => ["A","A","A"],
+    :occupancy => [11,11,11],
+    :lighting_schedule => ["E","E","E"],
+    :lighting_power_density => [6.14,6.14,6.14],
+    :plug_load_schedule => ["I","I","I"],
+    :plug_load_power_density => [13.99,13.99,13.99],
     :surfaces => [
       {
         :name => "Perimeter_East",
         :azimuth => 0,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
       },
       {
         :name => "Exterior_East",
         :azimuth => 90,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 1
       },
       {
         :name => "Exterior_South",
         :azimuth => 180,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
         :number_windows => 1
       },
       {
         :name => "Perimeter_South",
         :azimuth => 270,
-        :surface_area => corner_length * floor_height,
+        :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Interior"
+      }
+    ]
+  },
+  {
+    :name => "Plenum", 
+    :area => floor_area,
+    :surfaces => [
+      {
+        :name => "Exterior_North",
+        :azimuth => 0,
+        :surface_area => length * $plenum_height,
+        :surface_facing_type => "Exterior"
+      },
+      {
+        :name => "Exterior_East",
+        :azimuth => 90,
+        :surface_area => width * $plenum_height,
+        :surface_facing_type => "Exterior",
+      },
+      {
+        :name => "Exterior_South",
+        :azimuth => 180,
+        :surface_area => length * $plenum_height,
+        :surface_facing_type => "Exterior",
+      },
+      {
+        :name => "Exterior_West",
+        :azimuth => 270,
+        :surface_area => width * $plenum_height,
+        :surface_facing_type => "Exterior"
       }
     ]
   },
@@ -565,128 +664,292 @@ zones = [
 
 %>
 
-<% for floor in floors %>
-  <% for zone in zones %>
-
-  ZONE <%= "Floor" + floor[:floor].to_s + zone[:name]%>
-    znModel = "CZM"
-    znArea = <%= zone[:area] %>
-    znVol = <%= zone[:area] * floor_height %>
-    znCeilingHt = <%= (floor_height * floor[:floor]) + (plenum_height * (floor[:floor] - 1))  %>
-    znFloorZ = <%= (floor_height + plenum_height) * (floor[:floor] - 1) %>
-    infAC = 0
-    znTH = 20
-    znQMxH = <%= 10000000*$w_btu %>
-    znCAir = <%= 0.24*0.077*zone[:area]*floor_height %>
-
-    <% for surface in zone[:surfaces] %>
-    SURFACE <%= surface[:name] %>
-      sfType = <%= "WALL" %>
-      sfArea = <%= surface[:surface_area] %>
-      sfAzm = <%= surface[:azimuth] %>
-
-      <% if surface[:surface_facing_type] == "Interior" %>
-        sfExCnd = "ADJZN"
-        sfAdjZn = <%= surface[:name] %>
-        sfCon = "Interior Wall"
-        sfModel = "QUICK"
-        sfInAbs = 0.7
-      <% else %>
-        sfExCnd = "AMBIENT"
-        sfCon = "Exterior Wall"
-        sfModel = "QUICK"
-        sfExAbs = 0.7
-
-        WINDOW
-          wnHeight = <%= 2.7432 * $m_ft %>
-          wnWidth = <%= 2.486 * $m_ft %>
-          wnMult = <%= surface[:number_windows] %>
-          wnU = <%= 3.268 * $w_btu %>
-          wnSHGC = 0.39
-      <% end %>
-    <% end %>
-
-    <% if floor[:floor] == 1 %>
-      SURFACE <%= "Ground" %>
-        sfType = "FLOOR"
-        sfArea = <%= zone[:area] %>
-        sfExCnd = "GROUND"
-        sfCon = "Slab-On-Grade"
-        sfModel = "FD"
-        sfInAbs = 0.7
-    <% else %>
-      SURFACE <%= "Plenum" %>
-        sfType = "FLOOR"
-        sfArea = <%= zone[:area] %>
-        sfExCnd = "ADJZN"
-        sfAdjZn = <%= "Floor" + (floor[:floor]- 1).to_s + "Plenum" %>
-        sfCon = "Interior Floor"
-        sfModel = "QUICK"
-        sfInAbs = 0.7
-    <% end %>
-
-    SURFACE <%= "Plenum" %>
-      sfType = "CEILING"
-      sfArea = <%= zone[:area] %>
-      sfExCnd = "ADJZN"
-      sfAdjZn = <%= "Floor" + floor[:floor].to_s + "Plenum" %>
-      sfCon = "Dropped Ceiling"
-      sfModel = "QUICK"
-      sfInAbs = 0.7
-  <% end %>
-
-
-  ZONE <%= "Floor" + floor[:floor].to_s + "Plenum"%>
-    znModel = "CZM"
-    znArea = <%= zone[:area] %>
-    znVol = <%= zone[:area] * plenum_height %>
-    znCeilingHt = <%= (floor_height + plenum_height) * floor[:floor]  %>
-    znFloorZ = <%= floor_height * floor[:floor] %>
-    infAC = 0
-    znTH = 20
-    znQMxH = <%= 10000000*$w_btu %>
-    znCAir = <%= 0.24*0.077*zone[:area]*plenum_height %>
-    <% for zone in zones %>
-      SURFACE <%= zone[:name] %>
-        sfType = "FLOOR"
-        sfArea = <%= zone[:area] %>
-        sfExCnd = "ADJZN"
-        sfAdjZn = <%= "Floor" + floor[:floor].to_s + zone[:name]%>
-        sfCon = "Interior Floor"
-        sfModel = "QUICK"
-        sfInAbs = 0.7
-      
-      SURFACE <%= zone[:name] %>
-        sfType = "CEILING"
-        sfArea = <%= zone[:area] %>
-        <% if floor[:floor] == 3 %>
-          sfExCnd = "AMBIENT"
-          sfCon = "Roof"
-          sfModel = "QUICK"
-          sfInAbs = 0.7
-        <% else %>
-          sfExCnd = "ADJZN"
-          sfAdjZn = <%= "Floor" + (floor[:floor] + 1).to_s + zone[:name] %>
-          sfCon = "Dropped Ceiling"
-          sfModel = "QUICK"
-          sfInAbs = 0.7
-        <% end %>
-
-    <% end %>
+<% def set_common_surface_variables() %>
+  sfInAbs = 0.7
 <% end %>
 
-EXPORTFILE "Output"
-  xfFileName = "Output.csv"
-  xfFileStat = OVERWRITE
+<% def set_occupancy_schedule(occupancy_schedule)
+  if occupancy_schedule == "A"
+    return "select($ISWEHOL,0,default hourval(0,0,0,0,0,0,0,0.25,0.50,0.90,0.90,0.90,0.75,0.75,0.90,0.90,0.90,0.50,0.25,0,0,0,0,0))"
+  elsif occupancy_schedule == "B"
+    return "select($ISWEHOL,0,default hourval(0,0,0,0,0,0,0,0,0,0,0,0.25,0.90,0.90,0.75,0,0,0,0,0,0,0,0,0))"
+  elsif occupancy_schedule == "C"
+    return "select($ISWEHOL,0,default hourval(0,0,0,0,0,0,0,0.20,0.41,0.73,0.73,0.73,0.61,0.61,0.73,0.73,0.73,0.41,0.20,0,0,0,0,0))"
+  else # occupancy schedule "D"
+    return "select($ISWEHOL,0,default hourval(0,0,0,0,0,0,0,0.20,0.47,0.78,0.78,0.78,0.66,0.66,0.78,0.78,0.78,0.47,0.20,0,0,0,0,0))"
+  end
+end
 
-EXPORT
-  exExportfile = "Output"
-  exHeader = ColumnsOnly
-  exFooter = No
-  exType = UDT
-  exFreq = HOUR
-  exDayBeg = JAN 1
-  exDayEnd = DEC 31
+def set_lighting_schedule(lighting_schedule)
+  if lighting_schedule == "E"
+    return "select($ISWEHOL,hourval(0.05,0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.30,0.30,0.30,0.30,0.15,0.15,0.15,0.15,0.15,0.05,0.05,0.05,0.05,0.05,0.05,0.05),default hourval(0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.30,0.20,0.20,0.10,0.05))"
+  elsif lighting_schedule == "F"
+    return "select($ISWEHOL,hourval(0.05,0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.30,0.30,0.30,0.30,0.15,0.15,0.15,0.15,0.15,0.05,0.05,0.05,0.05,0.05,0.05,0.05),default hourval(0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.10,0.10,0.10,0.10,0.90,0.90,0.90,0.90,0.30,0.30,0.30,0.30,0.30,0.20,0.20,0.10,0.05))"
+  elsif lighting_schedule == "G"
+    return "select($ISWEHOL,hourval(0.04,0.04,0.04,0.04,0.04,0.04,0.08,0.10,0.30,0.30,0.30,0.30,0.15,0.15,0.15,0.15,0.15,0.05,0.05,0.04,0.04,0.04,0.04,0.04),default hourval(0.04,0.04,0.04,0.04,0.04,0.08,0.08,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.54,0.24,0.16,0.16,0.08,0.04))"
+  else # occupancy schedule "H"
+    return "select($ISWEHOL,hourval(0.05,0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.30,0.30,0.30,0.30,0.15,0.15,0.15,0.15,0.15,0.05,0.05,0.05,0.05,0.05,0.05,0.05),default hourval(0.05,0.05,0.05,0.05,0.05,0.10,0.10,0.55,0.87,0.87,0.87,0.87,0.87,0.87,0.87,0.87,0.87,0.87,0.55,0.30,0.20,0.20,0.10,0.05))"
+  end
+end
+
+def set_plug_load_schedule(plug_load_schedule)
+  if plug_load_schedule == "I"
+    return "select($ISWEHOL,hourval(0.23,0.23,0.23,0.23,0.23,0.23,0.38,0.38,0.48,0.48,0.48,0.48,0.33,0.33,0.33,0.33,0.33,0.29,0.29,0.23,0.23,0.23,0.23,0.23),default hourval(0.31,0.31,0.31,0.31,0.31,0.31,0.38,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.38,0.38,0.38,0.38))"
+  elsif plug_load_schedule == "J"
+    return "select($ISWEHOL,hourval(0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07,0.07),default hourval(0.07,0.07,0.07,0.07,0.07,0.07,0.30,0.77,0.90,0.90,0.90,0.90,0.90,0.90,0.77,0.30,0.30,0.77,0.90,0.90,0.90,0.90,0.77,0.30))"
+  elsif plug_load_schedule == "K"
+    return "select($ISWEHOL,hourval(0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.10,0.10,0.10,0.10,0.10,0.10,0.10,0.10,0.06,0.06,0.06,0.06,0.06,0.06,0.06),default hourval(0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.06,0.06,0.06,0.06))"
+  else # occupancy schedule "L"
+    return "select($ISWEHOL,hourval(0.09,0.09,0.09,0.09,0.09,0.09,0.14,0.14,0.17,0.17,0.17,0.17,0.12,0.12,0.12,0.12,0.12,0.11,0.11,0.09,0.09,0.09,0.09,0.09),default hourval(0.14,0.14,0.14,0.14,0.14,0.14,0.16,0.16,0.35,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.90,0.38,0.20,0.20,0.16,0.16,0.16,0.16))"
+  end
+end 
+
+def set_ventilation_schedule(ventilation_schedule)
+  if ventilation_schedule == "M1"
+    return "select($ISWEHOL,0,default hourval(0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0))"
+  else # ventilation schedule "M2"
+    return "hourval(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)"
+  end
+end
+
+
+def set_infiltration_schedule(infiltration_schedule)
+  if infiltration_schedule == "N1"
+    return "select($ISWEHOL,0,default hourval(1,1,1,1,1,1,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,1,1))"
+  elsif infiltration_schedule == "N2"
+    return "hourval(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)"
+  else # infiltration schedule "N3"
+    return "hourval(0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25)"
+  end
+end
+
+
+def set_cooling_schedule(cooling_schedule)
+  if cooling_schedule == "O"
+    return "select($ISWEHOL, hourval(26.67,26.67,26.67,26.67,26.67,26.67,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,26.67,26.67), default hourval(26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67))"
+  else # cooling schedule "P"
+    return "hourval(23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89)"
+  end
+end
+
+def set_heating_schedule(heating_schedule)
+  if heating_schedule == "Q"
+    return "select($ISWEHOL, hourval(15.56,15.56,15.56,15.56,15.56,15.56,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,15.56,15.56), default hourval(15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56,15.56))"
+  else # heating schedule "Q"
+    return "hourval(21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11,21.11)"
+  end
+end
+
+def set_heating_and_cooling_schedules_and_capacities(zone_name)
+  if zone_name == "Core_2"
+    cooling_schedule = "P"
+    heating_schedule = "R"
+  else # non-Core_2 zones; Plenum schedules are set, but are not used
+    cooling_schedule = "O"
+    heating_schedule = "Q"
+  end
+
+  if zone_name == "Plenum" %>
+    znTC = 200
+    znTH = 1
+    znQMxC = 0
+    znQMxH = 0
+  <% else # non-plenum zones %>
+    znTC = <%= 9.0/5.0 %> * <%= set_cooling_schedule(cooling_schedule) %> + <%= 32.0 %>
+    znTH = <%= 9.0/5.0 %> * <%= set_heating_schedule(heating_schedule) %> + <%= 32.0 %>
+    znQMxC = <%= -1000000 * $w_btu %>
+    znQMxH = <%= 1000000 * $w_btu %>
+  <% end
+end %>
+
+<% def get_zone_height(zone_name)
+  if zone_name == "Plenum"
+    return $plenum_height
+  else # non-plenum floor height
+    return $floor_height
+  end
+end 
+
+
+def set_zone_volume_and_height_dimensions(zone,floor)
+  if zone[:name] == "Plenum" %>
+    znVol = <%= zone[:area] * $plenum_height %>
+    znCeilingHt = <%= ($floor_height + $plenum_height) * floor  %>
+    znFloorZ = <%= ($floor_height * floor) + ($plenum_height * (floor - 1)) %>
+  <% else %>
+    znVol = <%= zone[:area] * $floor_height %>
+    znCeilingHt = <%= ($floor_height * floor) + ($plenum_height * (floor - 1))  %>
+    znFloorZ = <%= ($floor_height + $plenum_height) * (floor-1) %>
+  <% end
+end
+
+for floor in floors
+  floor_index = floor - 1
+  for zone in zones
+    zone_name = zone[:name]
+    zone_floor_area = zone[:area] %>
+    ZONE <%= "Floor" + floor.to_s + zone_name %>
+      znModel = "CZM"
+      znArea = <%= zone_floor_area %>
+      infAC = 0
+      <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
+      znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
+      <% set_zone_volume_and_height_dimensions(zone,floor) %>
+    
+
+    <% if zone_name == "Plenum" # Add plenum zones %>
+      <% for plenum_adjacent_zone_surface in zones # Add all non-plenum zones to plenum zone object as surfaces %>
+        <% plenum_adjacent_zone_surface_name = plenum_adjacent_zone_surface[:name] %>
+        <% if plenum_adjacent_zone_surface_name != "Plenum" # Skip plenum zone %>
+          SURFACE <%= "Floor" + floor.to_s + plenum_adjacent_zone_surface_name %>
+            sfType = "FLOOR"
+            sfArea = <%= plenum_adjacent_zone_surface[:area] %>
+            sfExCnd = "ADJZN"
+            sfAdjZn = <%= "Floor" + floor.to_s + plenum_adjacent_zone_surface_name %>
+            sfCon = "Dropped Ceiling"
+            sfModel = "QUICK"
+            <% set_common_surface_variables() %>
+          <% if floor == 3 # TODO: need to simplify Floor3Plenum ceiling to one surface%>
+          SURFACE <%= "Roof" + plenum_adjacent_zone_surface_name %>
+            sfType = "CEILING"
+            sfArea = <%= plenum_adjacent_zone_surface[:area] %>
+            sfExCnd = "AMBIENT"
+            sfCon = "Roof"
+            sfModel = "QUICK"
+            <% set_common_surface_variables() %>
+            
+          <% else %>
+          SURFACE <%= "Floor" + (floor + 1).to_s + plenum_adjacent_zone_surface_name %>
+            sfType = "CEILING"
+            sfArea = <%= plenum_adjacent_zone_surface[:area] %>
+            sfExCnd = "ADJZN"
+            sfAdjZn = <%= "Floor" + (floor + 1).to_s + plenum_adjacent_zone_surface_name %>
+            sfCon = "Interior Floor"
+            sfModel = "QUICK"
+            <% set_common_surface_variables() %>
+          <% end %>
+
+        <% end %>
+      <% end %>
+        <% for surface in zone[:surfaces] # Add wall surfaces %> 
+        SURFACE <%= surface[:name] %>
+          sfType = <%= "WALL" %>
+          sfArea = <%= surface[:surface_area] %>
+          sfAzm = <%= surface[:azimuth] %>
+
+          <% if surface[:surface_facing_type] == "Interior" %>
+            sfExCnd = "ADJZN"
+            sfAdjZn = <%= "Floor" + (floor).to_s + surface[:name] %>
+            sfCon = "Interior Wall"
+            sfModel = "QUICK"
+            <% set_common_surface_variables() %>
+          <% else # Exterior wall surface %> 
+            sfExCnd = "AMBIENT"
+            sfCon = "Exterior Wall"
+            sfModel = "QUICK"
+            <% set_common_surface_variables() %>
+          <% end %>
+        <% end %>
+    <% else # Add non-plenum zones %>
+      <% # Set gains for occupancy, lighting, and plug loads
+      occupancy_schedule = zone[:occupancy_schedule][floor_index] 
+      occupancy = zone[:occupancy][floor_index] 
+      lighting_schedule = zone[:lighting_schedule][floor_index] 
+      lighting_power_density = zone[:lighting_power_density][floor_index]
+      plug_load_schedule = zone[:plug_load_schedule][floor_index]
+      plug_load_power_density = zone[:plug_load_power_density][floor_index] %>
+      GAIN <%= "OccupancySchedule" + occupancy_schedule %> 
+        gnPower = <%= $occupant_power * occupancy %> * <%= set_occupancy_schedule(occupancy_schedule) %>
+        gnFrRad = 0.50
+        gnFrLat = 0.45
+      GAIN <%= "LightingSchedule" + lighting_schedule %> 
+        gnPower = <%= lighting_power_density * zone_floor_area %> * <%= set_lighting_schedule(lighting_schedule) %>
+        gnFrRad = 0.70
+        gnFrLat = 0
+      GAIN <%= "PlugLoadSchedule" + plug_load_schedule %> 
+        gnPower = <%= plug_load_power_density * zone_floor_area %> * <%= set_lighting_schedule(plug_load_schedule) %>
+        gnFrRad = 0.50
+        gnFrLat = 0
+      <% for surface in zone[:surfaces] %>
+      SURFACE <%= surface[:name] %>
+        sfType = <%= "WALL" %>
+        sfArea = <%= surface[:surface_area] %>
+        sfAzm = <%= surface[:azimuth] %>
+
+        <% if surface[:surface_facing_type] == "Interior" # Add non-plenum zone interior surfaces %>
+          sfExCnd = "ADJZN"
+          sfAdjZn = <%= "Floor" + (floor).to_s + surface[:name] %>
+          sfCon = "Interior Wall"
+          sfModel = "QUICK"
+          <% set_common_surface_variables() %>
+        <% else # Add Add non-plenum zone exterior surfaces %> 
+          sfExCnd = "AMBIENT"
+          sfCon = "Exterior Wall"
+          sfModel = "QUICK"
+          <% set_common_surface_variables() %>
+
+          WINDOW <%= "Floor" + (floor).to_s + surface[:name] %>
+            wnHeight = <%= $window_height %>
+            wnWidth = <%= $window_width %>
+            wnMult = <%= surface[:number_windows] %>
+            wnU = <%= 3.268 * $u_c %>
+            wnSHGC = <%= $window_shgc %>
+            wnModel = "ASHWAT"
+            wnNGlz = 2
+            wnExShd = NONE
+            wnInShd = NONE
+            wnUNFRC = <%= 5.231 * $u_c %>
+
+        <% end %>
+      <% end %> 
+    
+
+
+
+      <% if floor == 1 # Add ground surface for non-plenum zones on first floor %> 
+        SURFACE <%= "Ground" %>
+          sfType = "FLOOR"
+          sfArea = <%= zone[:area] %>
+          sfExCnd = "ADIABATIC"
+          sfCon = "Slab-On-Grade"
+          sfModel = "FD"
+          <% set_common_surface_variables() %>
+        
+      <% else # Add floor surface for non-plenum surface on second or third floors %>
+        SURFACE <%= "Floor" + (floor).to_s + "Plenum" %>
+          sfType = "FLOOR"
+          sfArea = <%= zone[:area] %>
+          sfExCnd = "ADJZN"
+          sfAdjZn = <%= "Floor" + (floor - 1).to_s + "Plenum" %>
+          sfCon = "Interior Floor"
+          sfModel = "QUICK"
+          <% set_common_surface_variables() %>
+      <% end %>
+
+        SURFACE <%= "Floor" + (floor + 1).to_s + "Plenum" %>
+          sfType = "CEILING"
+          sfArea = <%= zone[:area] %>
+          sfExCnd = "ADJZN"
+          sfAdjZn = <%= "Floor" + floor.to_s + "Plenum" %>
+          sfCon = "Dropped Ceiling"
+          sfModel = "QUICK"
+          <% set_common_surface_variables() %>
+    <% end %>
+  <% end %>
+<% end %>
+
+// EXPORTFILE "Output"
+  // xfFileName = "Output.csv"
+  // xfFileStat = OVERWRITE
+
+// EXPORT
+  // exExportfile = "Output"
+  // exHeader = ColumnsOnly
+  // exFooter = No
+  // exType = UDT
+  // exFreq = HOUR
+  // exDayBeg = JAN 1
+  // exDayEnd = DEC 31
 
 
 RUN
