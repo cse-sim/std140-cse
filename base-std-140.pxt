@@ -23,7 +23,7 @@ def convert_celsius_to_fahrenheit(celsius)
 end
 
 # Internal use
-nsteps = 10
+nsteps = 6
 %>
 
 <%
