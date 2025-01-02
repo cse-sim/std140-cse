@@ -1,6 +1,3 @@
 :case_name=>"CB1100",
 :weather_dependent_infiltration_rate=>true,
-:adiabatic_floor=>false,
-
-# infiltration rate dependent on wind speed, temp diff, etc.
-# slab-on-grade is non-adiabatic
+:adiabatic_floor=>false
