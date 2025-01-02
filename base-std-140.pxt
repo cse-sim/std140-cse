@@ -27,21 +27,6 @@ nsteps = 6
 %>
 
 <%
-# Std 140 Case Variables
-if weather_dependent_infiltration_rate
-  variable_1 = 1
-else
-  variable_1 = 1
-end
-
-if adiabatic_floor
-  variable_1 = 1
-else
-  variable_1 = 1
-end
-%>
-
-<%
 # Dimensions
 length = 49.9110*$m_ft
 width = 33.2738*$m_ft
