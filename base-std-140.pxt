@@ -159,6 +159,11 @@ MATERIAL "Interior Wall Insulation"
   matDens = <%= 512*$rho_c %>
   matSpHt = <%= 1382.7*$cp_c %>
 
+MATERIAL "Furniture Wood"
+  matCond = <%= 0.119*$k_c %>
+  matDens = <%= 545*$rho_c %>
+  matSpHt = <%= 1214*$cp_c %>
+
 
 // Constructions
 // Std 140
@@ -193,6 +198,10 @@ CONSTRUCTION "Interior Wall"
   LAYER lrMat= "Interior Wall Gypsum Board" lrThk=<%= 0.0127*$m_ft %>
   LAYER lrMat= "Interior Wall Insulation" lrThk=<%= 0.0889*$m_ft %>
   LAYER lrMat= "Interior Wall Gypsum Board" lrThk=<%= 0.0127*$m_ft %>
+
+CONSTRUCTION "Furniture"
+  LAYER lrMat= "Furniture Wood" lrThk=<%= 0.15*$m_ft %>
+
 
 <%
 # Zones
