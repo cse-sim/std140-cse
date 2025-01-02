@@ -1,4 +1,4 @@
-<% # INTERFACE
+<%#INTERFACE
   parameter "case_name"
   parameter "weather_dependent_infiltration_rate"
   parameter "adiabatic_floor"
