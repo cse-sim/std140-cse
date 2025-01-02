@@ -769,10 +769,11 @@ for floor in floors
             <% set_common_surface_variables() %>
           <% end %>
         <% end %>
-    <% else # Add non-plenum zones %>
-      <% # Set gains for occupancy, lighting, and plug loads
-      occupancy_schedule = zone[:occupancy_schedule][floor_index] 
-      occupancy = zone[:occupancy][floor_index] 
+    <% else # Add non-plenum zones
+      internal_partition_surface_area = zone[:internal_partition_surface_area]
+      internal_mass_surface_area = zone[:internal_mass_surface_area]
+      occupancy_schedule = zone[:occupancy_schedule][floor_index]
+      occupancy = zone[:occupancy][floor_index]
       lighting_schedule = zone[:lighting_schedule][floor_index] 
       lighting_power_density = zone[:lighting_power_density][floor_index]
       plug_load_schedule = zone[:plug_load_schedule][floor_index]
@@ -791,6 +792,27 @@ for floor in floors
         znHcAirX = <%= occupancy * people_outdoor_air_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %> + <%= zone_floor_area * area_outdoor_air_rate %>
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
 
+      <% if internal_partition_surface_area > 0 # internal partition surface %>
+        SURFACE <%= zone_floor_name + "InternalPartition" %>
+          sfType = "WALL" 
+          sfCon = "Interior Wall"
+          sfArea = <%= internal_partition_surface_area %>
+          sfAzm = 0 // TODO: is this important for internal walls?
+          sfExCnd = "ADJZN"
+          sfAdjZn = <%= zone_floor_name %>
+          sfModel = FORWARD_DIFFERENCE
+      <% end %>
+      <% if internal_mass_surface_area > 0 # interal mass surface %>
+        SURFACE <%= zone_floor_name + "InternalMass" %> // TODO: is it appropriate to create a surface for internal mass?
+          sfType = "WALL" 
+          sfCon = "Furniture"
+          sfArea = <%= internal_mass_surface_area %>
+          sfAzm = 0 // TODO: is this important for internal mass?
+          sfExCnd = "ADJZN"
+          sfAdjZn = <%= zone_floor_name %>
+          sfModel = FORWARD_DIFFERENCE
+      <% end %>
+      <% # Set gains for occupancy, lighting, and plug loads %>
       GAIN <%= "OccupancySchedule" + occupancy_schedule %> 
         gnPower = <%= $occupant_power * occupancy %> * <%= set_occupancy_schedule(occupancy_schedule) %>
         gnFrRad = 0.50
