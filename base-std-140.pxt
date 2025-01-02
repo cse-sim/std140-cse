@@ -97,7 +97,7 @@ wfName = "weather/std-140/725650TY.epw"
 nSubSteps = <%= nsteps %>
 DT = No
 bldgAzm = 0
-elevation = 1650 * <%= $m_ft %> <% # TODO: is there a way to import the elevation from the weather file? %>
+elevation = <%= 1650 * $m_ft %> <% # TODO: is there a way to import the elevation from the weather file? %>
 grndRefl = 0.20
 terrainClass = 3
 wuDays = 0
