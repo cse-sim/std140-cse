@@ -882,7 +882,6 @@ for floor in floors
           sfCon = "Exterior Wall"
           sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
-        <% end %> 
           WINDOW <%= "Floor" + (floor).to_s + surface[:name] %>
             wnHeight = <%= $window_height %>
             wnWidth = <%= $window_width %>
