@@ -1,6 +1,6 @@
 <%#INTERFACE
   parameter "case_name"
-  parameter "weather_dependent_infiltration_rate"
+  parameter "weather_independent_infiltration_rate"
   parameter "adiabatic_floor"
 %>
 
@@ -24,21 +24,6 @@ end
 
 # Internal use
 nsteps = 6
-%>
-
-<%
-# Std 140 Case Variables
-if weather_dependent_infiltration_rate
-  variable_1 = 1
-else
-  variable_1 = 1
-end
-
-if adiabatic_floor
-  variable_1 = 1
-else
-  variable_1 = 1
-end
 %>
 
 <%
@@ -850,7 +835,16 @@ for floor in floors
       ZONE <%= "Floor" + floor.to_s + zone_name %>
         znModel = "CZM"
         znArea = <%= zone_floor_area %>
-        infAC = <%= zone[:infiltration_ach][floor_index] %>
+        <% # TODO: is infiltration adjusted for elevation/air density in CSE? If not, the formula in section X.2.1.6.1 must be applied%>
+        <% # TODO: review infiltration inputs %>
+        <% if weather_independent_infiltration_rate %>
+          infAC = <%= zone[:infiltration_ach][floor_index] %>
+          znWindFLkg = 0
+        <% else # weather dependent infiltration rate %>
+          infAC = 0
+          infStories = 1
+          infShld = 3
+        <% end %>
         <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
         znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
         <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
