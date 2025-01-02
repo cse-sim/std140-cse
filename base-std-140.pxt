@@ -721,9 +721,11 @@ for floor in floors
   for zone in zones 
     zone_name = zone[:name]
     zone_floor_area = zone[:area] 
-    if zone_name == "Plenum" # Add plenum zones %>
-
-      ZONE <%= "Floor" + floor.to_s + zone_name %>
+    if zone_name == "Plenum" # Add plenum zones
+      zone_floor_name = "Floor" + floor.to_s + zone_name 
+      internal_partition_surface_area = zone[:internal_partition_surface_area]
+      internal_mass_surface_area = zone[:internal_mass_surface_area]%>
+      ZONE <%= zone_floor_name %>
         znModel = "UZM"
         znArea = <%= zone_floor_area %>
         infAC = 0
