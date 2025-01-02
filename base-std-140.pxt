@@ -896,7 +896,7 @@ for floor in floors
             wnUNFRC = <%= $window_u_factor %>
             wnExEpsLW = <%= $window_infrared_emittance %>
             wnInEpsLW = <%= $window_infrared_emittance %>
-            wnExRf = <%= $rough_surface_value %>
+        <% end %> 
           
           <% if floor == 1 && if (zone_name == "Perimeter_North" || zone_name == "Perimeter_South") %> 
           DOOR <%= "Floor" + (floor).to_s + surface[:name] %>
