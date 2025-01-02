@@ -815,6 +815,7 @@ for floor in floors
         <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
         znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
         <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
+        <% # TODO: ventilation should be calculated accoridng to 140-2023 Informative Annex B3 %>
         znHcAirX = <%= occupancy * people_outdoor_air_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %> + <%= zone_floor_area * area_outdoor_air_rate %>
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
 
@@ -863,7 +864,7 @@ for floor in floors
           sfCon = "Interior Wall"
           sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
-        <% else # Add Add non-plenum zone exterior surfaces %> 
+        <% else # Add non-plenum zone exterior surfaces %> 
           sfExCnd = "AMBIENT"
           sfCon = "Exterior Wall"
           sfModel = FORWARD_DIFFERENCE
