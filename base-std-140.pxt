@@ -75,6 +75,12 @@ $window_width = 2.486 * $m_ft
 $window_height = 2.7432 * $m_ft
 
 $window_shgc = 0.39
+
+door_width = 0.9144 * $m_ft
+door_height = 2.1336 * $m_ft
+
+$two_door_area = door_width * door_height * 2 # TODO: can two doors be combined into a single door with double area in DOOR object?
+
 $occupant_power = 120*$w_btu
 %>
 
@@ -873,8 +879,18 @@ for floor in floors
             wnNGlz = 2
             wnExShd = NONE
             wnInShd = NONE
-            wnUNFRC = <%= 5.231 * $u_c %>
-
+          
+          <% if floor == 1 && if (zone_name == "Perimeter_North" || zone_name == "Perimeter_South") %> 
+          DOOR <%= "Floor" + (floor).to_s + surface[:name] %>
+            drArea = <%= $two_door_area %>
+            drModel = "FORWARD_DIFFERENCE"
+            drCon = "Exterior Door"
+            drExAbs = <%= $solar_absorptance %>
+            drInAbs = <%= $solar_absorptance %>
+            drExEpsLW = <%= $infrared_emittance %>
+            drInEpsLW = <%= $infrared_emittance %>
+            drExRf = <%= $rough_surface_value %>
+          <% end %> 
         <% end %>
       <% end %> 
     
