@@ -159,6 +159,11 @@ MATERIAL "Interior Wall Insulation"
   matDens = <%= 512*$rho_c %>
   matSpHt = <%= 1382.7*$cp_c %>
 
+MATERIAL "Furniture Wood"
+  matCond = <%= 0.119*$k_c %>
+  matDens = <%= 545*$rho_c %>
+  matSpHt = <%= 1214*$cp_c %>
+
 
 // Constructions
 // Std 140
@@ -194,6 +199,10 @@ CONSTRUCTION "Interior Wall"
   LAYER lrMat= "Interior Wall Insulation" lrThk=<%= 0.0889*$m_ft %>
   LAYER lrMat= "Interior Wall Gypsum Board" lrThk=<%= 0.0127*$m_ft %>
 
+CONSTRUCTION "Furniture"
+  LAYER lrMat= "Furniture Wood" lrThk=<%= 0.15*$m_ft %>
+
+
 <%
 # Zones
 
@@ -203,6 +212,8 @@ zones = [
   {
     :name => "Corner_Northwest", 
     :area => corner_area,
+    :internal_partition_surface_area => 0,
+    :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [11,15,15],
@@ -245,6 +256,8 @@ zones = [
   {
     :name => "Perimeter_North",
     :area => perimeter_ns_area,
+    :internal_partition_surface_area => 150.367 * $m2_ft2,
+    :internal_mass_surface_area => 372.9 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [10,10,10],
@@ -292,6 +305,8 @@ zones = [
   {
     :name => "Corner_Northeast",
     :area => corner_area,
+    :internal_partition_surface_area => 0,
+    :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["B","B","B"],
     :occupancy => [5,5,5],
@@ -328,6 +343,8 @@ zones = [
   {
     :name => "Perimeter_West",
     :area => perimeter_ew_area,
+    :internal_partition_surface_area => 0,
+    :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [59,6,6],
@@ -363,6 +380,8 @@ zones = [
   {
     :name => "Core_1",
     :area => core_1_area,
+    :internal_partition_surface_area => 161.054 * $m2_ft2,
+    :internal_mass_surface_area => 906.3 * $m2_ft2,
     :infiltration_ach => [0.75,0,0],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [10,10,10],
@@ -391,6 +410,8 @@ zones = [
   {
     :name => "Core_2",
     :area => core_2_area,
+    :internal_partition_surface_area => 139.473 * $m2_ft2,
+    :internal_mass_surface_area => 526.3 * $m2_ft2,
     :infiltration_ach => [0.75,0,0],
     :occupancy_schedule => ["C","C","C"],
     :occupancy => [0,0,0],
@@ -419,6 +440,8 @@ zones = [
   {
     :name => "Core_3",
     :area => core_3_area,
+    :internal_partition_surface_area => 139.967 * $m2_ft2,
+    :internal_mass_surface_area => 534.8 * $m2_ft2,
     :infiltration_ach => [0.75,0,0],
     :occupancy_schedule => ["D","D","D"],
     :occupancy => [25,25,25],
@@ -447,6 +470,8 @@ zones = [
   {
     :name => "Perimeter_East",
     :area => perimeter_ew_area,
+    :internal_partition_surface_area => 75.188 * $m2_ft2,
+    :internal_mass_surface_area => 220.7 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [6,6,6],
@@ -476,6 +501,8 @@ zones = [
   {
     :name => "Corner_Southwest", 
     :area => corner_area,
+    :internal_partition_surface_area => 0,
+    :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [11,11,11],
@@ -512,6 +539,8 @@ zones = [
   {
     :name => "Perimeter_South",
     :area => perimeter_ns_area,
+    :internal_partition_surface_area => 150.367 * $m2_ft2,
+    :internal_mass_surface_area => 372.9 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [10,10,10],
@@ -541,6 +570,8 @@ zones = [
   {
     :name => "Corner_Southeast", 
     :area => corner_area,
+    :internal_partition_surface_area => 0,
+    :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["A","A","A"],
     :occupancy => [11,11,11],
@@ -720,10 +751,10 @@ for floor in floors
   floor_index = floor - 1
   for zone in zones 
     zone_name = zone[:name]
+    zone_floor_name = "Floor" + floor.to_s + zone_name
     zone_floor_area = zone[:area] 
     if zone_name == "Plenum" # Add plenum zones %>
-
-      ZONE <%= "Floor" + floor.to_s + zone_name %>
+      ZONE <%= zone_floor_name %>
         znModel = "UZM"
         znArea = <%= zone_floor_area %>
         infAC = 0
@@ -758,10 +789,11 @@ for floor in floors
             <% set_common_surface_variables() %>
           <% end %>
         <% end %>
-    <% else # Add non-plenum zones %>
-      <% # Set gains for occupancy, lighting, and plug loads
-      occupancy_schedule = zone[:occupancy_schedule][floor_index] 
-      occupancy = zone[:occupancy][floor_index] 
+    <% else # Add non-plenum zones
+      internal_partition_surface_area = zone[:internal_partition_surface_area]
+      internal_mass_surface_area = zone[:internal_mass_surface_area]
+      occupancy_schedule = zone[:occupancy_schedule][floor_index]
+      occupancy = zone[:occupancy][floor_index]
       lighting_schedule = zone[:lighting_schedule][floor_index] 
       lighting_power_density = zone[:lighting_power_density][floor_index]
       plug_load_schedule = zone[:plug_load_schedule][floor_index]
@@ -780,6 +812,27 @@ for floor in floors
         znHcAirX = <%= occupancy * people_outdoor_air_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %> + <%= zone_floor_area * area_outdoor_air_rate %>
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
 
+      <% if internal_partition_surface_area > 0 # internal partition surface %>
+        SURFACE <%= zone_floor_name + "InternalPartition" %>
+          sfType = "WALL" 
+          sfCon = "Interior Wall"
+          sfArea = <%= internal_partition_surface_area %>
+          sfAzm = 0 // TODO: is this important for internal walls?
+          sfExCnd = "ADJZN"
+          sfAdjZn = <%= zone_floor_name %>
+          sfModel = FORWARD_DIFFERENCE
+      <% end %>
+      <% if internal_mass_surface_area > 0 # interal mass surface %>
+        SURFACE <%= zone_floor_name + "InternalMass" %> // TODO: is it appropriate to create a surface for internal mass?
+          sfType = "WALL" 
+          sfCon = "Furniture"
+          sfArea = <%= internal_mass_surface_area %>
+          sfAzm = 0 // TODO: is this important for internal mass?
+          sfExCnd = "ADJZN"
+          sfAdjZn = <%= zone_floor_name %>
+          sfModel = FORWARD_DIFFERENCE
+      <% end %>
+      <% # Set gains for occupancy, lighting, and plug loads %>
       GAIN <%= "OccupancySchedule" + occupancy_schedule %> 
         gnPower = <%= $occupant_power * occupancy %> * <%= set_occupancy_schedule(occupancy_schedule) %>
         gnFrRad = 0.50
