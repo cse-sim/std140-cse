@@ -73,16 +73,31 @@ core_3_area = core_3_width * perimeter_ew_length
 
 $window_width = 2.486 * $m_ft
 $window_height = 2.7432 * $m_ft
-
 $window_shgc = 0.39
+$window_u_factor = 5.231 * $u_c
+
+door_width = 0.9144 * $m_ft
+door_height = 2.1336 * $m_ft
+
+$two_door_area = door_width * door_height * 2 # TODO: can two doors be combined into a single door with double area in DOOR object?
+
 $occupant_power = 120*$w_btu
+
+$infrared_emittance	= 0.9
+$window_infrared_emittance	= 0.84
+$solar_absorptance = 0.7
+$visible_absorptance = 0.7
+$visible_absorptance_interior_floor = 0.8
+$visible_absorptance_dropped_ceiling = 0.2
+
+$rough_surface_value = 1.67
 %>
 
 wfName = "weather/std-140/725650TY.epw"
 nSubSteps = <%= nsteps %>
 DT = No
 bldgAzm = 0
-elevation = 1650 * <%= $m_ft %> <% # TODO: is there a way to import the elevation from the weather file? %>
+elevation = <%= 1650 * $m_ft %> <% # TODO: is there a way to import the elevation from the weather file? %>
 grndRefl = 0.20
 terrainClass = 3
 wuDays = 0
@@ -635,7 +650,11 @@ zones = [
 %>
 
 <% def set_common_surface_variables() %>
-  sfInAbs = 0.7
+  sfExAbs = <%= $solar_absorptance %>
+  sfInAbs = <%= $solar_absorptance %>
+  sfExEpsLW = <%= $infrared_emittance %>
+  sfInEpsLW = <%= $infrared_emittance %>
+  sfExRf = <%= $rough_surface_value %>
 <% end %>
 
 <% def set_occupancy_schedule(occupancy_schedule)
@@ -809,6 +828,7 @@ for floor in floors
         <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
         znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
         <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
+        <% # TODO: ventilation should be calculated accoridng to 140-2023 Informative Annex B3 %>
         znHcAirX = <%= occupancy * people_outdoor_air_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %> + <%= zone_floor_area * area_outdoor_air_rate %>
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
 
@@ -857,7 +877,7 @@ for floor in floors
           sfCon = "Interior Wall"
           sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
-        <% else # Add Add non-plenum zone exterior surfaces %> 
+        <% else # Add non-plenum zone exterior surfaces %> 
           sfExCnd = "AMBIENT"
           sfCon = "Exterior Wall"
           sfModel = FORWARD_DIFFERENCE
@@ -873,8 +893,22 @@ for floor in floors
             wnNGlz = 2
             wnExShd = NONE
             wnInShd = NONE
-            wnUNFRC = <%= 5.231 * $u_c %>
-
+            wnUNFRC = <%= $window_u_factor %>
+            wnExEpsLW = <%= $window_infrared_emittance %>
+            wnInEpsLW = <%= $window_infrared_emittance %>
+            wnExRf = <%= $rough_surface_value %>
+          
+          <% if floor == 1 && if (zone_name == "Perimeter_North" || zone_name == "Perimeter_South") %> 
+          DOOR <%= "Floor" + (floor).to_s + surface[:name] %>
+            drArea = <%= $two_door_area %>
+            drModel = "FORWARD_DIFFERENCE"
+            drCon = "Exterior Door"
+            drExAbs = <%= $solar_absorptance %>
+            drInAbs = <%= $solar_absorptance %>
+            drExEpsLW = <%= $infrared_emittance %>
+            drInEpsLW = <%= $infrared_emittance %>
+            drExRf = <%= $rough_surface_value %>
+          <% end %> 
         <% end %>
       <% end %> 
     
