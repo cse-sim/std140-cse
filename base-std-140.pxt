@@ -1,7 +1,7 @@
-<% # INTERFACE
-  # parameter "case_name"
-  # parameter "weather_dependent_infiltration_rate"
-  # parameter "adiabatic_floor"
+<%#INTERFACE
+  parameter "case_name"
+  parameter "weather_independent_infiltration_rate"
+  parameter "adiabatic_floor"
 %>
 
 <%
@@ -24,21 +24,6 @@ end
 
 # Internal use
 nsteps = 6
-%>
-
-<%
-# Std 140 Case Variables
-# if weather_dependent_infiltration_rate
-
-# else
-
-# end
-
-# if adiabatic_floor
-
-# else
-
-# end
 %>
 
 <%
@@ -98,7 +83,7 @@ nSubSteps = <%= nsteps %>
 DT = No
 bldgAzm = 0
 elevation = <%= 1650 * $m_ft %> <% # TODO: is there a way to import the elevation from the weather file? %>
-grndRefl = 0.20
+
 terrainClass = 3
 wuDays = 0
 skyModel = ANISOTROPIC
@@ -107,6 +92,14 @@ hConvMod = No
 jan1DoW = "FRI" // Jan 1 2021
 
 METER "MtrElec"
+
+// Soil
+
+soilCond = <%= 1.90 * $k_c %>
+soilDens = <%= 1490 * $rho_c %>
+soilSpHt = <%= 1800 * $cp_c  %>
+grndRefl = 0.20
+
 
 // Materials
 // Std140
@@ -204,10 +197,14 @@ CONSTRUCTION "Interior Floor"
 CONSTRUCTION "Dropped Ceiling"
   LAYER lrMat= "Dropped Ceiling Acoustic Tile" lrThk=<%= 0.08*$m_ft %>
 
-CONSTRUCTION "Slab-On-Grade"
+CONSTRUCTION "Slab-On-Grade Adiabatic"
   LAYER lrMat= "Carpet" lrThk=<%= 0.01728*$m_ft %>
   LAYER lrMat= "Concrete Floor" lrThk=<%= 0.20*$m_ft %>
   LAYER lrMat= "Adiabatic Insulation" lrThk=<%= 1.000*$m_ft %>
+
+CONSTRUCTION "Slab-On-Grade Non-Adiabatic"
+  LAYER lrMat= "Carpet" lrThk=<%= 0.01728*$m_ft %>
+  LAYER lrMat= "Concrete Floor" lrThk=<%= 0.20*$m_ft %>
 
 CONSTRUCTION "Interior Wall"
   LAYER lrMat= "Interior Wall Gypsum Board" lrThk=<%= 0.0127*$m_ft %>
@@ -217,6 +214,8 @@ CONSTRUCTION "Interior Wall"
 CONSTRUCTION "Furniture"
   LAYER lrMat= "Furniture Wood" lrThk=<%= 0.15*$m_ft %>
 
+FOUNDATION "Slab-On-Grade Non-Adiabatic"
+  fdFtCon = "Slab-On-Grade Non-Adiabatic"
 
 <%
 # Zones
@@ -227,6 +226,7 @@ zones = [
   {
     :name => "Corner_Northwest", 
     :area => corner_area,
+    :exposed_perimeter => corner_length * 2,
     :internal_partition_surface_area => 0,
     :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
@@ -271,6 +271,7 @@ zones = [
   {
     :name => "Perimeter_North",
     :area => perimeter_ns_area,
+    :exposed_perimeter => perimeter_ns_length,
     :internal_partition_surface_area => 150.367 * $m2_ft2,
     :internal_mass_surface_area => 372.9 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
@@ -320,6 +321,7 @@ zones = [
   {
     :name => "Corner_Northeast",
     :area => corner_area,
+    :exposed_perimeter => corner_length * 2,
     :internal_partition_surface_area => 0,
     :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
@@ -358,6 +360,7 @@ zones = [
   {
     :name => "Perimeter_West",
     :area => perimeter_ew_area,
+    :exposed_perimeter => perimeter_ew_length,
     :internal_partition_surface_area => 0,
     :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
@@ -395,6 +398,7 @@ zones = [
   {
     :name => "Core_1",
     :area => core_1_area,
+    :exposed_perimeter => 0,
     :internal_partition_surface_area => 161.054 * $m2_ft2,
     :internal_mass_surface_area => 906.3 * $m2_ft2,
     :infiltration_ach => [0.75,0,0],
@@ -425,6 +429,7 @@ zones = [
   {
     :name => "Core_2",
     :area => core_2_area,
+    :exposed_perimeter => 0,
     :internal_partition_surface_area => 139.473 * $m2_ft2,
     :internal_mass_surface_area => 526.3 * $m2_ft2,
     :infiltration_ach => [0.75,0,0],
@@ -455,6 +460,7 @@ zones = [
   {
     :name => "Core_3",
     :area => core_3_area,
+    :exposed_perimeter => 0,
     :internal_partition_surface_area => 139.967 * $m2_ft2,
     :internal_mass_surface_area => 534.8 * $m2_ft2,
     :infiltration_ach => [0.75,0,0],
@@ -485,6 +491,7 @@ zones = [
   {
     :name => "Perimeter_East",
     :area => perimeter_ew_area,
+    :exposed_perimeter => perimeter_ew_length,
     :internal_partition_surface_area => 75.188 * $m2_ft2,
     :internal_mass_surface_area => 220.7 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
@@ -516,6 +523,7 @@ zones = [
   {
     :name => "Corner_Southwest", 
     :area => corner_area,
+    :exposed_perimeter => corner_length * 2,
     :internal_partition_surface_area => 0,
     :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
@@ -554,6 +562,7 @@ zones = [
   {
     :name => "Perimeter_South",
     :area => perimeter_ns_area,
+    :exposed_perimeter => perimeter_ns_length,
     :internal_partition_surface_area => 150.367 * $m2_ft2,
     :internal_mass_surface_area => 372.9 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
@@ -585,6 +594,7 @@ zones = [
   {
     :name => "Corner_Southeast", 
     :area => corner_area,
+    :exposed_perimeter => corner_length * 2,
     :internal_partition_surface_area => 0,
     :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
@@ -809,6 +819,7 @@ for floor in floors
           <% end %>
         <% end %>
     <% else # Add non-plenum zones
+      exposed_perimeter = zone[:exposed_perimeter]
       internal_partition_surface_area = zone[:internal_partition_surface_area]
       internal_mass_surface_area = zone[:internal_mass_surface_area]
       occupancy_schedule = zone[:occupancy_schedule][floor_index]
@@ -824,7 +835,16 @@ for floor in floors
       ZONE <%= "Floor" + floor.to_s + zone_name %>
         znModel = "CZM"
         znArea = <%= zone_floor_area %>
-        infAC = <%= zone[:infiltration_ach][floor_index] %>
+        <% # TODO: is infiltration adjusted for elevation/air density in CSE? If not, the formula in section X.2.1.6.1 must be applied%>
+        <% # TODO: review infiltration inputs %>
+        <% if weather_independent_infiltration_rate %>
+          infAC = <%= zone[:infiltration_ach][floor_index] %>
+          znWindFLkg = 0
+        <% else # weather dependent infiltration rate %>
+          infAC = 0
+          infStories = 1
+          infShld = 3
+        <% end %>
         <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
         znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
         <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
@@ -882,7 +902,6 @@ for floor in floors
           sfCon = "Exterior Wall"
           sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
-
           WINDOW <%= "Floor" + (floor).to_s + surface[:name] %>
             wnHeight = <%= $window_height %>
             wnWidth = <%= $window_width %>
@@ -896,7 +915,7 @@ for floor in floors
             wnUNFRC = <%= $window_u_factor %>
             wnExEpsLW = <%= $window_infrared_emittance %>
             wnInEpsLW = <%= $window_infrared_emittance %>
-            wnExRf = <%= $rough_surface_value %>
+        <% end %> 
           
           <% if floor == 1 && if (zone_name == "Perimeter_North" || zone_name == "Perimeter_South") %> 
           DOOR <%= "Floor" + (floor).to_s + surface[:name] %>
@@ -915,15 +934,26 @@ for floor in floors
 
 
 
-      <% if floor == 1 # Add ground surface for non-plenum zones on first floor %> 
-        SURFACE <%= "Ground" + zone_name %>
-          sfType = "FLOOR"
-          sfArea = <%= zone[:area] %>
-          sfExCnd = "ADIABATIC"
-          sfCon = "Slab-On-Grade"
-          sfModel = FORWARD_DIFFERENCE
-          <% set_common_surface_variables() %>
-        
+      <% if floor == 1 # Add ground surface for non-plenum zones on first floor 
+        if adiabatic_floor %> 
+          SURFACE <%= "Ground" + zone_name %>
+            sfType = "FLOOR"
+            sfArea = <%= zone[:area] %>
+            sfExCnd = "ADIABATIC"
+            sfCon = "Slab-On-Grade Adiabatic"
+            sfModel = FORWARD_DIFFERENCE
+            <% set_common_surface_variables() %>
+        <% else %>
+          SURFACE <%= "Ground" + zone_name %>
+            sfType = "FLOOR"
+            sfArea = <%= zone[:area] %>
+            sfExCnd = "GROUND"
+            sfCon = "Slab-On-Grade Non-Adiabatic"
+            sfModel = KIVA
+            sfFnd = "Slab-On-Grade Non-Adiabatic"
+            sfExpPerim = <%= exposed_perimeter %>
+            <% set_common_surface_variables() %>
+        <% end %>
       <% else # Add floor surface for non-plenum surface on second or third floors %>
         SURFACE <%= "Floor" + (floor - 1).to_s + "Plenum" %>
           sfType = "FLOOR"

@@ -1,5 +1,3 @@
 :case_name=>"CB1010", 
-:weather_dependent_infiltration_rate=>true,
-:adiabatic_floor=>true,
-
-# infiltration rate dependent on wind speed, temp diff, etc.
+:weather_independent_infiltration_rate=>true,
+:adiabatic_floor=>true
