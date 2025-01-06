@@ -220,7 +220,7 @@ FOUNDATION "Slab-On-Grade Non-Adiabatic"
 <%
 # Zones
 
-floors = [1,2,3]
+floors = ["Bottom","Middle","Top"]
 
 zones = [
   {
@@ -776,12 +776,12 @@ def set_zone_volume_and_height_dimensions(zone,floor)
   <% end
 end
 
-for floor in floors
-  floor_index = floor - 1
+floors.each_with_index do |floor_name, floor_index|
+  floor = floor_index + 1
   for zone in zones 
     zone_name = zone[:name]
-    zone_floor_name = "Floor" + floor.to_s + zone_name
-    zone_floor_area = zone[:area] 
+    zone_floor_name = "#{floor_name}_#{zone_name}"
+    zone_floor_area = zone[:area]
     if zone_name == "Plenum" # Add plenum zones %>
       ZONE <%= zone_floor_name %>
         znModel = "UZM"
@@ -800,14 +800,15 @@ for floor in floors
         <% set_common_surface_variables() %>
       <% end %>
         <% for surface in zone[:surfaces] # Add wall surfaces %>
-        SURFACE <%= surface[:name] %>
+        <% adjacent_zone_name = "#{floor_name}_#{surface[:name]}" %>
+        SURFACE <%= adjacent_zone_name %>
           sfType = <%= "WALL" %>
           sfArea = <%= surface[:surface_area] %>
           sfAzm = <%= surface[:azimuth] %>
 
           <% if surface[:surface_facing_type] == "Interior" %>
             sfExCnd = "ADJZN"
-            sfAdjZn = <%= "Floor" + (floor).to_s + surface[:name] %>
+            sfAdjZn = <%= adjacent_zone_name %>
             sfCon = "Interior Wall"
             sfModel = FORWARD_DIFFERENCE
             <% set_common_surface_variables() %>
@@ -832,7 +833,7 @@ for floor in floors
       people_outdoor_air_rate = zone[:people_outdoor_air_rate][floor_index]
       area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index] %>
 
-      ZONE <%= "Floor" + floor.to_s + zone_name %>
+      ZONE <%= zone_floor_name %>
         znModel = "CZM"
         znArea = <%= zone_floor_area %>
         <% # TODO: is infiltration adjusted for elevation/air density in CSE? If not, the formula in section X.2.1.6.1 must be applied%>
@@ -853,7 +854,7 @@ for floor in floors
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
 
       <% if internal_partition_surface_area > 0 # internal partition surface %>
-        SURFACE <%= zone_floor_name + "InternalPartition" %>
+        SURFACE <%= "#{zone_floor_name}_Internal_Partition" %>
           sfType = "WALL" 
           sfCon = "Interior Wall"
           sfArea = <%= internal_partition_surface_area %>
@@ -863,7 +864,7 @@ for floor in floors
           sfModel = FORWARD_DIFFERENCE
       <% end %>
       <% if internal_mass_surface_area > 0 # interal mass surface %>
-        SURFACE <%= zone_floor_name + "InternalMass" %> // TODO: is it appropriate to create a surface for internal mass?
+        SURFACE <%= "#{zone_floor_name}_Internal_Mass" %> // TODO: is it appropriate to create a surface for internal mass?
           sfType = "WALL" 
           sfCon = "Furniture"
           sfArea = <%= internal_mass_surface_area %>
@@ -885,15 +886,16 @@ for floor in floors
         gnPower = <%= plug_load_power_density * zone_floor_area %> * <%= set_lighting_schedule(plug_load_schedule) %>
         gnFrRad = 0.50
         gnFrLat = 0
-      <% for surface in zone[:surfaces] %>
-      SURFACE <%= surface[:name] %>
+      <% for surface in zone[:surfaces] # Add non-plenum adjacent surfaces %>
+      <% adjacent_zone_name = "#{floor_name}_#{surface[:name]}" %>
+      SURFACE <%= adjacent_zone_name %>
         sfType = <%= "WALL" %>
         sfArea = <%= surface[:surface_area] %>
         sfAzm = <%= surface[:azimuth] %>
 
         <% if surface[:surface_facing_type] == "Interior" # Add non-plenum zone interior surfaces %>
           sfExCnd = "ADJZN"
-          sfAdjZn = <%= "Floor" + (floor).to_s + surface[:name] %>
+          sfAdjZn = <%= adjacent_zone_name %>
           sfCon = "Interior Wall"
           sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
@@ -902,7 +904,7 @@ for floor in floors
           sfCon = "Exterior Wall"
           sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
-          WINDOW <%= "Floor" + (floor).to_s + surface[:name] %>
+          WINDOW <%= zone_floor_name %>
             wnHeight = <%= $window_height %>
             wnWidth = <%= $window_width %>
             wnMult = <%= surface[:number_windows] %>
@@ -918,7 +920,7 @@ for floor in floors
         <% end %> 
           
           <% if floor == 1 && if (zone_name == "Perimeter_North" || zone_name == "Perimeter_South") %> 
-          DOOR <%= "Floor" + (floor).to_s + surface[:name] %>
+          DOOR <%= zone_floor_name %>
             drArea = <%= $two_door_area %>
             drModel = "FORWARD_DIFFERENCE"
             drCon = "Exterior Door"
@@ -934,9 +936,10 @@ for floor in floors
 
 
 
-      <% if floor == 1 # Add ground surface for non-plenum zones on first floor 
+      <% if floor == 1 # Add ground surface for non-plenum zones on first floor
+        ground_name = "Ground_#{zone_name}"
         if adiabatic_floor %> 
-          SURFACE <%= "Ground" + zone_name %>
+          SURFACE <%= ground_name %>
             sfType = "FLOOR"
             sfArea = <%= zone[:area] %>
             sfExCnd = "ADIABATIC"
@@ -944,7 +947,7 @@ for floor in floors
             sfModel = FORWARD_DIFFERENCE
             <% set_common_surface_variables() %>
         <% else %>
-          SURFACE <%= "Ground" + zone_name %>
+          SURFACE <%= ground_name %>
             sfType = "FLOOR"
             sfArea = <%= zone[:area] %>
             sfExCnd = "GROUND"
@@ -955,21 +958,22 @@ for floor in floors
             <% set_common_surface_variables() %>
         <% end %>
       <% else # Add floor surface for non-plenum surface on second or third floors %>
-        SURFACE <%= "Floor" + (floor - 1).to_s + "Plenum" %>
+        <% plenum_below_zone_floor_name = "#{floors[floor_index-1]}_Plenum" %>
+        SURFACE <%= plenum_below_zone_floor_name %>
           sfType = "FLOOR"
           sfArea = <%= zone[:area] %>
           sfExCnd = "ADJZN"
-          sfAdjZn = <%= "Floor" + (floor - 1).to_s + "Plenum" %>
+          sfAdjZn = <%= plenum_below_zone_floor_name %>
           sfCon = "Interior Floor"
           sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
       <% end %>
-
-      SURFACE <%= "Floor" + floor.to_s + "Plenum" %>
+      <% plenum_above_zone_floor_name = "#{floor_name}_Plenum" %>
+      SURFACE <%= plenum_above_zone_floor_name %>
         sfType = "CEILING"
         sfArea = <%= zone[:area] %>
         sfExCnd = "ADJZN"
-        sfAdjZn = <%= "Floor" + floor.to_s + "Plenum" %>
+        sfAdjZn = <%= plenum_above_zone_floor_name %>
         sfCon = "Dropped Ceiling"
         sfModel = FORWARD_DIFFERENCE
         <% set_common_surface_variables() %>
