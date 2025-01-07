@@ -980,18 +980,33 @@ floors.each_with_index do |floor_name, floor_index|
   <% end %>
 <% end %>
 
-// EXPORTFILE "Output"
-  // xfFileName = "Output.csv"
-  // xfFileStat = OVERWRITE
+EXPORTFILE "Output"
+  xfFileName = "Output.csv"
+  xfFileStat = OVERWRITE
 
-// EXPORT
-  // exExportfile = "Output"
-  // exHeader = ColumnsOnly
-  // exFooter = No
-  // exType = UDT
-  // exFreq = HOUR
-  // exDayBeg = JAN 1
-  // exDayEnd = DEC 31
+EXPORT
+  exExportfile = "Output"
+  exHeader = ColumnsOnly
+  exFooter = No
+  exType = UDT
+  exFreq = HOUR
+  exDayBeg = JAN 1
+  exDayEnd = DEC 31
 
+EXPORTCOL colHead="Month" colVal=$month
+EXPORTCOL colHead="Day" colVal=$dayOfMonth
+EXPORTCOL colHead="Hour" colVal=$hour
+
+<% for floor in floors
+  for zone in zones
+    zone_name = zone[:name]
+    zone_floor_name = "#{floor}_#{zone_name}" %>
+    EXPORTCOL colHead="<%= "ZoneAirTemp_#{zone_floor_name}" %>" colVal=(@znRes[<%= zone_floor_name %>].H.tAir - 32) / 1.8
+    EXPORTCOL colHead="<%= "SensibleCoolingRate_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.qscHvac / <%= $kw_btu %>
+    EXPORTCOL colHead="<%= "HeatingRate_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.qsMech / <%= $kw_btu %>
+    EXPORTCOL colHead="<%= "LightingPower_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.litDmd / <%= $kw_btu %>
+    // EXPORTCOL colHead="<%= "PlugLoadPower_#{zone_floor_name}" %>" colVal=
+  <% end %>
+<% end %>
 
 RUN
