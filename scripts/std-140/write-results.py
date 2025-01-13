@@ -35,8 +35,8 @@ last_data_row = first_data_row + 8760
 
 template_file_root = "Std140_CB_Output"
 test_suite = "std-140"
-# current_directory = os.path.dirname(os.path.dirname(os.getcwd()))
-current_directory = os.getcwd()
+# current_directory = os.path.dirname(os.path.dirname(os.getcwd())) # Use when called from rakefile
+current_directory = os.getcwd()  # Use when running script directly
 template_file_name = f"{template_file_root}_Template.xlsx"
 template_file_path = Path(f"{current_directory}/docs/{test_suite}/{template_file_name}")
 
