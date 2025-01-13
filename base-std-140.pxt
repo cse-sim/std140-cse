@@ -1009,4 +1009,26 @@ EXPORTCOL colHead="Hour" colVal=$hour
   <% end
 end %>
 
+<%
+
+exterior_surface_conduction = "Total exterior surface conduction heat transfer rate [kW] c"
+exterior_surface_incident_solar = "Total exterior surface incident solar radiation rate [kW] d"
+exterior_surface_convection = "Total exterior surface convection heat transfer rate [kW] f"
+interior_surface_conduction = "Total interior surface conduction heat transfer rate [kW] c"
+interior_surface_convection = "Total interior surface convection heat transfer rate [kW] f"
+
+bottom_perimeter_south = "Bottom_Perimeter_South"
+bottom_perimeter_south_exterior = "Bottom_Exterior_South"
+surface_name = create_surface_name(bottom_perimeter_south, bottom_perimeter_south_exterior)
+
+%>
+
+
+// EXPORTCOL colHead="<%= exterior_surface_incident_solar %>" colVal=@xsurf["<%= surface_name %>"].sbcI.hxr * (@xsurf["<%= surface_name %>"].sbcI.txr - @xsurf["<%= surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btu %>
+EXPORTCOL colHead="<%= exterior_surface_convection %>" colVal=@xsurf["<%= surface_name %>"].sbcI.hxa * (@xsurf["<%= surface_name %>"].sbcI.txa - @xsurf["<%= surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btu %>
+EXPORTCOL colHead="<%= interior_surface_convection %>" colVal=@xsurf["<%= surface_name %>"].sbcO.hxa * (@xsurf["<%= surface_name %>"].sbcO.txa - @xsurf["<%= surface_name %>"].sbcO.tsrf) * <%= $m2_ft2 / $kw_btu %>
+
+
+// surface for gross area and xsurf for net area 
+
 RUN
