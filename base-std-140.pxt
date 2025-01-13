@@ -721,7 +721,6 @@ def set_infiltration_schedule(infiltration_schedule)
   end
 end
 
-
 def set_cooling_schedule(cooling_schedule)
   if cooling_schedule == "O"
     return "select($ISWEHOL, hourval(26.67,26.67,26.67,26.67,26.67,26.67,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,23.89,26.67,26.67), default hourval(26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67,26.67))"
@@ -761,7 +760,12 @@ end %>
   else # non-plenum floor height
     return $floor_height
   end
-end 
+end
+
+def create_surface_name(zone_floor_name, adjacent_zone_name)
+  zones = [zone_floor_name, adjacent_zone_name].sort
+  return "#{zones[0]}_#{zones[1]}"
+end
 
 def set_zone_volume_and_height_dimensions(zone,floor)
   if zone[:name] == "Plenum" %>
@@ -777,11 +781,19 @@ end
 
 floors.each_with_index do |floor_name, floor_index|
   floor = floor_index + 1
-  for zone in zones 
+  for zone in zones
     zone_name = zone[:name]
     zone_floor_name = "#{floor_name}_#{zone_name}"
     zone_floor_area = zone[:area]
-    if zone_name == "Plenum" # Add plenum zones %>
+
+    zone_floor_lighting_meter = "MtrLighting_#{zone_floor_name}"
+    zone_floor_plug_load_meter = "MtrPlugLoad_#{zone_floor_name}" %>
+
+    METER <%= zone_floor_lighting_meter %>
+    METER <%= zone_floor_plug_load_meter %>
+
+    <% if zone_name == "Plenum" # Add plenum zones %>
+
       ZONE <%= zone_floor_name %>
         znModel = "UZM"
         znArea = <%= zone_floor_area %>
@@ -790,7 +802,7 @@ floors.each_with_index do |floor_name, floor_index|
         znHcAirX = 0
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
       <% if floor == 3 %>
-        SURFACE "Roof"
+        SURFACE <%= create_surface_name(zone_floor_name, "Roof") %>
           sfType = "CEILING"
           sfArea = <%= floor_area %>
           sfExCnd = "AMBIENT"
@@ -800,7 +812,7 @@ floors.each_with_index do |floor_name, floor_index|
       <% end %>
         <% for surface in zone[:surfaces] # Add wall surfaces %>
         <% adjacent_zone_name = "#{floor_name}_#{surface[:name]}" %>
-        SURFACE <%= adjacent_zone_name %>
+        SURFACE <%= create_surface_name(zone_floor_name, adjacent_zone_name) %>
           sfType = <%= "WALL" %>
           sfArea = <%= surface[:surface_area] %>
           sfAzm = <%= surface[:azimuth] %>
@@ -830,7 +842,21 @@ floors.each_with_index do |floor_name, floor_index|
       plug_load_power_density = zone[:plug_load_power_density][floor_index]
       ventilation_schedule = zone[:ventilation_schedule]
       people_outdoor_air_rate = zone[:people_outdoor_air_rate][floor_index]
-      area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index] %>
+      area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index] 
+
+      flow_rate = ($m3_ft3 / $h_min) * (occupancy * people_outdoor_air_rate + zone_floor_area * area_outdoor_air_rate) %>
+
+      IZXFER <%= "#{zone_floor_name}_Ventilation" %>
+        izNVType = AIRNETEXTFLOW
+        izAFCat = FanEx
+        izZn1 = <%= zone_floor_name %>
+        // izWindSpeed
+        izVfMin = <%= flow_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %>
+
+      IZXFER <%= "#{zone_floor_name}_Exfiltration" %>
+        izNVType = AIRNETEXT
+        izZn1 = <%= zone_floor_name %>
+        izALo = <%= flow_rate / 1000 %> * <%= set_ventilation_schedule(ventilation_schedule) %>
 
       ZONE <%= zone_floor_name %>
         znModel = "CZM"
@@ -849,11 +875,12 @@ floors.each_with_index do |floor_name, floor_index|
         znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
         <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
         <% # TODO: ventilation should be calculated accoridng to 140-2023 Informative Annex B3 %>
-        znHcAirX = <%= occupancy * people_outdoor_air_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %> + <%= zone_floor_area * area_outdoor_air_rate %>
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
 
+        
+
       <% if internal_partition_surface_area > 0 # internal partition surface %>
-        SURFACE <%= "#{zone_floor_name}_Internal_Partition" %>
+    SURFACE <%= "#{zone_floor_name}_Internal_Partition" %>
           sfType = "WALL" 
           sfCon = "Interior Wall"
           sfArea = <%= internal_partition_surface_area %>
@@ -881,13 +908,17 @@ floors.each_with_index do |floor_name, floor_index|
         gnPower = <%= lighting_power_density * zone_floor_area %> * <%= set_lighting_schedule(lighting_schedule) %>
         gnFrRad = 0.70
         gnFrLat = 0
+        gnEndUse = LIT
+        gnMeter = <%= zone_floor_lighting_meter %>
       GAIN <%= "PlugLoadSchedule" + plug_load_schedule %> 
         gnPower = <%= plug_load_power_density * zone_floor_area %> * <%= set_lighting_schedule(plug_load_schedule) %>
         gnFrRad = 0.50
         gnFrLat = 0
+        gnEndUse = RCP
+        gnMeter = <%= zone_floor_plug_load_meter %>
       <% for surface in zone[:surfaces] # Add non-plenum adjacent surfaces %>
       <% adjacent_zone_name = "#{floor_name}_#{surface[:name]}" %>
-      SURFACE <%= adjacent_zone_name %>
+      SURFACE <%= create_surface_name(zone_floor_name, adjacent_zone_name) %>
         sfType = <%= "WALL" %>
         sfArea = <%= surface[:surface_area] %>
         sfAzm = <%= surface[:azimuth] %>
@@ -935,20 +966,16 @@ floors.each_with_index do |floor_name, floor_index|
 
 
 
-      <% if floor == 1 # Add ground surface for non-plenum zones on first floor
-        ground_name = "Ground_#{zone_name}"
-        if adiabatic_floor %> 
-          SURFACE <%= ground_name %>
-            sfType = "FLOOR"
-            sfArea = <%= zone[:area] %>
+      <% if floor == 1 # Add ground surface for non-plenum zones on first floor %>
+        SURFACE <%= create_surface_name(zone_floor_name, "Ground") %>
+          sfType = "FLOOR"
+          sfArea = <%= zone[:area] %>
+        <% if adiabatic_floor %> 
             sfExCnd = "ADIABATIC"
             sfCon = "Slab-On-Grade Adiabatic"
             sfModel = FORWARD_DIFFERENCE
             <% set_common_surface_variables() %>
         <% else %>
-          SURFACE <%= ground_name %>
-            sfType = "FLOOR"
-            sfArea = <%= zone[:area] %>
             sfExCnd = "GROUND"
             sfCon = "Slab-On-Grade Non-Adiabatic"
             sfModel = KIVA
@@ -958,7 +985,7 @@ floors.each_with_index do |floor_name, floor_index|
         <% end %>
       <% else # Add floor surface for non-plenum surface on second or third floors %>
         <% plenum_below_zone_floor_name = "#{floors[floor_index-1]}_Plenum" %>
-        SURFACE <%= plenum_below_zone_floor_name %>
+        SURFACE <%= create_surface_name(zone_floor_name, plenum_below_zone_floor_name) %>
           sfType = "FLOOR"
           sfArea = <%= zone[:area] %>
           sfExCnd = "ADJZN"
@@ -967,15 +994,15 @@ floors.each_with_index do |floor_name, floor_index|
           sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
       <% end %>
-      <% plenum_above_zone_floor_name = "#{floor_name}_Plenum" %>
-      SURFACE <%= plenum_above_zone_floor_name %>
-        sfType = "CEILING"
-        sfArea = <%= zone[:area] %>
-        sfExCnd = "ADJZN"
-        sfAdjZn = <%= plenum_above_zone_floor_name %>
-        sfCon = "Dropped Ceiling"
-        sfModel = FORWARD_DIFFERENCE
-        <% set_common_surface_variables() %>
+        <% plenum_above_zone_floor_name = "#{floor_name}_Plenum" %>
+        SURFACE <%= create_surface_name(zone_floor_name, plenum_above_zone_floor_name) %>
+          sfType = "CEILING"
+          sfArea = <%= zone[:area] %>
+          sfExCnd = "ADJZN"
+          sfAdjZn = <%= plenum_above_zone_floor_name %>
+          sfCon = "Dropped Ceiling"
+          sfModel = FORWARD_DIFFERENCE
+          <% set_common_surface_variables() %>
     <% end %>
   <% end %>
 <% end %>
