@@ -1002,11 +1002,11 @@ EXPORTCOL colHead="Hour" colVal=$hour
     zone_name = zone[:name]
     zone_floor_name = "#{floor}_#{zone_name}" %>
     EXPORTCOL colHead="<%= "ZoneAirTemp_#{zone_floor_name}" %>" colVal=(@znRes[<%= zone_floor_name %>].H.tAir - 32) / 1.8
-    EXPORTCOL colHead="<%= "SensibleCoolingRate_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.qscHvac / <%= $kw_btu %>
-    EXPORTCOL colHead="<%= "HeatingRate_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.qsMech / <%= $kw_btu %>
-    EXPORTCOL colHead="<%= "LightingPower_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.litDmd / <%= $kw_btu %>
-    // EXPORTCOL colHead="<%= "PlugLoadPower_#{zone_floor_name}" %>" colVal=
-  <% end %>
-<% end %>
+    EXPORTCOL colHead="<%= "SensibleCoolingRate_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.qscHvac / <%= $kw_btu %> * <%= -1 %>
+    EXPORTCOL colHead="<%= "HeatingRate_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.qhMech / <%= $kw_btu %>
+    EXPORTCOL colHead="<%= "LightingPower_#{zone_floor_name}" %>" colVal=@meter[<%= "MtrLighting_#{zone_floor_name}" %>].H.lit / <%= $kw_btu %>
+    EXPORTCOL colHead="<%= "PlugLoadPower_#{zone_floor_name}" %>" colVal=@meter[<%= "MtrPlugLoad_#{zone_floor_name}" %>].H.rcp / <%= $kw_btu %>
+  <% end
+end %>
 
 RUN

@@ -54,7 +54,7 @@ hourly_sheets = [
     "SensibleCoolingRate",
     "HeatingRate",
     "LightingPower",
-    # "PlugLoadPower",
+    "PlugLoadPower",
 ]
 
 for case in cases:
