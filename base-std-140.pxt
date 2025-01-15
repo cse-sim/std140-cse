@@ -794,10 +794,6 @@ floors.each_with_index do |floor_name, floor_index|
 
     <% if zone_name == "Plenum" # Add plenum zones %>
 
-      IZXFER <%= "#{zone_floor_name}_Ventilation" %>
-        izNVType = NONE
-        izZn1 = <%= zone_floor_name %>
-
       ZONE <%= zone_floor_name %>
         znModel = "UZM"
         znArea = <%= zone_floor_area %>
@@ -850,21 +846,6 @@ floors.each_with_index do |floor_name, floor_index|
       area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index]
 
       flow_rate = ($m3_ft3 / $h_min) * (occupancy * people_outdoor_air_rate + zone_floor_area * area_outdoor_air_rate) %>
-
-      <% # if (zone_floor_name == "Bottom_Corner_Northwest") | (zone_floor_name == "Bottom_Perimeter_North") | (zone_floor_name == "Bottom_Corner_Northeast") | (zone_floor_name == "Bottom_Corner_Southwest")%>
-      <% # if (floor_name == "Bottom") # | (floor_name == "Middle") %> 
-      IZXFER <%= "#{zone_floor_name}_Ventilation" %>
-        izNVType = AIRNETEXTFLOW
-        izAFCat = FanEx
-        izZn1 = <%= zone_floor_name %>
-        // izWindSpeed
-        izVfMin = <%= flow_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %>
-
-      IZXFER <%= "#{zone_floor_name}_Exfiltration" %>
-        izNVType = AIRNETEXT
-        izZn1 = <%= zone_floor_name %>
-        izALo = <%= flow_rate * zone_floor_area %>
-      <% # end %>
 
       ZONE <%= zone_floor_name %>
         znModel = "CZM"
