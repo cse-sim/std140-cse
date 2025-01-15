@@ -847,7 +847,7 @@ floors.each_with_index do |floor_name, floor_index|
       plug_load_power_density = zone[:plug_load_power_density][floor_index]
       ventilation_schedule = zone[:ventilation_schedule]
       people_outdoor_air_rate = zone[:people_outdoor_air_rate][floor_index]
-      area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index] 
+      area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index]
 
       flow_rate = ($m3_ft3 / $h_min) * (occupancy * people_outdoor_air_rate + zone_floor_area * area_outdoor_air_rate) %>
 
