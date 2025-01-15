@@ -794,6 +794,10 @@ floors.each_with_index do |floor_name, floor_index|
 
     <% if zone_name == "Plenum" # Add plenum zones %>
 
+      IZXFER <%= "#{zone_floor_name}_Ventilation" %>
+        izNVType = NONE
+        izZn1 = <%= zone_floor_name %>
+
       ZONE <%= zone_floor_name %>
         znModel = "UZM"
         znArea = <%= zone_floor_area %>
@@ -831,6 +835,7 @@ floors.each_with_index do |floor_name, floor_index|
           <% end %>
         <% end %>
     <% else # Add non-plenum zones
+
       exposed_perimeter = zone[:exposed_perimeter]
       internal_partition_surface_area = zone[:internal_partition_surface_area]
       internal_mass_surface_area = zone[:internal_mass_surface_area]
@@ -846,6 +851,8 @@ floors.each_with_index do |floor_name, floor_index|
 
       flow_rate = ($m3_ft3 / $h_min) * (occupancy * people_outdoor_air_rate + zone_floor_area * area_outdoor_air_rate) %>
 
+      <% # if (zone_floor_name == "Bottom_Corner_Northwest") | (zone_floor_name == "Bottom_Perimeter_North") | (zone_floor_name == "Bottom_Corner_Northeast") | (zone_floor_name == "Bottom_Corner_Southwest")%>
+      <% # if (floor_name == "Bottom") # | (floor_name == "Middle") %> 
       IZXFER <%= "#{zone_floor_name}_Ventilation" %>
         izNVType = AIRNETEXTFLOW
         izAFCat = FanEx
@@ -856,12 +863,13 @@ floors.each_with_index do |floor_name, floor_index|
       IZXFER <%= "#{zone_floor_name}_Exfiltration" %>
         izNVType = AIRNETEXT
         izZn1 = <%= zone_floor_name %>
-        izALo = <%= flow_rate / 1000 %> * <%= set_ventilation_schedule(ventilation_schedule) %>
+        izALo = <%= flow_rate * zone_floor_area %>
+      <% # end %>
 
       ZONE <%= zone_floor_name %>
         znModel = "CZM"
         znArea = <%= zone_floor_area %>
-        <% # TODO: is infiltration adjusted for elevation/air density in CSE? If not, the formula in section X.2.1.6.1 must be applied%>
+        <% # TODO: is infiltration adjusted for elevation/air density in CSE? If not, the formula in section X.2.1.6.1 must be applied %>
         <% # TODO: review infiltration inputs %>
         <% if weather_independent_infiltration_rate %>
           infAC = <%= zone[:infiltration_ach][floor_index] %>
