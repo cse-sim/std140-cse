@@ -1038,22 +1038,48 @@ end %>
 
 <%
 
-exterior_surface_conduction = "Total exterior surface conduction heat transfer rate [kW] c"
-exterior_surface_incident_solar = "Total exterior surface incident solar radiation rate [kW] d"
-exterior_surface_convection = "Total exterior surface convection heat transfer rate [kW] f"
-interior_surface_conduction = "Total interior surface conduction heat transfer rate [kW] c"
-interior_surface_convection = "Total interior surface convection heat transfer rate [kW] f"
+outdoor_air_density = "Current outdoor air density a [kg/m3]"
+
+infiltration_mass_flow_rate = "Infiltration mass flow rate [kg/s] b"
+infiltration_sensible_heat_transfer_rate = "Sensible heat transfer rate into the zone due to infiltration [kW] c"
+infiltration_latent_heat_transfer_rate = "Latent heat transfer rate into the zone due to infiltration [kW] c"
+
+ventilation_mass_flow_rate = "Ventilation mass flow rate [kg/s] b"
+ventilation_sensible_heat_transfer_rate = "Sensible heat transfer rate into the zone due to ventilation [kW] c"
+ventilation_latent_heat_transfer_rate = "Latent heat transfer rate into the zone due to ventilation [kW] c"
+
+window_solar_radiation_rate = "Total window transmitted solar radiation rate [kW] c,d"
+window_net_heat_transfer_rate = "Total net heat transfer rate through the windows [kW] c,e"
+
+exterior_wall_exterior_surface_conduction_rate = "Total exterior surface conduction heat transfer rate [kW] c"
+exterior_wall_exterior_surface_incident_solar_rate = "Total exterior surface incident solar radiation rate [kW] d"
+exterior_wall_exterior_surface_convection_rate = "Total exterior surface convection heat transfer rate [kW] f"
+exterior_wall_interior_surface_conduction_rate = "Total interior surface conduction heat transfer rate [kW] c*"
+exterior_wall_interior_surface_convection_rate = "Total interior surface convection heat transfer rate [kW] f*"
+
+slab_on_grade_interior_surface_conduction_rate = "Total interior surface conduction heat transfer rate [kW] c^"
+slab_on_grade_interior_surface_convection_rate = "Total interior surface convection heat transfer rate [kW] f^"
 
 bottom_perimeter_south = "Bottom_Perimeter_South"
 bottom_perimeter_south_exterior = "Bottom_Exterior_South"
-surface_name = create_surface_name(bottom_perimeter_south, bottom_perimeter_south_exterior)
+ground = "Ground"
+
+exterior_wall_surface_name = create_surface_name(bottom_perimeter_south, bottom_perimeter_south_exterior)
+ground_surface_name = create_surface_name(bottom_perimeter_south, ground)
+
+exterior_wall_area = perimeter_ns_length * $floor_height
+slab_area = perimeter_ns_area
 
 %>
 
+EXPORTCOL colHead="<%= exterior_wall_exterior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qSrf * <%= $m2_ft2 / $kw_btu * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qrAbs * <%= $m2_ft2 / $kw_btu * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_exterior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcO.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcO.tsrf) * <%= $m2_ft2 / $kw_btu * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_interior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btu * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_interior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcI.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btu * exterior_wall_area %>
 
-// EXPORTCOL colHead="<%= exterior_surface_incident_solar %>" colVal=@xsurf["<%= surface_name %>"].sbcI.hxr * (@xsurf["<%= surface_name %>"].sbcI.txr - @xsurf["<%= surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btu %>
-EXPORTCOL colHead="<%= exterior_surface_convection %>" colVal=@xsurf["<%= surface_name %>"].sbcI.hxa * (@xsurf["<%= surface_name %>"].sbcI.txa - @xsurf["<%= surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btu %>
-EXPORTCOL colHead="<%= interior_surface_convection %>" colVal=@xsurf["<%= surface_name %>"].sbcO.hxa * (@xsurf["<%= surface_name %>"].sbcO.txa - @xsurf["<%= surface_name %>"].sbcO.tsrf) * <%= $m2_ft2 / $kw_btu %>
+EXPORTCOL colHead="<%= exterior_wall_interior_surface_conduction_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btu * slab_area %>
+EXPORTCOL colHead="<%= slab_on_grade_interior_surface_convection_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.hxa * (@xsurf["<%= ground_surface_name %>"].sbcI.txa - @xsurf["<%= ground_surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btu * slab_area%>
 
 
 // surface for gross area and xsurf for net area 
