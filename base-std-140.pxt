@@ -779,9 +779,36 @@ def set_zone_volume_and_height_dimensions(zone,floor)
   <% end
 end
 
-floors.each_with_index do |floor_name, floor_index|
-  floor = floor_index + 1
-  for zone in zones
+for zone in zones
+  zone_name = zone[:name]
+  if zone_name != "Plenum"
+    floors.each_with_index do |floor_name, floor_index|
+    floor = floor_index + 1
+    zone_floor_name = "#{floor_name}_#{zone_name}"
+    zone_floor_area = zone[:area]
+    occupancy = zone[:occupancy][floor_index]
+    ventilation_schedule = zone[:ventilation_schedule]
+    people_outdoor_air_rate = zone[:people_outdoor_air_rate][floor_index]
+    area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index]
+    flow_rate = ($m3_ft3 / $h_min) * (occupancy * people_outdoor_air_rate + zone_floor_area * area_outdoor_air_rate) %>
+
+    IZXFER <%= "#{zone_floor_name}_Ventilation" %>
+      izNVType = AIRNETEXTFLOW
+      izAFCat = FanEx
+      izZn1 = <%= zone_floor_name %>
+      izVfMin = <%= flow_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %>
+
+    IZXFER <%= "#{zone_floor_name}_Exfiltration" %>
+      izNVType = AIRNETEXT
+      izZn1 = <%= zone_floor_name %>
+      izALo = <%= flow_rate * zone_floor_area %>
+    <% end
+  end
+end
+
+for zone in zones
+  floors.each_with_index do |floor_name, floor_index|
+    floor = floor_index + 1
     zone_name = zone[:name]
     zone_floor_name = "#{floor_name}_#{zone_name}"
     zone_floor_area = zone[:area]
