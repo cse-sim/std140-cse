@@ -56,6 +56,16 @@ hourly_sheets = [
     "LightingPower",
     "PlugLoadPower",
 ]
+zone_sheet = "Hourly-Bottom_Perimeter_South"
+zone_columns = [
+    "Total exterior surface conduction heat transfer rate [kW] c",
+    "Total exterior surface incident solar radiation rate [kW] d",
+    "Total exterior surface convection heat transfer rate [kW] f",
+    "Total interior surface conduction heat transfer rate [kW] c*",
+    "Total interior surface convection heat transfer rate [kW] f*",
+    "Total interior surface conduction heat transfer rate [kW] c^",
+    "Total interior surface convection heat transfer rate [kW] f^",
+]
 
 for case in cases:
     template = xl.load_workbook(filename=template_file_path)
@@ -100,6 +110,21 @@ for case in cases:
             for col_idx, value in enumerate(row, start=1):
                 sheet.cell(row=row_idx + 1, column=col_idx, value=value)
         print("Data successfully added to the XLSX file.")
+
+    df_sheet = sheets[zone_sheet]
+    df_sheet = df_sheet.iloc[:, :-1]
+    df_sheet.columns = df_sheet.iloc[0]
+    df_sheet = df_sheet[1:]
+    for zone_column in zone_columns:
+        df_sheet[zone_column] = df_case_data[zone_column]
+
+    sheet = template[zone_sheet]  # Access the corresponding sheet in the template
+    for row_idx, row in enumerate(
+        dataframe_to_rows(df_sheet, index=False, header=False), start=3
+    ):
+        for col_idx, value in enumerate(row, start=1):
+            sheet.cell(row=row_idx + 1, column=col_idx, value=value)
+
     print(f"Done processing case {case}.")
     print("Writing results to XLSX ...")
     template.save(f"{current_directory}/reports/{test_suite}/{output_file_name}")
