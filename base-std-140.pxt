@@ -9,14 +9,17 @@
 $m_ft = 3.28084
 $m2_ft2 = $m_ft*$m_ft
 $m3_ft3 = $m2_ft2*$m_ft
+$kg_lbm = 2.20462
 $h_min = 60.0
+$h_s = 3600.0
 $k_c = 0.5781759824
 $rho_c = 0.062428
 $cp_c = 0.000239
-$w_btu = 3.412
-$kw_btu = $w_btu * 1000
+$w_btuh = 3.412
+$kw_btuh = $w_btuh * 1000
+$kj_btu = 1 / 1.0556
 $k_r = 9/5.0
-$q_c = $w_btu/$m2_ft2
+$q_c = $w_btuh/$m2_ft2
 $u_c = $q_c/$k_r
 
 def convert_celsius_to_fahrenheit(celsius)
@@ -59,6 +62,7 @@ core_3_area = core_3_width * perimeter_ew_length
 
 $window_width = 2.486 * $m_ft
 $window_height = 2.7432 * $m_ft
+$window_area = $window_width * $window_height
 $window_shgc = 0.39
 $window_u_factor = 5.231 * $u_c
 
@@ -67,7 +71,7 @@ door_height = 2.1336 * $m_ft
 
 $two_door_area = door_width * door_height * 2 # TODO: can two doors be combined into a single door with double area in DOOR object?
 
-$occupant_power = 120*$w_btu
+$occupant_power = 120*$w_btuh
 
 $infrared_emittance	= 0.9
 $window_infrared_emittance	= 0.84
@@ -749,8 +753,8 @@ def set_heating_and_cooling_schedules_and_capacities(zone_name)
   if zone_name != "Plenum" # non-plenum zones %>
     znTC = <%= 9.0/5.0 %> * <%= set_cooling_schedule(cooling_schedule) %> + <%= 32.0 %>
     znTH = <%= 9.0/5.0 %> * <%= set_heating_schedule(heating_schedule) %> + <%= 32.0 %>
-    znQMxC = <%= -1000000 * $w_btu %>
-    znQMxH = <%= 1000000 * $w_btu %>
+    znQMxC = <%= -1000000 * $w_btuh %>
+    znQMxH = <%= 1000000 * $w_btuh %>
   <% end
 end %>
 
@@ -1023,42 +1027,13 @@ for zone in zones
   <% end %>
 <% end %>
 
-EXPORTFILE "Output"
-  xfFileName = "Output.csv"
-  xfFileStat = OVERWRITE
-
-EXPORT
-  exExportfile = "Output"
-  exHeader = ColumnsOnly
-  exFooter = No
-  exType = UDT
-  exFreq = HOUR
-  exDayBeg = JAN 1
-  exDayEnd = DEC 31
-
-EXPORTCOL colHead="Month" colVal=$month
-EXPORTCOL colHead="Day" colVal=$dayOfMonth
-EXPORTCOL colHead="Hour" colVal=$hour
-
-<% for floor in floors
-  for zone in zones
-    zone_name = zone[:name]
-    zone_floor_name = "#{floor}_#{zone_name}" %>
-    EXPORTCOL colHead="<%= "ZoneAirTemp_#{zone_floor_name}" %>" colVal=(@znRes[<%= zone_floor_name %>].H.tAir - 32) / 1.8
-    EXPORTCOL colHead="<%= "SensibleCoolingRate_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.qscHvac / <%= $kw_btu %> * <%= -1 %>
-    EXPORTCOL colHead="<%= "HeatingRate_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.qhMech / <%= $kw_btu %>
-    EXPORTCOL colHead="<%= "LightingPower_#{zone_floor_name}" %>" colVal=@meter[<%= "MtrLighting_#{zone_floor_name}" %>].H.lit / <%= $kw_btu %>
-    EXPORTCOL colHead="<%= "PlugLoadPower_#{zone_floor_name}" %>" colVal=@meter[<%= "MtrPlugLoad_#{zone_floor_name}" %>].H.rcp / <%= $kw_btu %>
-  <% end
-end %>
-
 <%
 
-outdoor_air_density = "Current outdoor air density a [kg/m3]"
+outdoor_air_density = "Current outdoor air density a [kg/m3]" # complete
 
 infiltration_mass_flow_rate = "Infiltration mass flow rate [kg/s] b"
-infiltration_sensible_heat_transfer_rate = "Sensible heat transfer rate into the zone due to infiltration [kW] c"
-infiltration_latent_heat_transfer_rate = "Latent heat transfer rate into the zone due to infiltration [kW] c"
+infiltration_sensible_heat_transfer_rate = "Sensible heat transfer rate into the zone due to infiltration [kW] c" # complete
+infiltration_latent_heat_transfer_rate = "Latent heat transfer rate into the zone due to infiltration [kW] c" # complete
 
 ventilation_mass_flow_rate = "Ventilation mass flow rate [kg/s] b"
 ventilation_sensible_heat_transfer_rate = "Sensible heat transfer rate into the zone due to ventilation [kW] c"
@@ -1080,6 +1055,9 @@ bottom_perimeter_south = "Bottom_Perimeter_South"
 bottom_perimeter_south_exterior = "Bottom_Exterior_South"
 ground = "Ground"
 
+bottom_perimeter_infiltration = "#{bottom_perimeter_south}_Infiltration"
+bottom_perimeter_ventilation = "#{bottom_perimeter_south}_Ventilation"
+
 exterior_wall_surface_name = create_surface_name(bottom_perimeter_south, bottom_perimeter_south_exterior)
 ground_surface_name = create_surface_name(bottom_perimeter_south, ground)
 
@@ -1088,14 +1066,82 @@ slab_area = perimeter_ns_area
 
 %>
 
-EXPORTCOL colHead="<%= exterior_wall_exterior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qSrf * <%= $m2_ft2 / $kw_btu * exterior_wall_area %>
-EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qrAbs * <%= $m2_ft2 / $kw_btu * exterior_wall_area %>
-EXPORTCOL colHead="<%= exterior_wall_exterior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcO.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcO.tsrf) * <%= $m2_ft2 / $kw_btu * exterior_wall_area %>
-EXPORTCOL colHead="<%= exterior_wall_interior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btu * exterior_wall_area %>
-EXPORTCOL colHead="<%= exterior_wall_interior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcI.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btu * exterior_wall_area %>
+EXPORTFILE "OUTPUT_SUB_HOURLY"
+  xfFileName = "OUTPUT_SUB_HOURLY.csv"
+  xfFileStat = OVERWRITE
 
-EXPORTCOL colHead="<%= exterior_wall_interior_surface_conduction_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btu * slab_area %>
-EXPORTCOL colHead="<%= slab_on_grade_interior_surface_convection_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.hxa * (@xsurf["<%= ground_surface_name %>"].sbcI.txa - @xsurf["<%= ground_surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btu * slab_area%>
+EXPORT
+  exExportfile = "OUTPUT_SUB_HOURLY"
+  exHeader = ColumnsOnly
+  exFooter = No
+  exType = UDT
+  exFreq = SUBHOUR
+  exDayBeg = JAN 1
+  exDayEnd = DEC 31
+
+EXPORTCOL colHead="Month" colVal=$month
+EXPORTCOL colHead="Day" colVal=$dayOfMonth
+EXPORTCOL colHead="Hour" colVal=$hour
+EXPORTCOL colHead="SubHour" colVal=$subhour
+
+EXPORTCOL colHead="Dry Air Mass" colVal = @zone["<%= bottom_perimeter_south %>"].dryAirMass
+EXPORTCOL colHead="ACH" colVal = @zone["<%= bottom_perimeter_south %>"].ivAirX
+
+EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Conduction" %>" colVal= @window["<%= bottom_perimeter_south %>"].sbcI.qSrf * <%= $m2_ft2 * $window_area * 7 / $kw_btuh %>
+
+EXPORTCOL colHead="<%= ventilation_latent_heat_transfer_rate %>" colVal= @zone["<%= bottom_perimeter_south %>"].qlIz
+
+
+EXPORTFILE "OUTPUT_HOURLY"
+  xfFileName = "OUTPUT_HOURLY.csv"
+  xfFileStat = OVERWRITE
+
+EXPORT
+  exExportfile = "OUTPUT_HOURLY"
+  exHeader = ColumnsOnly
+  exFooter = No
+  exType = UDT
+  exFreq = HOUR
+  exDayBeg = JAN 1
+  exDayEnd = DEC 31
+
+EXPORTCOL colHead="Month" colVal=$month
+EXPORTCOL colHead="Day" colVal=$dayOfMonth
+EXPORTCOL colHead="Hour" colVal=$hour
+
+<% for floor in floors
+  for zone in zones
+    zone_name = zone[:name]
+    zone_floor_name = "#{floor}_#{zone_name}" %>
+    EXPORTCOL colHead="<%= "ZoneAirTemp_#{zone_floor_name}" %>" colVal=(@znRes[<%= zone_floor_name %>].H.tAir - 32) / 1.8
+    EXPORTCOL colHead="<%= "SensibleCoolingRate_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.qscHvac / <%= $kw_btuh %> * <%= -1 %>
+    EXPORTCOL colHead="<%= "HeatingRate_#{zone_floor_name}" %>" colVal=@znRes[<%= zone_floor_name %>].H.qhMech / <%= $kw_btuh %>
+    EXPORTCOL colHead="<%= "LightingPower_#{zone_floor_name}" %>" colVal=@meter[<%= "MtrLighting_#{zone_floor_name}" %>].H.lit / <%= $kw_btuh %>
+    EXPORTCOL colHead="<%= "PlugLoadPower_#{zone_floor_name}" %>" colVal=@meter[<%= "MtrPlugLoad_#{zone_floor_name}" %>].H.rcp / <%= $kw_btuh %>
+  <% end
+end %>
+
+EXPORTCOL colHead="<%= outdoor_air_density %>" colVal= @top.rhoMoistOSh * <%= $m3_ft3 / $kg_lbm %>
+
+EXPORTCOL colHead="<%= infiltration_sensible_heat_transfer_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qsInfil * <%= 1 / $kw_btuh %>
+EXPORTCOL colHead="<%= infiltration_latent_heat_transfer_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qlInfil * <%= 1 / $kw_btuh %>
+
+EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@izXfer["<%= bottom_perimeter_ventilation %>"].amfNom * <%= $kg_lbm %>
+EXPORTCOL colHead="Air Specific Enthalpy Change [kJ/kg]" colVal= @top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= zone_floor_name %>].H.tAir)
+
+EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
+EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Incident Radiation" %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
+
+EXPORTCOL colHead="<%= exterior_wall_exterior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qSrf * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=(@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.bm + @xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.df) * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
+EXPORTCOL colHead="back_up" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.tot * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
+
+EXPORTCOL colHead="<%= exterior_wall_exterior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcO.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcO.tsrf) * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_interior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_interior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcI.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
+
+EXPORTCOL colHead="<%= slab_on_grade_interior_surface_conduction_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btuh * slab_area %>
+EXPORTCOL colHead="<%= slab_on_grade_interior_surface_convection_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.hxa * (@xsurf["<%= ground_surface_name %>"].sbcI.txa - @xsurf["<%= ground_surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btuh * slab_area %>
 
 
 // surface for gross area and xsurf for net area 
