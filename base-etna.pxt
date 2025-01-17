@@ -132,7 +132,7 @@ if cell == "A"
     else
 
       # ET100A3
-      $convection_model = "UNIFIED"
+      $convection_model = "INHCMODEL"
 
     end
 
@@ -239,7 +239,7 @@ elsif cell == "B"
     else
 
       # ET100B3
-      $convection_model = "UNIFIED"
+      $convection_model = "INHCMODEL"
 
     end
 
@@ -569,6 +569,11 @@ CONSTRUCTION "WindowsPath3"
   LAYER lrMat="Polystyrene 2 Windows" lrThk=<%= 0.070*$m_ft %>
 <% end %>
 
+#define INHCMODEL ENERGYPLUS
+#define EPCOEFFSFLOOR  3.873/5.678, 0.082/5.678, 0.98
+#define EPCOEFFSWALL  1.208/5.678, 1.012/5.678, 0.604
+#define EPCOEFFSCEILING  2.234/5.678, 4.099/5.678, 0.503
+
 <% guard_surfaces = [
   {:name => "Ceiling", :temp => "Tattic"},
   {:name => "Floor", :temp => "Tcellar"},
@@ -637,8 +642,15 @@ window_azimuths = [
 %>
 
 <% def create_surface_data_members(surface,constant_interior_coefficients) %>
-sfExHcModel = INPUT
+    sfExHcModel = INPUT
     sfInHcModel = <%= $convection_model %>
+<% if (surface[:name] == "CeilingPath1") | (surface[:name] == "CeilingPath2") %>  
+    sfInHcFrcEPCoeffs = EPCOEFFSWALL
+<% elsif (surface[:name] == "FloorPath1") | (surface[:name] == "FloorPath2") | (surface[:name] == "FloorPath3") %>
+    sfInHcFrcEPCoeffs = EPCOEFFSFLOOR
+<% else %>
+    sfInHcFrcEPCoeffs = EPCOEFFSWALL
+<% end %>
     sfExHcMult = <%= $exterior_coefficient * $w_btu / $m2_ft2 / $k_r %>
 <% if constant_interior_coefficients %>
     sfInHcMult = <%= surface[:interior_coefficient] * $w_btu / $m2_ft2 / $k_r %>
