@@ -642,7 +642,7 @@ window_azimuths = [
 %>
 
 <% def create_surface_data_members(surface,constant_interior_coefficients) %>
-    sfExHcModel = INPUT
+  sfExHcModel = INPUT
     sfInHcModel = <%= $convection_model %>
 <% if (surface[:name] == "CeilingPath1") | (surface[:name] == "CeilingPath2") %>  
     sfInHcFrcEPCoeffs = EPCOEFFSWALL
