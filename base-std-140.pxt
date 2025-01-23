@@ -71,7 +71,7 @@ door_height = 2.1336 * $m_ft
 
 $two_door_area = door_width * door_height * 2 # TODO: can two doors be combined into a single door with double area in DOOR object?
 
-$occupant_power = 120*$w_btuh
+$occupant_power = 120.0*$w_btuh
 
 $infrared_emittance	= 0.9
 $window_infrared_emittance	= 0.84
@@ -90,7 +90,7 @@ bldgAzm = 0
 elevation = <%= 1650 * $m_ft %> <% # TODO: is there a way to import the elevation from the weather file? %>
 
 terrainClass = 3
-wuDays = 0
+wuDays = 30
 skyModel = ANISOTROPIC
 skyModelLW = BERDAHLMARTIN
 hConvMod = No
@@ -147,7 +147,7 @@ MATERIAL "Carpet"
   matDens = <%= 320*$rho_c %>
   matSpHt = <%= 1380*$cp_c %>
 
-MATERIAL "Concrete Floor"
+MATERIAL "Concrete"
   matCond = <%= 2.31*$k_c %>
   matDens = <%= 2322*$rho_c %>
   matSpHt = <%= 832*$cp_c %>
@@ -195,19 +195,19 @@ CONSTRUCTION "Exterior Door"
 
 CONSTRUCTION "Interior Floor"
   LAYER lrMat= "Carpet" lrThk=<%= 0.08*$m_ft %>
-  LAYER lrMat= "Concrete Floor" lrThk=<%= 2.31*$m_ft %>
+  LAYER lrMat= "Concrete" lrThk=<%= 2.31*$m_ft %>
 
 CONSTRUCTION "Dropped Ceiling"
   LAYER lrMat= "Dropped Ceiling Acoustic Tile" lrThk=<%= 0.08*$m_ft %>
 
 CONSTRUCTION "Slab-On-Grade Adiabatic"
   LAYER lrMat= "Carpet" lrThk=<%= 0.01728*$m_ft %>
-  LAYER lrMat= "Concrete Floor" lrThk=<%= 0.20*$m_ft %>
+  LAYER lrMat= "Concrete" lrThk=<%= 0.20*$m_ft %>
   LAYER lrMat= "Adiabatic Insulation" lrThk=<%= 1.000*$m_ft %>
 
 CONSTRUCTION "Slab-On-Grade Non-Adiabatic"
   LAYER lrMat= "Carpet" lrThk=<%= 0.01728*$m_ft %>
-  LAYER lrMat= "Concrete Floor" lrThk=<%= 0.20*$m_ft %>
+  LAYER lrMat= "Concrete" lrThk=<%= 0.20*$m_ft %>
 
 CONSTRUCTION "Interior Wall"
   LAYER lrMat= "Interior Wall Gypsum Board" lrThk=<%= 0.0127*$m_ft %>
@@ -217,8 +217,15 @@ CONSTRUCTION "Interior Wall"
 CONSTRUCTION "Furniture"
   LAYER lrMat= "Furniture Wood" lrThk=<%= 0.15*$m_ft %>
 
-FOUNDATION "Slab-On-Grade Non-Adiabatic"
-  fdFtCon = "Slab-On-Grade Non-Adiabatic"
+CONSTRUCTION "Foundation Wall"
+  LAYER lrMat= "Concrete" lrThk=<%= 0.20*$m_ft %>
+
+FOUNDATION "Foundation"
+  fdFtCon = "Foundation Wall"
+  fdWlHtAbvGrd = 0
+  fdWlDpBlwSlb = 1.07 * <%= $m_ft %>
+
+
 
 <%
 # Zones
@@ -234,7 +241,7 @@ zones = [
     :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["A","A","A"],
-    :occupancy => [11,15,15],
+    :occupancy => [11.0,15.0,15.0],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,8.61,8.61],
     :plug_load_schedule => ["I","I","I"],
@@ -279,7 +286,7 @@ zones = [
     :internal_mass_surface_area => 372.9 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
-    :occupancy => [10,10,10],
+    :occupancy => [10.0,10.0,10.0],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.1,7.53,7.53],
     :plug_load_schedule => ["I","I","I"],
@@ -329,7 +336,7 @@ zones = [
     :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["B","B","B"],
-    :occupancy => [5,5,5],
+    :occupancy => [5.0,5.0,5.0],
     :lighting_schedule => ["F","F","F"],
     :lighting_power_density => [3.66,3.66,3.66],
     :plug_load_schedule => ["J","J","J"],
@@ -368,7 +375,7 @@ zones = [
     :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
-    :occupancy => [59,6,6],
+    :occupancy => [59.0,6.0,6.0],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,7.53,7.53],
     :plug_load_schedule => ["I","I","I"],
@@ -406,7 +413,7 @@ zones = [
     :internal_mass_surface_area => 906.3 * $m2_ft2,
     :infiltration_ach => [0.75,0,0],
     :occupancy_schedule => ["A","A","A"],
-    :occupancy => [10,10,10],
+    :occupancy => [10.0,10.0,10.0],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.1,7.1,7.1],
     :plug_load_schedule => ["I","I","I"],
@@ -437,7 +444,7 @@ zones = [
     :internal_mass_surface_area => 526.3 * $m2_ft2,
     :infiltration_ach => [0.75,0,0],
     :occupancy_schedule => ["C","C","C"],
-    :occupancy => [0,0,0],
+    :occupancy => [0.0,0.0,0.0],
     :lighting_schedule => ["G","G","G"],
     :lighting_power_density => [1.51,1.51,1.51],
     :plug_load_schedule => ["K","K","K"],
@@ -468,7 +475,7 @@ zones = [
     :internal_mass_surface_area => 534.8 * $m2_ft2,
     :infiltration_ach => [0.75,0,0],
     :occupancy_schedule => ["D","D","D"],
-    :occupancy => [25,25,25],
+    :occupancy => [25.0,25.0,25.0],
     :lighting_schedule => ["H","H","H"],
     :lighting_power_density => [1.29,1.29,1.29],
     :plug_load_schedule => ["L","L","L"],
@@ -499,7 +506,7 @@ zones = [
     :internal_mass_surface_area => 220.7 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
-    :occupancy => [6,6,6],
+    :occupancy => [6.0,6.0,6.0],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.53,7.53,7.53],
     :plug_load_schedule => ["I","I","I"],
@@ -531,7 +538,7 @@ zones = [
     :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["A","A","A"],
-    :occupancy => [11,11,11],
+    :occupancy => [11.0,11.0,11.0],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,6.14,6.14],
     :plug_load_schedule => ["I","I","I"],
@@ -570,7 +577,7 @@ zones = [
     :internal_mass_surface_area => 372.9 * $m2_ft2,
     :infiltration_ach => [1.20,0.45,0.45],
     :occupancy_schedule => ["A","A","A"],
-    :occupancy => [10,10,10],
+    :occupancy => [10.0,10.0,10.0],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [7.1,7.1,7.1],
     :plug_load_schedule => ["I","I","I"],
@@ -602,7 +609,7 @@ zones = [
     :internal_mass_surface_area => 41.8 * $m2_ft2,
     :infiltration_ach => [1.65,0.90,0.90],
     :occupancy_schedule => ["A","A","A"],
-    :occupancy => [11,11,11],
+    :occupancy => [11.0,11.0,11.0],
     :lighting_schedule => ["E","E","E"],
     :lighting_power_density => [6.14,6.14,6.14],
     :plug_load_schedule => ["I","I","I"],
@@ -794,8 +801,7 @@ for zone in zones
     ventilation_schedule = zone[:ventilation_schedule]
     people_outdoor_air_rate = zone[:people_outdoor_air_rate][floor_index]
     area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index]
-    flow_rate = ($m3_ft3 / $h_min) * (occupancy * people_outdoor_air_rate + zone_floor_area * area_outdoor_air_rate) %>
-
+    flow_rate = ($m3_ft3 / $h_min) * (occupancy * people_outdoor_air_rate + zone_floor_area/$m2_ft2 * area_outdoor_air_rate) %>
     IZXFER <%= "#{zone_floor_name}_Ventilation" %>
       izNVType = AIRNETEXTFLOW
       izAFCat = FanEx
@@ -874,9 +880,7 @@ for zone in zones
       plug_load_power_density = zone[:plug_load_power_density][floor_index]
       ventilation_schedule = zone[:ventilation_schedule]
       people_outdoor_air_rate = zone[:people_outdoor_air_rate][floor_index]
-      area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index]
-
-      flow_rate = ($m3_ft3 / $h_min) * (occupancy * people_outdoor_air_rate + zone_floor_area * area_outdoor_air_rate) %>
+      area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index] %>
 
       ZONE <%= zone_floor_name %>
         znModel = "CZM"
@@ -887,7 +891,7 @@ for zone in zones
           infAC = <%= zone[:infiltration_ach][floor_index] %>
           znWindFLkg = 0
         <% else # weather dependent infiltration rate %>
-          infAC = 0
+          // infAC = 0
           infStories = 1
           infShld = 3
         <% end %>
@@ -954,7 +958,7 @@ for zone in zones
           sfCon = "Exterior Wall"
           sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
-          WINDOW <%= zone_floor_name %>
+          WINDOW <%= "Window_#{zone_floor_name}" %>
             wnHeight = <%= $window_height %>
             wnWidth = <%= $window_width %>
             wnMult = <%= surface[:number_windows] %>
@@ -999,7 +1003,7 @@ for zone in zones
             sfExCnd = "GROUND"
             sfCon = "Slab-On-Grade Non-Adiabatic"
             sfModel = KIVA
-            sfFnd = "Slab-On-Grade Non-Adiabatic"
+            sfFnd = "Foundation Wall"
             sfExpPerim = <%= exposed_perimeter %>
             <% set_common_surface_variables() %>
         <% end %>
@@ -1084,12 +1088,13 @@ EXPORTCOL colHead="Day" colVal=$dayOfMonth
 EXPORTCOL colHead="Hour" colVal=$hour
 EXPORTCOL colHead="SubHour" colVal=$subhour
 
-EXPORTCOL colHead="Dry Air Mass" colVal = @zone["<%= bottom_perimeter_south %>"].dryAirMass
+EXPORTCOL colHead="Dry Air Mass" colVal = @zone["<%= bottom_perimeter_south %>"].dryAirMass * <%= 1 / $kg_lbm %>
 EXPORTCOL colHead="ACH" colVal = @zone["<%= bottom_perimeter_south %>"].ivAirX
+EXPORTCOL colHead="Moist Air Density [kg/m3]" colVal = @zone["<%= bottom_perimeter_south %>"].rho * <%= $m3_ft3 / $kg_lbm %>
 
-EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Conduction" %>" colVal= @window["<%= bottom_perimeter_south %>"].sbcI.qSrf * <%= $m2_ft2 * $window_area * 7 / $kw_btuh %>
+EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Conduction" %>" colVal= @xsurf["<%= "Window_#{bottom_perimeter_south}" %>"].sbcI.qSrf * <%= -1 * $m2_ft2 * $window_area * 7 / $kw_btuh %>
 
-EXPORTCOL colHead="<%= ventilation_latent_heat_transfer_rate %>" colVal= @zone["<%= bottom_perimeter_south %>"].qlIz
+EXPORTCOL colHead="<%= ventilation_latent_heat_transfer_rate %>" colVal= @zone["<%= bottom_perimeter_south %>"].qlIz * <%= 1 / $kw_btuh %> 
 
 
 EXPORTFILE "OUTPUT_HOURLY"
@@ -1126,15 +1131,14 @@ EXPORTCOL colHead="<%= outdoor_air_density %>" colVal= @top.rhoMoistOSh * <%= $m
 EXPORTCOL colHead="<%= infiltration_sensible_heat_transfer_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qsInfil * <%= 1 / $kw_btuh %>
 EXPORTCOL colHead="<%= infiltration_latent_heat_transfer_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qlInfil * <%= 1 / $kw_btuh %>
 
-EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@izXfer["<%= bottom_perimeter_ventilation %>"].amfNom * <%= $kg_lbm %>
+EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@izXfer["<%= bottom_perimeter_ventilation %>"].amfNom * <%= 1 / $kg_lbm %>
 EXPORTCOL colHead="Air Specific Enthalpy Change [kJ/kg]" colVal= @top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= zone_floor_name %>].H.tAir)
 
-EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
+EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %> 
 EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Incident Radiation" %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
 
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qSrf * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=(@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.bm + @xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.df) * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
-EXPORTCOL colHead="back_up" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.tot * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
 
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcO.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcO.tsrf) * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
 EXPORTCOL colHead="<%= exterior_wall_interior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
