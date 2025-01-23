@@ -34,14 +34,14 @@ first_data_row = template_column_row + 1
 last_data_row = first_data_row + 8760
 
 m_ft = 3.28084
-south_perimeter_volume = 40.7643 * m_ft * 4.5732 * m_ft * 2.7432 * m_ft
+south_perimeter_volume = 40.7643 * 4.5732 * 2.7432
 
 template_file_root = "Std140_CB_Output"
 test_suite = "std-140"
-# current_directory = os.path.dirname(
-#     os.path.dirname(os.getcwd())
-# )  # Use when called from rakefile
-current_directory = os.getcwd()  # Use when running script directly
+current_directory = os.path.dirname(
+    os.path.dirname(os.getcwd())
+)  # Use when called from rakefile
+# current_directory = os.getcwd()  # Use when running script directly
 template_file_name = f"{template_file_root}_Template.xlsx"
 template_file_path = Path(f"{current_directory}/docs/{test_suite}/{template_file_name}")
 
@@ -63,16 +63,32 @@ hourly_sheets = [
     "PlugLoadPower",
 ]
 zone_sheet = "Hourly-Bottom_Perimeter_South"
+
+infiltration_mass_flow_rate = "Infiltration mass flow rate [kg/s] b"
+ventilation_mass_flow_rate = "Ventilation mass flow rate [kg/s] b"
+ventilation_sensible_heat_transfer_rate = (
+    "Sensible heat transfer rate into the zone due to ventilation [kW] c"
+)
+
+
+window_net_heat_transfer_rate = (
+    "Total net heat transfer rate through the windows [kW] c,e"
+)
+window_net_heat_transfer_rate_conduction = f"{window_net_heat_transfer_rate} Conduction"
+window_net_heat_transfer_rate_radiation = (
+    f"{window_net_heat_transfer_rate} Incident Radiation"
+)
+
 zone_columns = [
     "Current outdoor air density a [kg/m3]",
-    "Infiltration mass flow rate [kg/s] b",
+    infiltration_mass_flow_rate,
     "Sensible heat transfer rate into the zone due to infiltration [kW] c",
     "Latent heat transfer rate into the zone due to infiltration [kW] c",
-    "Ventilation mass flow rate [kg/s] b",
-    "Sensible heat transfer rate into the zone due to ventilation [kW] c",
+    ventilation_mass_flow_rate,
+    ventilation_sensible_heat_transfer_rate,
     "Latent heat transfer rate into the zone due to ventilation [kW] c",
     "Total window transmitted solar radiation rate [kW] c,d",
-    "Total net heat transfer rate through the windows [kW] c,e",
+    window_net_heat_transfer_rate,
     "Total exterior surface conduction heat transfer rate [kW] c",
     "Total exterior surface incident solar radiation rate [kW] d",
     "Total exterior surface convection heat transfer rate [kW] f",
@@ -82,22 +98,14 @@ zone_columns = [
     "Total interior surface convection heat transfer rate [kW] f^",
 ]
 
-infiltration_mass_flow_rate = "Infiltration mass flow rate [kg/s] b"
-ventilation_mass_flow_rate = "Ventilation mass flow rate [kg/s] b"
-ventilation_sensible_heat_transfer_rate = (
-    "Sensible heat transfer rate into the zone due to ventilation [kW] c"
-)
-window_net_heat_transfer_rate = (
-    "Total net heat transfer rate through the windows [kW] c,e"
-)
-window_net_heat_transfer_rate_conduction = f"{window_net_heat_transfer_rate} Conduction"
-window_net_heat_transfer_rate_radiation = (
-    f"{window_net_heat_transfer_rate} Incident Radiation"
-)
 
-sub_hourly_average = ["Dry Air Mass", "ACH"]
+sub_hourly_average = [
+    "Dry Air Mass",
+    "ACH",
+    "Moist Air Density [kg/m3]",
+    window_net_heat_transfer_rate_conduction,
+]
 sub_hourly_sum = [
-    "Total net heat transfer rate through the windows [kW] c,e Conduction",
     "Latent heat transfer rate into the zone due to ventilation [kW] c",
 ]
 
@@ -119,9 +127,12 @@ def post_processing(df_hourly: pd.DataFrame, df_sub_hourly: pd.DataFrame):
             df_hourly[column] = df_sub_hourly[column].resample("H").sum()
 
     df_hourly[infiltration_mass_flow_rate] = (
-        df_hourly["ACH"] * south_perimeter_volume
-        + df_hourly[ventilation_mass_flow_rate]
-    )
+        df_hourly["ACH"]
+        / 3600
+        * df_hourly["Moist Air Density [kg/m3]"]
+        * south_perimeter_volume
+        - df_hourly[ventilation_mass_flow_rate]
+    )  # df_hourly["Moist Air Density [kg/m3]"] * south_perimeter_volume could be replaced with zone air mass
 
     df_hourly[ventilation_sensible_heat_transfer_rate] = (
         df_hourly[ventilation_mass_flow_rate]
