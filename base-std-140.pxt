@@ -1003,7 +1003,7 @@ for zone in zones
             sfExCnd = "GROUND"
             sfCon = "Slab-On-Grade Non-Adiabatic"
             sfModel = KIVA
-            sfFnd = "Foundation Wall"
+            sfFnd = "Foundation"
             sfExpPerim = <%= exposed_perimeter %>
             <% set_common_surface_variables() %>
         <% end %>
