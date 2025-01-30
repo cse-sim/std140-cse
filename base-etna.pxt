@@ -798,7 +798,7 @@ end
   EXPORTCOL colHead="Heater-Simulation [Wh]" colVal=@znRes["Cell"].H.qhMech / <%= $w_btu %>
   EXPORTCOL colHead="Blower Fan Flow Rate-Simulation [m3/h]" colVal=@zone["Cell"].hcAirX * <%= zone_volume / $m3_ft3 %> 
 <% for surface in output_surface_fluxes %>
-  EXPORTCOL colHead="<%= surface[:name] %> Total Heat Flux [Wh/m2]" colVal=(@xsurf["<%= surface[:name] %>"].sbcI.hxr * (@xsurf["<%= surface[:name] %>"].sbcI.txr - @xsurf["<%= surface[:name] %>"].sbcI.tsrf)) + (@xsurf["<%= surface[:name] %>"].sbcI.hxa * (@xsurf["<%= surface[:name] %>"].sbcI.txa - @xsurf["<%= surface[:name] %>"].sbcI.tsrf)) * <%= $m2_ft2 / $w_btu %>
+  EXPORTCOL colHead="<%= surface[:name] %> Total Heat Flux [Wh/m2]" colVal=((@xsurf["<%= surface[:name] %>"].sbcI.hxr * (@xsurf["<%= surface[:name] %>"].sbcI.txr - @xsurf["<%= surface[:name] %>"].sbcI.tsrf)) + (@xsurf["<%= surface[:name] %>"].sbcI.hxa * (@xsurf["<%= surface[:name] %>"].sbcI.txa - @xsurf["<%= surface[:name] %>"].sbcI.tsrf))) * <%= $m2_ft2 / $w_btu %>
   EXPORTCOL colHead="<%= surface[:name] %> Radiative Heat Flux [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxr * (@xsurf["<%= surface[:name] %>"].sbcI.txr - @xsurf["<%= surface[:name] %>"].sbcI.tsrf) * <%= $m2_ft2 / $w_btu %>
   EXPORTCOL colHead="<%= surface[:name] %> Convective Heat Flux [Wh/m2]" colVal=@xsurf["<%= surface[:name] %>"].sbcI.hxa * (@xsurf["<%= surface[:name] %>"].sbcI.txa - @xsurf["<%= surface[:name] %>"].sbcI.tsrf) * <%= $m2_ft2 / $w_btu %>
 <% end %>
