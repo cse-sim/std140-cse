@@ -778,6 +778,14 @@ def create_surface_name(zone_floor_name, adjacent_zone_name)
   return "#{zones[0]}_#{zones[1]}"
 end
 
+def get_ceiling_height(floor)
+  return ($floor_height * floor) + ($plenum_height * (floor - 1))
+end
+
+def get_floor_height(floor)
+  return ($floor_height + $plenum_height) * (floor-1)
+end
+
 def set_zone_volume_and_height_dimensions(zone,floor)
   if zone[:name] == "Plenum" %>
     znVol = <%= zone[:area] * $plenum_height %>
@@ -785,34 +793,53 @@ def set_zone_volume_and_height_dimensions(zone,floor)
     znFloorZ = <%= ($floor_height * floor) + ($plenum_height * (floor - 1)) %>
   <% else %>
     znVol = <%= zone[:area] * $floor_height %>
-    znCeilingHt = <%= ($floor_height * floor) + ($plenum_height * (floor - 1))  %>
-    znFloorZ = <%= ($floor_height + $plenum_height) * (floor-1) %>
+    znCeilingHt = <%= get_ceiling_height(floor) %>
+    znFloorZ = <%= get_floor_height(floor) %>
   <% end
+end
+
+def convert_ach4_to_ach50(ach4, hr)
+  # ach50 = 19.2 * ach4 / (wsf * (H/Hr)0.4) [for n = 0.65]
+  h = 8.202
+  wsf = 0.59
+  return 19.2 * ach4 / (wsf * (h/hr)**0.4)
 end
 
 for zone in zones
   zone_name = zone[:name]
+  zone_height = get_zone_height(zone_name)
   if zone_name != "Plenum"
     floors.each_with_index do |floor_name, floor_index|
-    floor = floor_index + 1
-    zone_floor_name = "#{floor_name}_#{zone_name}"
-    zone_floor_area = zone[:area]
-    occupancy = zone[:occupancy][floor_index]
-    ventilation_schedule = zone[:ventilation_schedule]
-    people_outdoor_air_rate = zone[:people_outdoor_air_rate][floor_index]
-    area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index]
-    flow_rate = ($m3_ft3 / $h_min) * (occupancy * people_outdoor_air_rate + zone_floor_area/$m2_ft2 * area_outdoor_air_rate) %>
-    IZXFER <%= "#{zone_floor_name}_Ventilation" %>
-      izNVType = AIRNETEXTFLOW
-      izAFCat = FanEx
-      izZn1 = <%= zone_floor_name %>
-      izVfMin = <%= flow_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %>
+      floor = floor_index + 1
+      zone_floor_name = "#{floor_name}_#{zone_name}"
+      zone_floor_area = zone[:area]
+      zone_floor_volume = zone_floor_area * zone_height
+      ach4 = zone[:ach4][floor_index]
+      ach50 = convert_ach4_to_ach50(ach4, zone_height)
+      occupancy = zone[:occupancy][floor_index]
+      ventilation_schedule = zone[:ventilation_schedule]
+      people_outdoor_air_rate = zone[:people_outdoor_air_rate][floor_index]
+      area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index]
+      flow_rate = ($m3_ft3 / $h_min) * (occupancy * people_outdoor_air_rate + zone_floor_area/$m2_ft2 * area_outdoor_air_rate) %>
 
-    IZXFER <%= "#{zone_floor_name}_Exfiltration" %>
-      izNVType = AIRNETEXT
-      izZn1 = <%= zone_floor_name %>
-      izALo = <%= flow_rate * zone_floor_area %>
-    <% end
+      IZXFER <%= "#{zone_floor_name}_Ventilation" %>
+        izNVType = AIRNETEXTFLOW
+        izAFCat = FanEx
+        izZn1 = <%= zone_floor_name %>
+        izVfMin = <%= flow_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %>
+      <% if weather_independent_infiltration_rate %>
+      IZXFER <%= "#{zone_floor_name}_Exfiltration" %>
+        izNVType = AIRNETEXT
+        izZn1 = <%= zone_floor_name %>
+        izALo = <%= flow_rate * zone_floor_area %>
+      <% else
+        insert 'infiltration.cse.pxt',
+        :zone_name=>zone_floor_name,
+        :leakage_area=>ach50*zone_floor_volume*0.00000917,
+        :zone_bottom_height=>get_floor_height(floor),
+        :zone_height=>get_ceiling_height(floor)
+      end
+    end
   end
 end
 
@@ -822,7 +849,7 @@ for zone in zones
     zone_name = zone[:name]
     zone_floor_name = "#{floor_name}_#{zone_name}"
     zone_floor_area = zone[:area]
-
+    zone_height = get_zone_height(zone_name)
     zone_floor_lighting_meter = "MtrLighting_#{zone_floor_name}"
     zone_floor_plug_load_meter = "MtrPlugLoad_#{zone_floor_name}" %>
 
@@ -835,7 +862,7 @@ for zone in zones
         znModel = "UZM"
         znArea = <%= zone_floor_area %>
         infAC = 0
-        znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
+        znCAir = <%= 0.24*0.077*zone_floor_area*zone_height %>
         znHcAirX = 0
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
       <% if floor == 3 %>
@@ -888,20 +915,14 @@ for zone in zones
         <% # TODO: is infiltration adjusted for elevation/air density in CSE? If not, the formula in section X.2.1.6.1 must be applied %>
         <% # TODO: review infiltration inputs %>
         <% if weather_independent_infiltration_rate %>
-          infAC = <%= zone[:infiltration_ach][floor_index] %>
+          infAC = <%= zone[:ach4][floor_index] %>
           znWindFLkg = 0
-        <% else # weather dependent infiltration rate %>
-          // infAC = 0
-          infStories = 1
-          infShld = 3
         <% end %>
         <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
         znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
         <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
         <% # TODO: ventilation should be calculated accoridng to 140-2023 Informative Annex B3 %>
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
-
-        
 
       <% if internal_partition_surface_area > 0 # internal partition surface %>
     SURFACE <%= "#{zone_floor_name}_Internal_Partition" %>
