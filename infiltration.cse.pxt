@@ -1,0 +1,28 @@
+<%#INITIALIZE
+parameter "zone_name"
+parameter "leakage_area"
+parameter "zone_bottom_height", :default=>0.7 # ft
+parameter "zone_height", :default=>8 # ft
+%>
+<%
+if leakage_area > 0.0
+    leak_heights = {"High" => zone_bottom_height + 0.75*zone_height, "Low" => zone_bottom_height + 0.25*zone_height}
+    pressure_coefficients = {"Upwind" => 0.6, "Side" => -0.65, "Downwind" => -0.3}
+    wall_hole_size = leakage_area / 8.0
+    leak_heights.each do |height, leak_height|
+        pressure_coefficients.each do |wind_direction,  pressure_coefficient|
+%>
+IZXFER "<%= zone_name%> <%= height %> <%= wind_direction %> Leak"
+    izNVType = "AIRNETEXT"
+    izZn1 = "<%= zone_name %>"
+    izALo = <%= wind_direction == "Side" ? wall_hole_size*2 : wall_hole_size %>
+    izHD = <%= leak_height %>
+    izCpr = <%= pressure_coefficient %>
+    izNVEff = 1
+    izExp = 0.65
+    izAFCat = InfilEx
+<%
+        end
+    end
+end
+%>
