@@ -69,6 +69,9 @@ ventilation_mass_flow_rate = "Ventilation mass flow rate [kg/s] b"
 ventilation_sensible_heat_transfer_rate = (
     "Sensible heat transfer rate into the zone due to ventilation [kW] c"
 )
+ventilation_latent_heat_transfer_rate = (
+    "Latent heat transfer rate into the zone due to ventilation [kW] c"
+)
 
 
 window_net_heat_transfer_rate = (
@@ -86,7 +89,7 @@ zone_columns = [
     "Latent heat transfer rate into the zone due to infiltration [kW] c",
     ventilation_mass_flow_rate,
     ventilation_sensible_heat_transfer_rate,
-    "Latent heat transfer rate into the zone due to ventilation [kW] c",
+    ventilation_latent_heat_transfer_rate,
     "Total window transmitted solar radiation rate [kW] c,d",
     window_net_heat_transfer_rate,
     "Total exterior surface conduction heat transfer rate [kW] c",
@@ -106,7 +109,7 @@ sub_hourly_average = [
     window_net_heat_transfer_rate_conduction,
 ]
 sub_hourly_sum = [
-    "Latent heat transfer rate into the zone due to ventilation [kW] c",
+    ventilation_latent_heat_transfer_rate,
 ]
 
 
