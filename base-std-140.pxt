@@ -798,6 +798,13 @@ def set_zone_volume_and_height_dimensions(zone,floor)
   <% end
 end
 
+def add_exfiltration_izxfer(zone_floor_name, zone_floor_area, flow_rate) %>
+  IZXFER <%= "#{zone_floor_name}_Exfiltration" %>
+    izNVType = AIRNETEXT
+    izZn1 = <%= zone_floor_name %>
+    izALo = <%= flow_rate * zone_floor_area %>
+<% end
+
 def convert_ach4_to_ach50(ach4, hr)
   # ach50 = 19.2 * ach4 / (wsf * (H/Hr)0.4) [for n = 0.65]
   h = 8.202
@@ -827,17 +834,18 @@ for zone in zones
         izAFCat = FanEx
         izZn1 = <%= zone_floor_name %>
         izVfMin = <%= flow_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %>
-      <% if weather_independent_infiltration_rate %>
-      IZXFER <%= "#{zone_floor_name}_Exfiltration" %>
-        izNVType = AIRNETEXT
-        izZn1 = <%= zone_floor_name %>
-        izALo = <%= flow_rate * zone_floor_area %>
-      <% else
-        insert 'infiltration.cse.pxt',
-        :zone_name=>zone_floor_name,
-        :leakage_area=>ach50*zone_floor_volume*0.00000917,
-        :zone_bottom_height=>get_floor_height(floor),
-        :zone_height=>get_ceiling_height(floor)
+      <% if weather_independent_infiltration_rate
+        add_exfiltration_izxfer(zone_floor_name, zone_floor_area, flow_rate)
+        else
+          if ach4 == 0
+            add_exfiltration_izxfer(zone_floor_name, zone_floor_area, flow_rate)
+          else
+          insert 'infiltration.cse.pxt',
+          :zone_name=>zone_floor_name,
+          :leakage_area=>ach50*zone_floor_volume*0.00000917,
+          :zone_bottom_height=>get_floor_height(floor),
+          :zone_height=>get_ceiling_height(floor)
+        end
       end
     end
   end
