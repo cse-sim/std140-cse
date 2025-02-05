@@ -1163,7 +1163,9 @@ EXPORTCOL colHead="<%= infiltration_sensible_heat_transfer_rate %>" colVal=@znRe
 EXPORTCOL colHead="<%= infiltration_latent_heat_transfer_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qlInfil * <%= 1 / $kw_btuh %>
 
 EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@izXfer["<%= bottom_perimeter_ventilation %>"].amfNom * <%= 1 / $kg_lbm %>
-EXPORTCOL colHead="Air Specific Enthalpy Change [kJ/kg]" colVal= @top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= zone_floor_name %>].H.tAir)
+EXPORTCOL colHead="Sensible Heat Change [kJ/kg]" colVal= @top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= zone_floor_name %>].H.tAir)
+
+EXPORTCOL colHead="Latent Heat Change [kJ/kg]" colVal= latent heat of fusion (1061 btu/lb) * <%= $kg_lbm / $kj_btu %> * (humidity ratio difference))
 
 EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %> 
 EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Incident Radiation" %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
