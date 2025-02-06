@@ -65,6 +65,12 @@ hourly_sheets = [
 zone_sheet = "Hourly-Bottom_Perimeter_South"
 
 infiltration_mass_flow_rate = "Infiltration mass flow rate [kg/s] b"
+infiltration_sensible_heat_transfer_rate = (
+    "Sensible heat transfer rate into the zone due to infiltration [kW] c"
+)
+infiltration_latent_heat_transfer_rate = (
+    "Latent heat transfer rate into the zone due to infiltration [kW] c"
+)
 ventilation_mass_flow_rate = "Ventilation mass flow rate [kg/s] b"
 ventilation_sensible_heat_transfer_rate = (
     "Sensible heat transfer rate into the zone due to ventilation [kW] c"
@@ -72,7 +78,6 @@ ventilation_sensible_heat_transfer_rate = (
 ventilation_latent_heat_transfer_rate = (
     "Latent heat transfer rate into the zone due to ventilation [kW] c"
 )
-
 
 window_net_heat_transfer_rate = (
     "Total net heat transfer rate through the windows [kW] c,e"
@@ -85,8 +90,8 @@ window_net_heat_transfer_rate_radiation = (
 zone_columns = [
     "Current outdoor air density a [kg/m3]",
     infiltration_mass_flow_rate,
-    "Sensible heat transfer rate into the zone due to infiltration [kW] c",
-    "Latent heat transfer rate into the zone due to infiltration [kW] c",
+    infiltration_sensible_heat_transfer_rate,
+    infiltration_latent_heat_transfer_rate,
     ventilation_mass_flow_rate,
     ventilation_sensible_heat_transfer_rate,
     ventilation_latent_heat_transfer_rate,
@@ -101,15 +106,11 @@ zone_columns = [
     "Total interior surface convection heat transfer rate [kW] f^",
 ]
 
-
 sub_hourly_average = [
     "Dry Air Mass",
     "ACH",
     "Moist Air Density [kg/m3]",
     window_net_heat_transfer_rate_conduction,
-]
-sub_hourly_sum = [
-    ventilation_latent_heat_transfer_rate,
 ]
 
 
@@ -126,20 +127,22 @@ def post_processing(df_hourly: pd.DataFrame, df_sub_hourly: pd.DataFrame):
     for column in df_sub_hourly.columns:
         if column in sub_hourly_average:
             df_hourly[column] = df_sub_hourly[column].resample("H").mean()
-        elif column in sub_hourly_sum:
-            df_hourly[column] = df_sub_hourly[column].resample("H").sum()
-
-    df_hourly[infiltration_mass_flow_rate] = (
-        df_hourly["ACH"]
-        / 3600
-        * df_hourly["Moist Air Density [kg/m3]"]
-        * south_perimeter_volume
-        - df_hourly[ventilation_mass_flow_rate]
-    )  # df_hourly["Moist Air Density [kg/m3]"] * south_perimeter_volume could be replaced with zone air mass
 
     df_hourly[ventilation_sensible_heat_transfer_rate] = (
         df_hourly[ventilation_mass_flow_rate]
-        * df_hourly["Air Specific Enthalpy Change [kJ/kg]"]
+        * df_hourly["Sensible Heat Change [kJ/kg]"]
+    )
+    df_hourly[ventilation_latent_heat_transfer_rate] = (
+        df_hourly[ventilation_mass_flow_rate] * df_hourly["Latent Heat Change [kJ/kg]"]
+    )
+
+    df_hourly[infiltration_sensible_heat_transfer_rate] = (
+        df_hourly["Total Sensible Heat Transfer [kW]"]
+        - df_hourly[ventilation_sensible_heat_transfer_rate]
+    )
+    df_hourly[infiltration_latent_heat_transfer_rate] = (
+        df_hourly["Total Latent Heat Transfer [kW]"]
+        - df_hourly[ventilation_latent_heat_transfer_rate]
     )
 
     df_hourly[window_net_heat_transfer_rate] = (
