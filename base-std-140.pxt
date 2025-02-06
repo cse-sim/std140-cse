@@ -836,7 +836,7 @@ for zone in zones
 
       IZXFER <%= "#{zone_floor_name}_Ventilation" %>
         izNVType = AIRNETEXTFLOW
-        izAFCat = FanEx
+        izAFCat = fanEx
         izZn1 = <%= zone_floor_name %>
         izVfMin = <%= flow_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %>
       <% if weather_independent_infiltration_rate
