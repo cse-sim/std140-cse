@@ -1168,7 +1168,11 @@ EXPORTCOL colHead="<%= outdoor_air_density %>" colVal= @top.rhoMoistOSh * <%= $m
 
 EXPORTCOL colHead="<%= infiltration_mass_flow_rate %>" colVal=@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[1].vntEx * <%= $standard_air_density / $kg_lbm / $min_s %> // Ventilation mass flow rate
 
+// EXPORTCOL colHead="<%= infiltration_sensible_heat_transfer_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qsInfil * <%= 1 / $kw_btuh %>
+// EXPORTCOL colHead="<%= infiltration_latent_heat_transfer_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qlInfil * <%= 1 / $kw_btuh %>
+
 EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[1].vntEx * <%= $standard_air_density / $kg_lbm / $min_s %> // Ventilation mass flow rate
+// EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@izXfer["<%= bottom_perimeter_ventilation %>"].amfNom * <%= 1 / $kg_lbm %> // Ventilation mass flow rate
 
 EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %> 
 EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Incident Radiation" %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
