@@ -1193,7 +1193,4 @@ EXPORTCOL colHead="<%= exterior_wall_interior_surface_convection_rate %>" colVal
 EXPORTCOL colHead="<%= slab_on_grade_interior_surface_conduction_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btuh * slab_area %>
 EXPORTCOL colHead="<%= slab_on_grade_interior_surface_convection_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.hxa * (@xsurf["<%= ground_surface_name %>"].sbcI.txa - @xsurf["<%= ground_surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btuh * slab_area %>
 
-
-// surface for gross area and xsurf for net area 
-
 RUN
