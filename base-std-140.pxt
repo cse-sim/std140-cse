@@ -23,6 +23,10 @@ $k_r = 9/5.0
 $q_c = $w_btuh/$m2_ft2
 $u_c = $q_c/$k_r
 
+#Substance Properties
+$standard_air_density = 0.075 # 0.075 lb/ft3
+$latent_heat_of_evaporation_water = 1061 # 1061 lb/btu
+
 def convert_celsius_to_fahrenheit(celsius)
   return celsius * 9/5.0 + 32.0
 end
