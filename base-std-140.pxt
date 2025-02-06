@@ -1077,12 +1077,8 @@ for zone in zones
 outdoor_air_density = "Current outdoor air density a [kg/m3]" # complete
 
 infiltration_mass_flow_rate = "Infiltration mass flow rate [kg/s] b"
-infiltration_sensible_heat_transfer_rate = "Sensible heat transfer rate into the zone due to infiltration [kW] c" # complete
-infiltration_latent_heat_transfer_rate = "Latent heat transfer rate into the zone due to infiltration [kW] c" # complete
 
 ventilation_mass_flow_rate = "Ventilation mass flow rate [kg/s] b"
-ventilation_sensible_heat_transfer_rate = "Sensible heat transfer rate into the zone due to ventilation [kW] c"
-ventilation_latent_heat_transfer_rate = "Latent heat transfer rate into the zone due to ventilation [kW] c"
 
 window_solar_radiation_rate = "Total window transmitted solar radiation rate [kW] c,d"
 window_net_heat_transfer_rate = "Total net heat transfer rate through the windows [kW] c,e"
