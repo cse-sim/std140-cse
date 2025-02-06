@@ -924,8 +924,10 @@ for zone in zones
         <% # TODO: is infiltration adjusted for elevation/air density in CSE? If not, the formula in section X.2.1.6.1 must be applied %>
         <% # TODO: review infiltration inputs %>
         <% if weather_independent_infiltration_rate %>
-          infAC = <%= zone[:ach4][floor_index] # TODO: move infiltration forweather-independent infiltration to IZXFER %>
-        <% else  # weather-dependent infiltration %>
+          infAC = <%= zone[:ach4][floor_index] %>
+          <% # TODO: move infiltration forweather-independent infiltration to IZXFER %>
+        <% else %>
+        <% # weather-dependent infiltration %>
           infAC = 0
         <% end %>
         <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
