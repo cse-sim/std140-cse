@@ -841,8 +841,13 @@ for zone in zones
         izZn1 = <%= zone_floor_name %>
         izVfMin = <%= flow_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %>
       <% if weather_independent_infiltration_rate
-        add_exfiltration_izxfer(zone_floor_name, zone_floor_area, flow_rate)
-        else
+        add_exfiltration_izxfer(zone_floor_name, zone_floor_area, flow_rate) %>
+        IZXFER <%= "#{zone_floor_name}_Constant_Infiltration" %>
+          izNVType = AIRNETEXTFLOW
+          izAFCat = InfilEx
+          izZn1 = <%= zone_floor_name %>
+          izVfMin = <%= cfm4 %>
+      <% else
           if ach4 == 0
             add_exfiltration_izxfer(zone_floor_name, zone_floor_area, flow_rate)
           else
@@ -850,7 +855,8 @@ for zone in zones
           :zone_name=>zone_floor_name,
           :leakage_area=>ach50*zone_floor_volume*0.00000917,
           :zone_bottom_height=>get_floor_height(floor),
-          :zone_height=>get_ceiling_height(floor)
+          :zone_height=>get_ceiling_height(floor) %>
+<%
         end
       end
     end
@@ -932,13 +938,7 @@ for zone in zones
         znArea = <%= zone_floor_area %>
         <% # TODO: is infiltration adjusted for elevation/air density in CSE? If not, the formula in section X.2.1.6.1 must be applied %>
         <% # TODO: review infiltration inputs %>
-        <% if weather_independent_infiltration_rate %>
-          infAC = <%= zone[:ach4][floor_index] %>
-          <% # TODO: move infiltration forweather-independent infiltration to IZXFER %>
-        <% else %>
-        <% # weather-dependent infiltration %>
-          infAC = 0
-        <% end %>
+        infAC = 0
         <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
         znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
         infShld = 1 // No obstructions or local shielding
