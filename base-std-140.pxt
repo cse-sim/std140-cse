@@ -859,7 +859,8 @@ for zone in zones
     zone_floor_area = zone[:area]
     zone_height = get_zone_height(zone_name)
     zone_floor_lighting_meter = "MtrLighting_#{zone_floor_name}"
-    zone_floor_plug_load_meter = "MtrPlugLoad_#{zone_floor_name}" %>
+    zone_floor_plug_load_meter = "MtrPlugLoad_#{zone_floor_name}"
+    zone_afmeter = "AFMETER_#{zone_floor_name}" %>
 
     METER <%= zone_floor_lighting_meter %>
     METER <%= zone_floor_plug_load_meter %>
@@ -873,6 +874,7 @@ for zone in zones
         znCAir = <%= 0.24*0.077*zone_floor_area*zone_height %>
         znHcAirX = 0
         infShld = 1 // No obstructions or local shielding
+        znAFMETER = <%= zone_afmeter %>
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
       <% if floor == 3 %>
         SURFACE <%= create_surface_name(zone_floor_name, "Roof") %>
@@ -936,7 +938,7 @@ for zone in zones
         <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
         <% # TODO: ventilation should be calculated accoridng to 140-2023 Informative Annex B3 %>
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
-
+        znAFMETER = <%= zone_afmeter %>
       <% if internal_partition_surface_area > 0 # internal partition surface %>
     SURFACE <%= "#{zone_floor_name}_Internal_Partition" %>
           sfType = "WALL" 
@@ -1096,6 +1098,8 @@ ground = "Ground"
 bottom_perimeter_infiltration = "#{bottom_perimeter_south}_Infiltration"
 bottom_perimeter_ventilation = "#{bottom_perimeter_south}_Ventilation"
 
+bottom_perimeter_south_afmeter = "AFMETER_#{bottom_perimeter_south}"
+
 exterior_wall_surface_name = create_surface_name(bottom_perimeter_south, bottom_perimeter_south_exterior)
 ground_surface_name = create_surface_name(bottom_perimeter_south, ground)
 
@@ -1162,13 +1166,9 @@ end %>
 
 EXPORTCOL colHead="<%= outdoor_air_density %>" colVal= @top.rhoMoistOSh * <%= $m3_ft3 / $kg_lbm %>
 
-EXPORTCOL colHead="<%= infiltration_sensible_heat_transfer_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qsInfil * <%= 1 / $kw_btuh %>
-EXPORTCOL colHead="<%= infiltration_latent_heat_transfer_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qlInfil * <%= 1 / $kw_btuh %>
+EXPORTCOL colHead="<%= infiltration_mass_flow_rate %>" colVal=@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[1].vntEx * <%= $standard_air_density / $kg_lbm / $min_s %> // Ventilation mass flow rate
 
-EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@izXfer["<%= bottom_perimeter_ventilation %>"].amfNom * <%= 1 / $kg_lbm %>
-EXPORTCOL colHead="Sensible Heat Change [kJ/kg]" colVal= @top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= zone_floor_name %>].H.tAir)
-
-EXPORTCOL colHead="Latent Heat Change [kJ/kg]" colVal= latent heat of fusion (1061 btu/lb) * <%= $kg_lbm / $kj_btu %> * (humidity ratio difference))
+EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[1].vntEx * <%= $standard_air_density / $kg_lbm / $min_s %> // Ventilation mass flow rate
 
 EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %> 
 EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Incident Radiation" %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
