@@ -879,7 +879,8 @@ for zone in zones
         znCAir = <%= 0.24*0.077*zone_floor_area*zone_height %>
         znHcAirX = 0
         infShld = 1 // No obstructions or local shielding
-        znAFMETER = <%= zone_afmeter %>
+        znAFMtr = "<%= zone_afmeter %>"
+
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
       <% if floor == 3 %>
         SURFACE <%= create_surface_name(zone_floor_name, "Roof") %>
@@ -940,10 +941,10 @@ for zone in zones
         <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
         znCAir = <%= 0.24*0.077*zone_floor_area*get_zone_height(zone_name) %>
         infShld = 1 // No obstructions or local shielding
+        znAFMtr = "<%= zone_afmeter %>"
         <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
         <% # TODO: ventilation should be calculated accoridng to 140-2023 Informative Annex B3 %>
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
-        znAFMETER = <%= zone_afmeter %>
       <% if internal_partition_surface_area > 0 # internal partition surface %>
     SURFACE <%= "#{zone_floor_name}_Internal_Partition" %>
           sfType = "WALL" 
