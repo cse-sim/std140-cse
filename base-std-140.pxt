@@ -866,9 +866,9 @@ for zone in zones
     zone_floor_lighting_meter = "MtrLighting_#{zone_floor_name}"
     zone_floor_plug_load_meter = "MtrPlugLoad_#{zone_floor_name}"
     zone_afmeter = "AFMETER_#{zone_floor_name}" %>
-
     METER <%= zone_floor_lighting_meter %>
     METER <%= zone_floor_plug_load_meter %>
+    AFMETER "<%= zone_afmeter %>"
 
     <% if zone_name == "Plenum" # Add plenum zones %>
 
