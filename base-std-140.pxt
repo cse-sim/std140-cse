@@ -1173,6 +1173,14 @@ EXPORTCOL colHead="<%= infiltration_mass_flow_rate %>" colVal=@AFMETER["<%= bott
 
 EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[1].vntEx * <%= $standard_air_density / $kg_lbm / $min_s %> // Ventilation mass flow rate
 // EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@izXfer["<%= bottom_perimeter_ventilation %>"].amfNom * <%= 1 / $kg_lbm %> // Ventilation mass flow rate
+EXPORTCOL colHead="Sensible Heat Change [kJ/kg]" colVal= @top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= zone_floor_name %>].H.tAir) // Used to calculate ventilation sensible heat transfer
+EXPORTCOL colHead="Latent Heat Change [kJ/kg]" colVal= 1061 * <%= $kg_lbm / $kj_btu %> * (@top.wOHr - @znRes[<%= zone_floor_name %>].H.wAir) // Used to calculate ventilation latent heat transfer
+// Use ventilation mass flow rate [kg/s] and the sensible and latent heat transfer [kJ/kg] to get kJ/s, which can be converted to kW
+
+
+EXPORTCOL colHead="Total Sensible Heat Transfer [kJ]" colVal= @znRes["<%= bottom_perimeter_south %>"].H.qsIz * <%= 1 / $kw_btuh %> // total 
+EXPORTCOL colHead="Total Latent Heat Transfer [kJ]" colVal= @znRes["<%= bottom_perimeter_south %>"].H.qlIz * <%= 1 / $kw_btuh %> // total 
+// Use the total sensible and latent heat transfers [kJ/h] --> kJ/s, then subtract from ventilation sensible and latent heat trasnfers to get the infiltration sensible and latent
 
 EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %> 
 EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Incident Radiation" %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
