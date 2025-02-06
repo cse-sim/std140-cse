@@ -827,6 +827,7 @@ for zone in zones
       zone_floor_area = zone[:area]
       zone_floor_volume = zone_floor_area * zone_height
       ach4 = zone[:ach4][floor_index]
+      cfm4 = ach4 * zone_floor_volume / $h_min
       ach50 = convert_ach4_to_ach50(ach4, zone_height)
       occupancy = zone[:occupancy][floor_index]
       ventilation_schedule = zone[:ventilation_schedule]
