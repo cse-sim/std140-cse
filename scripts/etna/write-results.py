@@ -5,7 +5,7 @@ from datetime import datetime
 import mako.template as mk
 import os
 import pytz
-import os, glob
+import glob
 
 
 def call_csv(path):
