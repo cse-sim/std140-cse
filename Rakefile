@@ -71,9 +71,7 @@ def write_report(tests)
   puts "=================\n"
   success = nil
   if !(FileUtils.uptodate?(target[0], src)) or !(FileUtils.uptodate?(target[1], src))
-    Dir.chdir('scripts/' + tests){
-      success = system(%Q|python write-results.py|)
-    }
+    success = system(%Q|python "#{File.join(Dir.pwd, 'scripts', tests, 'write-results.py')}"|)
   else
     puts "\n  ...report already up-to-date."
     success = true

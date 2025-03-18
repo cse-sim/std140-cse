@@ -1,0 +1,21 @@
+[tool.poetry]
+authors = ["Big Ladder Software"]
+description = "California Simulation Engine (CSE) test suite."
+name = "std140-cse"
+# packages = [{include = "resnet_multiclimate_results"}] 
+repository = "https://github.com/cse-sim/std140-cse" 
+version = "0.0.0" # Generated from git on CI
+
+[tool.poetry.dependencies]
+mako = "*"
+openpyxl = "*"
+pandas = "*"
+python = "^3.11"
+pytz = "*"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.21.2"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]

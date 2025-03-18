@@ -1,11 +1,10 @@
 print("\nInitializing Python...\n")
-import openpyxl as xl
-import pandas as pd
-from datetime import datetime
-import mako.template as mk
 import os
 import pytz
-import os, glob
+import glob
+import pandas as pd
+import openpyxl as xl
+from datetime import datetime
 
 
 def call_csv(path):
@@ -29,8 +28,8 @@ def find_todays_date():
 output_file_root = "CSE-ET100series"
 tests = "etna"
 template_file = "ET100series-Output-GMT+1 (071023a).xlsx"
-current_directory = os.path.dirname(os.path.dirname(os.getcwd()))
-# current_directory = os.getcwd()
+
+current_directory = os.getcwd()
 delete_output_file(f"{current_directory}/reports/etna/{output_file_root}")
 output_file = f"{output_file_root}-{find_todays_date()}"
 template = xl.load_workbook(filename=f"{current_directory}/docs/etna/{template_file}")
