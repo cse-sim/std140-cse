@@ -806,6 +806,7 @@ end
 def add_exfiltration_izxfer(zone_floor_name, zone_floor_area, flow_rate) %>
   IZXFER <%= "#{zone_floor_name}_Exfiltration" %>
     izNVType = AIRNETEXT
+    izAFCat = InfilEx
     izZn1 = <%= zone_floor_name %>
     izALo = <%= flow_rate * zone_floor_area %>
 <% end
@@ -837,7 +838,7 @@ for zone in zones
 
       IZXFER <%= "#{zone_floor_name}_Ventilation" %>
         izNVType = AIRNETEXTFLOW
-        izAFCat = fanEx
+        izAFCat = FanEx
         izZn1 = <%= zone_floor_name %>
         izVfMin = <%= flow_rate %> * <%= set_ventilation_schedule(ventilation_schedule) %>
       <% if weather_independent_infiltration_rate
@@ -1135,6 +1136,10 @@ EXPORTCOL colHead="Moist Air Density [kg/m3]" colVal = @zone["<%= bottom_perimet
 
 EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Conduction" %>" colVal= @xsurf["<%= "Window_#{bottom_perimeter_south}" %>"].sbcI.qSrf * <%= -1 * $m2_ft2 * $window_area * 7 / $kw_btuh %>
 
+EXPORTCOL colHead="Total Sensible Heat Transfer [kW] qIzSh" colVal= @zone["<%= bottom_perimeter_south %>"].qIzSh * <%= 1 / $kj_btu / $h_s %>
+
+
+
 EXPORTFILE "OUTPUT_HOURLY"
   xfFileName = "OUTPUT_HOURLY.csv"
   xfFileStat = OVERWRITE
@@ -1168,6 +1173,12 @@ EXPORTCOL colHead="<%= outdoor_air_density %>" colVal= @top.rhoMoistOSh * <%= $m
 
 EXPORTCOL colHead="<%= infiltration_mass_flow_rate %>" colVal=@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].infEx * <%= $standard_air_density / $kg_lbm / $min_s %> // Infiltration mass flow rate
 
+EXPORTCOL colHead="Air Specific Heat [btu/lb*F]" colVal= @top.airSH
+EXPORTCOL colHead="Outdoor Temp [F]" colVal=@top.tDbOHr
+EXPORTCOL colHead="Indoor Temp [F]" colVal=@znRes[<%= zone_floor_name %>].H.tAir
+EXPORTCOL colHead="Outdoor Humidity Ratio [kg/kg]" colVal= @top.wOHr
+EXPORTCOL colHead="Indoor Humidity Ratio [kg/kg]" colVal=@znRes[<%= zone_floor_name %>].H.wAir
+
 EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].fanEx * <%= $standard_air_density / $kg_lbm / $min_s %> // Ventilation mass flow rate
 EXPORTCOL colHead="Sensible Heat Change [kJ/kg]" colVal= @top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= zone_floor_name %>].H.tAir) // Used to calculate ventilation sensible heat transfer
 EXPORTCOL colHead="Latent Heat Change [kJ/kg]" colVal= <%= $latent_heat_of_evaporation_water * $kg_lbm / $kj_btu %> * (@top.wOHr - @znRes[<%= zone_floor_name %>].H.wAir) // Used to calculate ventilation latent heat transfer
@@ -1179,7 +1190,7 @@ EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@znRes["<%= bottom
 EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Incident Radiation" %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
 
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qSrf * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
-EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=(@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.bm + @xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.df) * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=(@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.bm + @xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.df) * <%= $m2_ft2 / $kw_btuh * (exterior_wall_area - $window_area * 7) %> // Number of windows on bottom perimeter south exterior wall is 7
 
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcO.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcO.tsrf) * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
 EXPORTCOL colHead="<%= exterior_wall_interior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
