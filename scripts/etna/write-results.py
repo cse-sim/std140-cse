@@ -1,10 +1,10 @@
 print("\nInitializing Python...\n")
-import openpyxl as xl
-import pandas as pd
-from datetime import datetime
 import os
 import pytz
 import glob
+import pandas as pd
+import openpyxl as xl
+from datetime import datetime
 
 
 def call_csv(path):
