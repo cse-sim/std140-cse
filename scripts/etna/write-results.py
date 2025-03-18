@@ -2,7 +2,6 @@ print("\nInitializing Python...\n")
 import openpyxl as xl
 import pandas as pd
 from datetime import datetime
-import mako.template as mk
 import os
 import pytz
 import glob
