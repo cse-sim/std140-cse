@@ -12,4 +12,5 @@ Weather Drivers - Weather File Processing
 
 ## Running tests
 
-Type `rake` from the top level directory.
+Type `poetry shell`, then
+type `rake` from the top level directory.
