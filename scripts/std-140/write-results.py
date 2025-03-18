@@ -113,6 +113,7 @@ sub_hourly_average = [
     "ACH",
     "Moist Air Density [kg/m3]",
     window_net_heat_transfer_rate_conduction,
+    "Total Sensible Heat Transfer [kW] qIzSh",
 ]
 
 
@@ -139,12 +140,11 @@ def post_processing(df_hourly: pd.DataFrame, df_sub_hourly: pd.DataFrame):
     )
 
     df_hourly[infiltration_sensible_heat_transfer_rate] = (
-        df_hourly["Total Sensible Heat Transfer [kW]"]
-        - df_hourly[ventilation_sensible_heat_transfer_rate]
+        df_hourly[infiltration_mass_flow_rate]
+        * df_hourly["Sensible Heat Change [kJ/kg]"]
     )
     df_hourly[infiltration_latent_heat_transfer_rate] = (
-        df_hourly["Total Latent Heat Transfer [kW]"]
-        - df_hourly[ventilation_latent_heat_transfer_rate]
+        df_hourly[infiltration_mass_flow_rate] * df_hourly["Latent Heat Change [kJ/kg]"]
     )
 
     df_hourly[window_net_heat_transfer_rate] = (
