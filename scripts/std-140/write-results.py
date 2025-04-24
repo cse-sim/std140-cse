@@ -1,14 +1,16 @@
 print("\nInitializing Python...\n")
-import openpyxl as xl
-import pandas as pd
+
 from datetime import datetime
-import mako.template as mk
+import glob
 import os
-import pytz
-import os, glob
-from openpyxl import load_workbook
 from pathlib import Path
+
+
+import openpyxl as xl
+from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
+import pandas as pd
+import pytz
 
 
 def call_csv(path):
@@ -44,7 +46,7 @@ else:
     current_directory = os.path.dirname(
         os.path.dirname(os.getcwd())
     )  # Use when called from rakefile
-template_file_name = f"{template_file_root}_Template.xlsx"
+template_file_name = f"{template_file_root}_Template_R1.xlsx"
 template_file_path = Path(f"{current_directory}/docs/{test_suite}/{template_file_name}")
 
 hourly_results_file_name = "OUTPUT_HOURLY.csv"
@@ -70,12 +72,18 @@ infiltration_mass_flow_rate = "Infiltration mass flow rate [kg/s] b"
 infiltration_sensible_heat_transfer_rate = (
     "Sensible heat transfer rate into the zone due to infiltration [kW] c"
 )
+infiltration_moisture_added = (
+    "Moisture added to the zone due to the infiltration [kg water/kg dry air]"
+)
 infiltration_latent_heat_transfer_rate = (
     "Latent heat transfer rate into the zone due to infiltration [kW] c"
 )
 ventilation_mass_flow_rate = "Ventilation mass flow rate [kg/s] b"
 ventilation_sensible_heat_transfer_rate = (
     "Sensible heat transfer rate into the zone due to ventilation [kW] c"
+)
+ventilation_moisture_added = (
+    "Moisture added to the zone due to the ventilation [kg water/kg dry air]"
 )
 ventilation_latent_heat_transfer_rate = (
     "Latent heat transfer rate into the zone due to ventilation [kW] c"
@@ -90,22 +98,21 @@ window_net_heat_transfer_rate_radiation = (
 )
 
 zone_columns = [
-    "Current outdoor air density a [kg/m3]",
+    "Outdoor air density a [kg/m3]",
     infiltration_mass_flow_rate,
     infiltration_sensible_heat_transfer_rate,
+    infiltration_moisture_added,
     infiltration_latent_heat_transfer_rate,
     ventilation_mass_flow_rate,
     ventilation_sensible_heat_transfer_rate,
+    ventilation_moisture_added,
     ventilation_latent_heat_transfer_rate,
     "Total window transmitted solar radiation rate [kW] c,d",
     window_net_heat_transfer_rate,
-    "Total exterior surface conduction heat transfer rate [kW] c",
     "Total exterior surface incident solar radiation rate [kW] d",
     "Total exterior surface convection heat transfer rate [kW] f",
-    "Total interior surface conduction heat transfer rate [kW] c*",
-    "Total interior surface convection heat transfer rate [kW] f*",
-    "Total interior surface conduction heat transfer rate [kW] c^",
-    "Total interior surface convection heat transfer rate [kW] f^",
+    "Total interior surface convection heat transfer rate [kW] f",
+    "Total interior surface convection heat transfer rate [kW] f",
 ]
 
 sub_hourly_average = [
@@ -129,7 +136,7 @@ def post_processing(df_hourly: pd.DataFrame, df_sub_hourly: pd.DataFrame):
     df_hourly.index = df_hourly["Datetime"]
     for column in df_sub_hourly.columns:
         if column in sub_hourly_average:
-            df_hourly[column] = df_sub_hourly[column].resample("H").mean()
+            df_hourly[column] = df_sub_hourly[column].resample("h").mean()
 
     df_hourly[ventilation_sensible_heat_transfer_rate] = (
         df_hourly[ventilation_mass_flow_rate]
@@ -208,10 +215,16 @@ for case in cases:
 
     df_sheet = sheets[zone_sheet]
     df_sheet = df_sheet.iloc[:, :-1]
-    df_sheet.columns = df_sheet.iloc[0]
+    columns = df_sheet.iloc[0]
     df_sheet = df_sheet[1:]
+    df_sheet.columns = [column for column in columns]
+    df_sheet.reset_index(drop=True, inplace=True)
     for zone_column in zone_columns:
-        df_sheet[zone_column] = df_case_data_hourly[zone_column]
+        if zone_column not in [
+            infiltration_moisture_added,
+            ventilation_moisture_added,
+        ]:  # Skips moisture-added columns since CSE calculation not performed, and not a required output.
+            df_sheet[zone_column] = df_case_data_hourly[zone_column]
 
     sheet = template[zone_sheet]  # Access the corresponding sheet in the template
     for row_idx, row in enumerate(
