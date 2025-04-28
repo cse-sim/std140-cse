@@ -32,7 +32,7 @@ def convert_celsius_to_fahrenheit(celsius)
 end
 
 # Internal use
-nsteps = 6
+nsteps = 1
 %>
 
 <%
@@ -86,6 +86,9 @@ $visible_absorptance_interior_floor = 0.8
 $visible_absorptance_dropped_ceiling = 0.2
 
 $rough_surface_value = 1.67
+
+$footing_length = 0.76 * $m_ft
+$footing_depth = 0.20 * $m_ft
 %>
 
 wfName = "weather/std-140/725650TY.epw"
@@ -226,11 +229,17 @@ CONSTRUCTION "Foundation Wall"
   LAYER lrMat= "Concrete" lrThk=<%= 0.20*$m_ft %>
 
 FOUNDATION "Foundation"
-  fdFtCon = "Foundation Wall"
+  fdWlCon = "Foundation Wall"
   fdWlHtAbvGrd = 0
-  fdWlDpBlwSlb = 1.07 * <%= $m_ft %>
+  fdWlDpBlwSlb = <%= 0.87 * $m_ft %>
 
-
+FNDBLOCK "Footing"
+  fbMat = "Concrete"
+  fbX1Ref = "WALLCENTER"
+  fbZ1Ref = "WALLBOTTOM"
+  fbX1 =  <%= -$footing_length / 2 %>
+  fbX2 = <%= $footing_length / 2 %>
+  fbZ2 = <%= $footing_depth %>
 
 <%
 # Zones

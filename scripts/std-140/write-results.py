@@ -167,7 +167,7 @@ for case in cases:
 
     information_sheet = template["Information"]
     information_sheet.cell(row=2, column=2, value=case)
-    information_sheet.cell(row=3, column=2, value="CSE 0.923.0")
+    information_sheet.cell(row=3, column=2, value="CSE 0.925.0")
     information_sheet.cell(row=4, column=2, value="Dec 18, 2024")
     information_sheet.cell(row=5, column=2, value="Big Ladder Software")
     information_sheet.cell(
