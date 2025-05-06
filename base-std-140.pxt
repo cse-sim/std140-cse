@@ -1038,7 +1038,7 @@ for zone in zones
         gnEndUse = LIT
         gnMeter = <%= zone_floor_lighting_meter %>
       GAIN <%= "PlugLoadSchedule" + plug_load_schedule %> 
-        gnPower = <%= plug_load_power_density * zone_floor_area %> * <%= set_lighting_schedule(plug_load_schedule) %>
+        gnPower = <%= plug_load_power_density * zone_floor_area %> * <%= set_plug_load_schedule(plug_load_schedule) %>
         gnFrRad = 0.50
         gnFrLat = 0
         gnEndUse = RCP
