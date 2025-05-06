@@ -7,10 +7,11 @@ repository = "https://github.com/cse-sim/std140-cse"
 version = "0.0.0" # Generated from git on CI
 
 [tool.poetry.dependencies]
+dimes = {git = "https://github.com/bigladder/dimes.git"}
 mako = "*"
 openpyxl = "*"
 pandas = "*"
-python = ">=3.11"
+python = ">=3.11,<4.0"
 pytz = "*"
 
 [tool.poetry.group.dev.dependencies]
