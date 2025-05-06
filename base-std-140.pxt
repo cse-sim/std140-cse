@@ -1153,8 +1153,7 @@ exterior_wall_exterior_surface_convection_rate = "Total exterior surface convect
 exterior_wall_interior_surface_conduction_rate = "Total interior surface conduction heat transfer rate [kW] c"
 exterior_wall_interior_surface_convection_rate = "Total interior surface convection heat transfer rate [kW] f"
 
-slab_on_grade_interior_surface_conduction_rate = "Total interior surface conduction heat transfer rate [kW] c"
-slab_on_grade_interior_surface_convection_rate = "Total interior surface convection heat transfer rate [kW] f"
+slab_on_grade_interior_surface_convection_rate = "Total interior surface convection heat transfer rate [kW] ^"
 
 bottom_perimeter_south = "Bottom_Perimeter_South"
 bottom_perimeter_south_exterior = "Bottom_Exterior_South"
@@ -1261,7 +1260,6 @@ EXPORTCOL colHead="<%= exterior_wall_exterior_surface_convection_rate %>" colVal
 EXPORTCOL colHead="<%= exterior_wall_interior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
 EXPORTCOL colHead="<%= exterior_wall_interior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcI.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
 
-EXPORTCOL colHead="<%= slab_on_grade_interior_surface_conduction_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btuh * slab_area %>
 EXPORTCOL colHead="<%= slab_on_grade_interior_surface_convection_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.hxa * (@xsurf["<%= ground_surface_name %>"].sbcI.txa - @xsurf["<%= ground_surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btuh * slab_area %>
 
 RUN

@@ -112,7 +112,7 @@ zone_columns = [
     "Total exterior surface incident solar radiation rate [kW] d",
     "Total exterior surface convection heat transfer rate [kW] f",
     "Total interior surface convection heat transfer rate [kW] f",
-    "Total interior surface convection heat transfer rate [kW] f",
+    "Total interior surface convection heat transfer rate [kW] ^",
 ]
 
 sub_hourly_average = [
