@@ -1253,13 +1253,13 @@ EXPORTCOL colHead="Total Latent Heat Transfer [kW]" colVal= @znRes["<%= bottom_p
 EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %> 
 EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Incident Radiation" %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
 
-EXPORTCOL colHead="<%= exterior_wall_exterior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qSrf * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
-EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=(@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.bm + @xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.df) * <%= $m2_ft2 / $kw_btuh * (exterior_wall_area - $window_area * 7) %> // Number of windows on bottom perimeter south exterior wall is 7
+EXPORTCOL colHead="<%= exterior_wall_exterior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qSrf * <%= 1 / $kw_btuh * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=(@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.bm + @xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.df) * <%= 1 / $kw_btuh * (exterior_wall_area - $window_area * 7) %> // Number of windows on bottom perimeter south exterior wall is 7
 
-EXPORTCOL colHead="<%= exterior_wall_exterior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcO.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcO.tsrf) * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
-EXPORTCOL colHead="<%= exterior_wall_interior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.qSrf * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
-EXPORTCOL colHead="<%= exterior_wall_interior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcI.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btuh * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_exterior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcO.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcO.tsrf) * <%= 1 / $kw_btuh * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_interior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.qSrf * <%= 1 / $kw_btuh * exterior_wall_area %>
+EXPORTCOL colHead="<%= exterior_wall_interior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcI.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcI.tsrf) * <%= 1 / $kw_btuh * exterior_wall_area %>
 
-EXPORTCOL colHead="<%= slab_on_grade_interior_surface_convection_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.hxa * (@xsurf["<%= ground_surface_name %>"].sbcI.txa - @xsurf["<%= ground_surface_name %>"].sbcI.tsrf) * <%= $m2_ft2 / $kw_btuh * slab_area %>
+EXPORTCOL colHead="<%= slab_on_grade_interior_surface_convection_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.hxa * (@xsurf["<%= ground_surface_name %>"].sbcI.txa - @xsurf["<%= ground_surface_name %>"].sbcI.tsrf) * <%= 1 / $kw_btuh * slab_area %>
 
 RUN
