@@ -70,6 +70,8 @@ excel_tabs_plots_details = [
         ["Bottom_Core_1", "Bottom_Corner_Northeast"],
     ),
 ]
+
+
 bottom_perimeter_south_plot_details: List[BottomPerimeterSouth] = [
     BottomPerimeterSouth(
         "Infiltration Mass Flow Rate",
@@ -79,8 +81,46 @@ bottom_perimeter_south_plot_details: List[BottomPerimeterSouth] = [
                 "Infiltration mass flow rate [kg/s] b", "Infiltration Mass Flow Rate"
             )
         ],
-    )
+    ),
+    BottomPerimeterSouth(
+        "Wall and Slab-On-Grade Heat Transfer Rate",
+        "kW",
+        [
+            ColumnDisplayName(
+                "Total exterior surface incident solar radiation rate [kW] d",
+                "Exterior Wall Exterior Surface Incident Solar",
+            ),
+            ColumnDisplayName(
+                "Total exterior surface convection heat transfer rate [kW] f",
+                "Exterior Wall Exterior Surface Convection",
+            ),
+            ColumnDisplayName(
+                "Total interior surface convection heat transfer rate [kW] f",
+                "Exterior Wall Interior Surface Convection",
+            ),
+            ColumnDisplayName(
+                "Total interior surface convection heat transfer rate [kW] ^",
+                "Slab-On-Grade Interior Surface Convection",
+            ),
+        ],
+    ),
+    BottomPerimeterSouth(
+        "Window Heat Transfer Rate",
+        "kW",
+        [
+            ColumnDisplayName(
+                "Total window transmitted solar radiation rate [kW] c,d",
+                "Total Solar Radiation",
+            ),
+            ColumnDisplayName(
+                "Total net heat transfer rate through the windows [kW] c,e",
+                "Net Heat Transfer",
+            ),
+        ],
+    ),
 ]
+
+
 plot_directory = Path("output", "std-140", "GRAPHS")
 
 date_time = get_date_time()
@@ -135,13 +175,15 @@ def plot_detailed_data():
                 plot.add_display_data(
                     DisplayData(
                         y_values,
-                        name=capitalize_and_remove_underscores(display_name),
+                        name=display_name,
                         native_units=native_units,
                         y_axis_name=y_axis_name,
                         line_properties=LinesOnly(line_width=2),
                     )
                 )
-        plot.write_html_plot(Path(plot_directory, f"{excel_tab}-{y_axis_name}.html"))
+            plot.write_html_plot(
+                Path(plot_directory, f"{excel_tab}-{y_axis_name}.html")
+            )
 
 
 def plot_nsteps_temperature_comparison():
