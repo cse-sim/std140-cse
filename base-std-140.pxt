@@ -69,7 +69,7 @@ $window_width = 2.486 * $m_ft
 $window_height = 2.7432 * $m_ft
 $window_area = $window_width * $window_height
 $window_shgc = 0.39
-$window_u_factor = 5.231 * $u_c
+$window_u_factor = 3.268 * $u_c
 
 door_width = 0.9144 * $m_ft
 door_height = 2.1336 * $m_ft
