@@ -65,11 +65,13 @@ core_1_area = core_1_width * perimeter_ew_length
 core_2_area = core_2_width * perimeter_ew_length
 core_3_area = core_3_width * perimeter_ew_length
 
+window_frame_area = 0.734* $m2_ft2 
 $window_width = 2.486 * $m_ft
 $window_height = 2.7432 * $m_ft
 $window_area = $window_width * $window_height
 $window_shgc = 0.39
 $window_u_factor = 3.268 * $u_c
+$frame_area_multiplier = 1 - (window_frame_area / $window_area)
 
 door_width = 0.9144 * $m_ft
 door_height = 2.1336 * $m_ft
@@ -1074,6 +1076,7 @@ for zone in zones
             wnUNFRC = <%= $window_u_factor %>
             wnExEpsLW = <%= $window_infrared_emittance %>
             wnInEpsLW = <%= $window_infrared_emittance %>
+            wnFMult = <%= $frame_area_multiplier %>
         <% end %> 
           
           <% if floor == 1 && if (zone_name == "Perimeter_North" || zone_name == "Perimeter_South") %> 
