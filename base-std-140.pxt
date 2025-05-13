@@ -1067,7 +1067,6 @@ for zone in zones
             wnHeight = <%= $window_height %>
             wnWidth = <%= $window_width %>
             wnMult = <%= surface[:number_windows] %>
-            wnU = <%= 3.268 * $u_c %>
             wnSHGC = <%= $window_shgc %>
             wnModel = "ASHWAT"
             wnNGlz = 2
