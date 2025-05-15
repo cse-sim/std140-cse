@@ -98,14 +98,14 @@ CONSTRUCTION "Slab-On-Grade Adiabatic"
 
 <%
 links = [ # If a link is connected to the exterior, then zone2 must be "ambient", and wind_pressure must be defined.
-    {:zone1=>1,:zone2=>"ambient",:flow_coefficient=>0.005,:n=>0.65,:wind_pressure=>11},
-    {:zone1=>3,:zone2=>"ambient",:flow_coefficient=>0.008,:n=>0.65,:wind_pressure=>3.7},
-    {:zone1=>2,:zone2=>"ambient",:flow_coefficient=>0.007,:n=>0.65,:wind_pressure=>-7.3},
-    {:zone1=>4,:zone2=>"ambient",:flow_coefficient=>0.009,:n=>0.65,:wind_pressure=>-4.9},
-    {:zone1=>1,:zone2=>2,:flow_coefficient=>0.015,:n=>0.50},
-    {:zone1=>3,:zone2=>1,:flow_coefficient=>0.020,:n=>0.50},
-    {:zone1=>4,:zone2=>2,:flow_coefficient=>0.020,:n=>0.50},
-    {:zone1=>3,:zone2=>4,:flow_coefficient=>0.015,:n=>0.50},
+    {:zone1=>1,:zone2=>"ambient",:flow_coefficient=>0.005,:n=>0.65,:height=>2.0,:wind_pressure=>11},
+    {:zone1=>3,:zone2=>"ambient",:flow_coefficient=>0.008,:n=>0.65,:height=>1.0,:wind_pressure=>3.7},
+    {:zone1=>2,:zone2=>"ambient",:flow_coefficient=>0.007,:n=>0.65,:height=>2.0,:wind_pressure=>-7.3},
+    {:zone1=>4,:zone2=>"ambient",:flow_coefficient=>0.009,:n=>0.65,:height=>2.0,:wind_pressure=>-4.9},
+    {:zone1=>1,:zone2=>2,:flow_coefficient=>0.015,:n=>0.50,:height=>2.5},
+    {:zone1=>3,:zone2=>1,:flow_coefficient=>0.020,:n=>0.50,:height=>0.0},
+    {:zone1=>4,:zone2=>2,:flow_coefficient=>0.020,:n=>0.50,:height=>0.0},
+    {:zone1=>3,:zone2=>4,:flow_coefficient=>0.015,:n=>0.50,:height=>1.5},
 ]
 zones = [
     {:azimuth=>180,:level=>2,:zone_temp_C=>23},
@@ -134,6 +134,7 @@ links.each_with_index do |link, index|
   zone2 = link[:zone2]
   flow_coefficient = link[:flow_coefficient]
   n = link[:n]
+  height = link[:height]
   if zone2 == "ambient" # Link is connected to the exterior and one zone.
       ventilation_model = "AIRNETEXT"
       air_flow_category = "InfilEx"
@@ -150,6 +151,7 @@ IZXFER <%= link_name %>
     izAFCat = <%= air_flow_category %>
     izZn1 = <%= convert_to_zone_string(zone1) %>
     izALo = <%= flow_coefficient / izNVEff * Math.sqrt(air_density_standard_conditions / 2) * delta_P ** (n - 0.5) * m2_ft2 %>
+    izHD = <%= height %>
     <% if exterior %>
 
     izTEx = <%= ambient_temperature %>
