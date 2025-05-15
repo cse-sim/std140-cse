@@ -188,7 +188,7 @@ ZONE <%= zone_name %>
     znFloorz = <%= (level - 1) * 10 %>
     znCeilingHt = <%= level * 10 %>
     znTH = <%= zone_temp_F - 0.00001 %>
-    znTD = <%= zone_temp_F %>
+    znTH = <%= zone_temp_F %>
     znTC = <%= zone_temp_F + 0.00001 %>
     znQMxH = 1000000
     znCAir = <%= 0.24*0.077*zone_floor_volume %>
