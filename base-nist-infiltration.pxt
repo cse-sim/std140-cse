@@ -1,24 +1,38 @@
 <%
+# Ruby Packages
+require 'mathn'
+
 # Unit Conversions
-$k_c = 0.5781759824
-$rho_c = 0.062428
-$cp_c = 0.000239
-$m_ft = 3.28084
+k_c = 0.5781759824
+rho_c = 0.062428
+cp_c = 0.000239
+m_ft = 3.28084
+m2_ft2 = m_ft * m_ft  
+pa_lbf_ft2 = 0.0208854
+s_hr = 3600.0
+ft_mile = 5280
+m_s_mph = m_ft * s_hr / ft_mile
 
 # Constants
 izNVEff = 0.8
-zone_height = 10
-zone_length = 10
-zone_floor_area = zone_length * zone_height
-zone_floor_volume = zone_floor_area * zone_height
-wall_surface_area = zone_height * zone_length
+zone_height = 10 # ft
+zone_length = 10 # ft
+zone_floor_area = zone_length * zone_height # ft2
+zone_floor_volume = zone_floor_area * zone_height # ft3
+wall_surface_area = zone_height * zone_length # ft2
+ambient_temperature = 32 # degF
+air_density_standard_conditions = 1.225 # kg/m3
+delta_P = 4 # Pa
+wind_speed = 1 # m/s (wind speed does not matter)
+wind_speed_mph = wind_speed * m_s_mph
 %>
 
-wfName = "weather/CAN_QC_Montreal-Mirabel.Intl.AP.CAN002_TMYx.2009-2023.epw"
-nSubSteps = 10
+wfName = "weather/nist-infiltration/CAN_QC_Montreal-Mirabel.Intl.AP.CAN002_TMYx.2009-2023.epw"
+nSubSteps = 20
 DT = No
 bldgAzm = 0
-elevation = <%= 82.3 * $m_ft %> <% # TODO: is there a way to import the elevation from the weather file? %>
+elevation = <%= 82.3 * m_ft %> <% # TODO: is there a way to import the elevation from the weather file? %>
+endDay = JAN 1
 
 terrainClass = 3
 wuDays = 0
@@ -29,74 +43,69 @@ jan1DoW = "FRI" // Jan 1 2021
 
 // Materials
 MATERIAL "Roof Metal Deck"
-  matCond = <%= 45.28*$k_c %>
-  matDens = <%= 7824*$rho_c %>
-  matSpHt = <%= 500*$cp_c %>
+  matCond = <%= 45.28*k_c %>
+  matDens = <%= 7824*rho_c %>
+  matSpHt = <%= 500*cp_c %>
 
 MATERIAL "Roof Insulation"
-  matCond = <%= 0.020*$k_c %>
-  matDens = <%= 32*$rho_c %>
-  matSpHt = <%= 922*$cp_c %>
+  matCond = <%= 0.020*k_c %>
+  matDens = <%= 32*rho_c %>
+  matSpHt = <%= 922*cp_c %>
 
 MATERIAL "Roof Built-Up Roofing"
-  matCond = <%= 0.16*$k_c %>
-  matDens = <%= 1120*$rho_c %>
-  matSpHt = <%= 1460*$cp_c %>
+  matCond = <%= 0.16*k_c %>
+  matDens = <%= 1120*rho_c %>
+  matSpHt = <%= 1460*cp_c %>
 
 MATERIAL "Exterior Wall Insulation"
-  matCond = <%= 0.037*$k_c %>
-  matDens = <%= 10*$rho_c %>
-  matSpHt = <%= 838*$cp_c %>
+  matCond = <%= 0.037*k_c %>
+  matDens = <%= 10*rho_c %>
+  matSpHt = <%= 838*cp_c %>
 
 MATERIAL "Exterior Wall Gypsum Board"
-  matCond = <%= 0.16*$k_c %>
-  matDens = <%= 800*$rho_c %>
-  matSpHt = <%= 1090*$cp_c %>
-
-MATERIAL "Exterior Wall Insulation"
-  matCond = <%= 0.037*$k_c %>
-  matDens = <%= 10*$rho_c %>
-  matSpHt = <%= 838*$cp_c %>
+  matCond = <%= 0.16*k_c %>
+  matDens = <%= 800*rho_c %>
+  matSpHt = <%= 1090*cp_c %>
 
 MATERIAL "Exterior Wall Stucco"
-  matCond = <%= 0.72*$k_c %>
-  matDens = <%= 1856*$rho_c %>
-  matSpHt = <%= 840*$cp_c %>
+  matCond = <%= 0.72*k_c %>
+  matDens = <%= 1856*rho_c %>
+  matSpHt = <%= 840*cp_c %>
 
 MATERIAL "Concrete Floor"
-  matCond = <%= 2.31*$k_c %>
-  matDens = <%= 2322*$rho_c %>
-  matSpHt = <%= 832*$cp_c %>
+  matCond = <%= 2.31*k_c %>
+  matDens = <%= 2322*rho_c %>
+  matSpHt = <%= 832*cp_c %>
 
 MATERIAL "Adiabatic Insulation"
-  matCond = <%= 0.01*$k_c %>
+  matCond = <%= 0.01*k_c %>
 
 // Constructions
 CONSTRUCTION "Roof"
-  LAYER lrMat= "Roof Metal Deck" lrThk=<%= 0.0008*$m_ft %>
-  LAYER lrMat= "Roof Insulation" lrThk=<%= 0.053*$m_ft %>
-  LAYER lrMat= "Roof Built-Up Roofing" lrThk=<%= 0.0095*$m_ft %>
+  LAYER lrMat= "Roof Metal Deck" lrThk=<%= 0.0008*m_ft %>
+  LAYER lrMat= "Roof Insulation" lrThk=<%= 0.053*m_ft %>
+  LAYER lrMat= "Roof Built-Up Roofing" lrThk=<%= 0.0095*m_ft %>
 
 CONSTRUCTION "Exterior Wall"
-  LAYER lrMat= "Exterior Wall Gypsum Board" lrThk=<%= 0.16*$m_ft %>
-  LAYER lrMat= "Exterior Wall Insulation" lrThk=<%= 0.062*$m_ft %>
-  LAYER lrMat= "Exterior Wall Gypsum Board" lrThk=<%= 0.16*$m_ft %>
-  LAYER lrMat= "Exterior Wall Stucco" lrThk=<%= 0.72*$m_ft %>
+  LAYER lrMat= "Exterior Wall Gypsum Board" lrThk=<%= 0.16*m_ft %>
+  LAYER lrMat= "Exterior Wall Insulation" lrThk=<%= 0.062*m_ft %>
+  LAYER lrMat= "Exterior Wall Gypsum Board" lrThk=<%= 0.16*m_ft %>
+  LAYER lrMat= "Exterior Wall Stucco" lrThk=<%= 0.72*m_ft %>
 
 CONSTRUCTION "Slab-On-Grade Adiabatic"
-  LAYER lrMat= "Concrete Floor" lrThk=<%= 0.20*$m_ft %>
-  LAYER lrMat= "Adiabatic Insulation" lrThk=<%= 1.000*$m_ft %>
+  LAYER lrMat= "Concrete Floor" lrThk=<%= 0.20*m_ft %>
+  LAYER lrMat= "Adiabatic Insulation" lrThk=<%= 1.000*m_ft %>
 
 <%
-links = [ # May need to rename from_zone and to_zone to zone1 and zone2, respectively
-    {:zone1=>1,:zone2=>"ambient",:vent_discharge_coefficient=>0.005,:n=>0.65,:wind_pressure_coefficient=>11}, # from_zone and to_zone have been switched for simplification purposes later in the code. 
-    {:zone1=>3,:zone2=>"ambient",:vent_discharge_coefficient=>0.008,:n=>0.65,:wind_pressure_coefficient=>3.7}, # from_zone and to_zone have been switched for simplification purposes later in the code. 
-    {:zone1=>2,:zone2=>"ambient",:vent_discharge_coefficient=>0.007,:n=>0.65,:wind_pressure_coefficient=>-7.3},
-    {:zone1=>4,:zone2=>"ambient",:vent_discharge_coefficient=>0.009,:n=>0.65,:wind_pressure_coefficient=>-4.9},
-    {:zone1=>1,:zone2=>2,:vent_discharge_coefficient=>0.015,:n=>0.50},
-    {:zone1=>3,:zone2=>1,:vent_discharge_coefficient=>0.020,:n=>0.50},
-    {:zone1=>4,:zone2=>2,:vent_discharge_coefficient=>0.020,:n=>0.50},
-    {:zone1=>3,:zone2=>4,:vent_discharge_coefficient=>0.015,:n=>0.50},
+links = [ # If a link is connected to the exterior, then zone2 must be "ambient", and wind_pressure must be defined.
+    {:zone1=>1,:zone2=>"ambient",:flow_coefficient=>0.005,:n=>0.65,:wind_pressure=>11},
+    {:zone1=>3,:zone2=>"ambient",:flow_coefficient=>0.008,:n=>0.65,:wind_pressure=>3.7},
+    {:zone1=>2,:zone2=>"ambient",:flow_coefficient=>0.007,:n=>0.65,:wind_pressure=>-7.3},
+    {:zone1=>4,:zone2=>"ambient",:flow_coefficient=>0.009,:n=>0.65,:wind_pressure=>-4.9},
+    {:zone1=>1,:zone2=>2,:flow_coefficient=>0.015,:n=>0.50},
+    {:zone1=>3,:zone2=>1,:flow_coefficient=>0.020,:n=>0.50},
+    {:zone1=>4,:zone2=>2,:flow_coefficient=>0.020,:n=>0.50},
+    {:zone1=>3,:zone2=>4,:flow_coefficient=>0.015,:n=>0.50},
 ]
 zones = [
     {:azimuth=>180,:level=>2,:zone_temp_C=>23},
@@ -104,7 +113,7 @@ zones = [
     {:azimuth=>180,:level=>1,:zone_temp_C=>21},
     {:azimuth=>0,:level=>1,:zone_temp_C=>21},
 ]
-surfaces = [
+surfaces = [ # Each zone has three walls adjacent to the exterior.
     {:azimuth=>-90,:direction=>"Left"},
     {:azimuth=>0,:direction=>"Front"},
     {:azimuth=>90,:direction=>"Right"}
@@ -117,61 +126,157 @@ def convert_to_zone_string(zone)
 end
 %>
 
-<% links.each_with_index do |link, index|
-    link_number = index + 1
-    zone1 = link[:zone1]
-    zone2 = link[:zone2]
-    vent_discharge_coefficient = link[:vent_discharge_coefficient]
-    n = link[:n]
-    if zone2 == "ambient"
-        ventilation_model = "AIRNETEXT"
-        air_flow_category = "InfilEx"
-        exterior = true
-    else # Link is adjacent to two zones (Link is no adjacent to the exterior)
-        ventilation_model = "AIRNETIZ"
-        air_flow_category = "InfilIz"
-        exterior = false
-    end
+<% 
+links.each_with_index do |link, index|
+  link_number = index + 1
+  link_name = "Link#{link_number}"
+  zone1 = link[:zone1]
+  zone2 = link[:zone2]
+  flow_coefficient = link[:flow_coefficient]
+  n = link[:n]
+  if zone2 == "ambient" # Link is connected to the exterior and one zone.
+      ventilation_model = "AIRNETEXT"
+      air_flow_category = "InfilEx"
+      exterior = true
+      wind_pressure = link[:wind_pressure]
+  else # Link is connected to two zones (i.e. Link is not connected to the exterior).
+      ventilation_model = "AIRNETIZ"
+      air_flow_category = "InfilCz"
+      exterior = false
+  end
 %>
-IZXFER
+IZXFER <%= link_name %>
     izNVType = <%= ventilation_model %>
     izAFCat = <%= air_flow_category %>
     izZn1 = <%= convert_to_zone_string(zone1) %>
-    <% if not exterior %>
+    izALo = <%= flow_coefficient / izNVEff * Math.sqrt(air_density_standard_conditions / 2) * delta_P ** (n - 0.5) * m2_ft2 %>
+    <% if exterior %>
+
+    izTEx = <%= ambient_temperature %>
+    izCpr = <%= 2 * wind_pressure / (air_density_standard_conditions * wind_speed ** 2) %>
+    izWindSpeed = <%= wind_speed_mph %>
+
+    <% else # if link is not connected to exterior. %>
+    
     izZn2 = <%= convert_to_zone_string(zone2) %>
+    
     <% end %>
-    izNVEff = 
+
+    izNVEff = <%= izNVEff %>
+
 <% end %>
 
-<% zones.each_with_index do |zone, index|
-    zone_number = index + 1
-    level = zone[:level]
-    zone_azimuth = zone[:azimuth]
-    zone_temp_F = zone[:zone_temp_C] * 1.8 + 32.0
-    zone_name = convert_to_zone_string(zone_number)
+<% 
+zones.each_with_index do |zone, index|
+  zone_number = index + 1
+  level = zone[:level]
+  zone_azimuth = zone[:azimuth]
+  zone_temp_F = zone[:zone_temp_C] * 1.8 + 32.0
+  zone_name = convert_to_zone_string(zone_number)
+  zone_afmeter = "AFMETER#{zone_name}"
 %>
+
+AFMETER <%= zone_afmeter %>
 
 ZONE <%= zone_name %>
     znModel = "CZM"
     znArea = <%= zone_floor_area %>
     znVol = <%= zone_floor_volume %>
     znAzm = <%= zone_azimuth %>
-    znFloorz = <%= (zone_number - 1) * 10 %>
-    znCeilingHt = <%= zone_number * 10 %>
-    znEaveZ = 0
+    znFloorz = <%= (level - 1) * 10 %>
+    znCeilingHt = <%= level * 10 %>
+    znTH = <%= zone_temp_F - 0.00001 %>
     znTD = <%= zone_temp_F %>
+    znTC = <%= zone_temp_F + 0.00001 %>
     znQMxH = 1000000
-    znQMxC = 1000000
+    znCAir = <%= 0.24*0.077*zone_floor_volume %>
+    znAFMtr = <%= zone_afmeter %>
 
-    <% for surface in surfaces
-        zone_azimuth = surface[:azimuth]
-        direction = surface[:direction]
-    %>
+    SURFACE <%= zone_name + "Floor" %>
+        sfType = "FLOOR"
+        sfArea = <%= zone_floor_area %>
+        sfCon = "Slab-On-Grade Adiabatic"
+        sfModel = "FORWARD_DIFFERENCE"
+        sfExCnd = "AMBIENT"
+
+  <% if level == 2 %>
+
+    SURFACE <%= zone_name + "Ceiling" %>
+        sfType = "CEILING"
+        sfArea = <%= zone_floor_area %>
+        sfCon = "Roof"
+        sfModel = "FORWARD_DIFFERENCE"
+        sfExCnd = "SPECIFIEDT"
+        sfExT = <%= ambient_temperature %>
+
+  <% end %>
+
+  <% 
+  for surface in surfaces
+    zone_azimuth = surface[:azimuth]
+    direction = surface[:direction]
+  %>
 
     SURFACE <%= zone_name + "Wall" + direction %>
         sfType = "WALL"
         sfArea = <%= wall_surface_area %>
         sfAzm = <%= zone_azimuth %>
+        sfCon = "Exterior Wall"
+        sfModel = "FORWARD_DIFFERENCE"
+        sfExCnd = "SPECIFIEDT"
+        sfExT = <%= ambient_temperature %>
 
-    <% end %>
-<% end %>
+  <% 
+  end 
+  %>
+<% 
+end 
+%>
+
+
+EXPORTFILE
+  xfFileName = "results"
+
+EXPORT "results"
+  exType = UDT
+  exFreq = HOUR
+  exDayBeg = JAN 1
+  exDayEnd = DEC 31
+  exHeader = COLUMNSONLY
+
+  EXPORTCOL colHead="Month" colVal=$month
+  EXPORTCOL colHead="Day" colVal=$dayOfMonth
+  EXPORTCOL colHead="Hour" colVal=$hour
+
+<% 
+zones.each_with_index do |zone, index|
+  zone_number = index + 1
+  zone_name = convert_to_zone_string(zone_number)
+  zone_afmeter = "AFMETER#{zone_name}"
+  zone_air_pressure = zone_name + "_Air_Pressure_Pa"
+  zone_flow_rate = zone_name + "_Flow_Rate_kg_s"
+%>
+
+EXPORTCOL colHead="<%= zone_air_pressure %>" colVal=@znRes["<%= zone_name %>"].H.pz0 * <%= 1 / pa_lbf_ft2 %> 
+EXPORTCOL colHead="<%= zone_flow_rate %>" colVal=@afmeter["<%= zone_afmeter %>"].H[0].InfCz * <%= 0.000125998 %> 
+
+<%
+end
+%>
+
+<% 
+links.each_with_index do |link, index|
+  link_number = index + 1
+  link_name = "Link#{link_number}"
+  link_air_pressure = link_name + "_Air_Pressure_Pa"
+  link_flow_rate = link_name + "_Flow_Rate_kg_s"
+%>
+
+EXPORTCOL colHead="<%= link_air_pressure %>" colVal=@izXfer["<%= link_name %>"].ad[0].delP * <%= 1 / pa_lbf_ft2 %> 
+EXPORTCOL colHead="<%= link_flow_rate %>" colVal=@izXfer["<%= link_name %>"].amfNom * <%= 0.000125998 %> 
+
+<%
+end
+%>
+
+RUN
