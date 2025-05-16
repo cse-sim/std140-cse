@@ -260,7 +260,7 @@ zones.each_with_index do |zone, index|
 %>
 
 EXPORTCOL colHead="<%= zone_air_pressure %>" colVal=@znRes["<%= zone_name %>"].H.pz0 * <%= 1 / pa_lbf_ft2 %> 
-EXPORTCOL colHead="<%= zone_flow_rate %>" colVal=@afmeter["<%= zone_afmeter %>"].H[0].InfCz * <%= 0.000125998 %> 
+EXPORTCOL colHead="<%= zone_flow_rate %>" colVal= ( @afmeter["<%= zone_afmeter %>"].H[0].InfCz + @afmeter["<%= zone_afmeter %>"].H[0].InfUz + @afmeter["<%= zone_afmeter %>"].H[1].InfCz + @afmeter["<%= zone_afmeter %>"].H[1].InfUz) * <%= 1 / kg_lbm %> 
 
 <%
 end
