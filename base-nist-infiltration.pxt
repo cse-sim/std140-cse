@@ -12,6 +12,7 @@ pa_lbf_ft2 = 0.0208854
 s_hr = 3600.0
 ft_mile = 5280
 m_s_mph = m_ft * s_hr / ft_mile
+kg_lbm = 2.20462
 
 # Constants
 izNVEff = 0.8
