@@ -18,7 +18,7 @@ izNVEff = 0.8
 zone_height = 10 # ft
 zone_length = 10 # ft
 zone_floor_area = zone_length * zone_height # ft2
-zone_floor_volume = zone_floor_area * zone_height # ft3
+zone_volume = zone_floor_area * zone_height # ft3
 wall_surface_area = zone_height * zone_length # ft2
 ambient_temperature = 32 # degF
 air_density_standard_conditions = 1.225 # kg/m3
@@ -98,14 +98,14 @@ CONSTRUCTION "Slab-On-Grade Adiabatic"
 
 <%
 links = [ # If a link is connected to the exterior, then zone2 must be "ambient", and wind_pressure must be defined.
-    {:zone1=>1,:zone2=>"ambient",:flow_coefficient=>0.005,:n=>0.65,:height=>2.0,:wind_pressure=>11},
-    {:zone1=>3,:zone2=>"ambient",:flow_coefficient=>0.008,:n=>0.65,:height=>1.0,:wind_pressure=>3.7},
-    {:zone1=>2,:zone2=>"ambient",:flow_coefficient=>0.007,:n=>0.65,:height=>2.0,:wind_pressure=>-7.3},
-    {:zone1=>4,:zone2=>"ambient",:flow_coefficient=>0.009,:n=>0.65,:height=>2.0,:wind_pressure=>-4.9},
-    {:zone1=>1,:zone2=>2,:flow_coefficient=>0.015,:n=>0.50,:height=>2.5},
-    {:zone1=>3,:zone2=>1,:flow_coefficient=>0.020,:n=>0.50,:height=>0.0},
-    {:zone1=>4,:zone2=>2,:flow_coefficient=>0.020,:n=>0.50,:height=>0.0},
-    {:zone1=>3,:zone2=>4,:flow_coefficient=>0.015,:n=>0.50,:height=>1.5},
+    {:zone1=>1,:zone2=>"Ambient",:flow_coefficient=>0.005,:n=>0.65,:height=>2.0,:wind_pressure=>11},
+    {:zone1=>3,:zone2=>"Ambient",:flow_coefficient=>0.008,:n=>0.65,:height=>1.0,:wind_pressure=>3.7},
+    {:zone1=>2,:zone2=>"Ambient",:flow_coefficient=>0.007,:n=>0.65,:height=>2.0,:wind_pressure=>-7.3},
+    {:zone1=>4,:zone2=>"Ambient",:flow_coefficient=>0.009,:n=>0.65,:height=>2.0,:wind_pressure=>-4.9},
+    {:zone1=>1,:zone2=>2,        :flow_coefficient=>0.015,:n=>0.50,:height=>2.5},
+    {:zone1=>1,:zone2=>3,        :flow_coefficient=>0.020,:n=>0.50,:height=>0.0},
+    {:zone1=>2,:zone2=>4,        :flow_coefficient=>0.020,:n=>0.50,:height=>0.0},
+    {:zone1=>3,:zone2=>4,        :flow_coefficient=>0.015,:n=>0.50,:height=>1.5},
 ]
 zones = [
     {:azimuth=>180,:level=>2,:zone_temp_C=>23},
@@ -135,7 +135,7 @@ links.each_with_index do |link, index|
   flow_coefficient = link[:flow_coefficient]
   n = link[:n]
   height = link[:height]
-  if zone2 == "ambient" # Link is connected to the exterior and one zone.
+  if zone2 == "Ambient" # Link is connected to the exterior and one zone.
       ventilation_model = "AIRNETEXT"
       air_flow_category = "InfilEx"
       exterior = true
@@ -183,7 +183,7 @@ AFMETER <%= zone_afmeter %>
 ZONE <%= zone_name %>
     znModel = "CZM"
     znArea = <%= zone_floor_area %>
-    znVol = <%= zone_floor_volume %>
+    znVol = <%= zone_volume %>
     znAzm = <%= zone_azimuth %>
     znFloorz = <%= (level - 1) * zone_height %>
     znCeilingHt = <%= zone_height %>
@@ -191,7 +191,7 @@ ZONE <%= zone_name %>
     znTH = <%= zone_temp_F %>
     znTC = <%= zone_temp_F + 0.00001 %>
     znQMxH = 1000000
-    znCAir = <%= 0.24*0.077*zone_floor_volume %>
+    znCAir = <%= 0.24*0.077*zone_volume %>
     znAFMtr = <%= zone_afmeter %>
 
     SURFACE <%= zone_name + "Floor" %>
