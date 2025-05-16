@@ -268,14 +268,20 @@ end
 
 <% 
 links.each_with_index do |link, index|
+  zone_a = link[:zone1]
+  zone_b = link[:zone2]
   link_number = index + 1
   link_name = "Link#{link_number}"
   link_air_pressure = link_name + "_Air_Pressure_Pa"
   link_flow_rate = link_name + "_Flow_Rate_kg_s"
+  zone_a_air_pressure = "#{link_name}_Zone#{zone_a}_Air_Pressure_Pa"
+  zone_b_air_pressure = "#{link_name}_Zone#{zone_b}_Air_Pressure_Pa"
 %>
 
 EXPORTCOL colHead="<%= link_air_pressure %>" colVal=@izXfer["<%= link_name %>"].ad[0].delP * <%= 1 / pa_lbf_ft2 %> 
-EXPORTCOL colHead="<%= link_flow_rate %>" colVal=@izXfer["<%= link_name %>"].amfNom * <%= 0.000125998 %> 
+EXPORTCOL colHead="<%= link_flow_rate %>" colVal=@izXfer["<%= link_name %>"].amfNom * <%= 1 / kg_lbm %> 
+EXPORTCOL colHead="<%= zone_a_air_pressure %>" colVal=@izXfer["<%= link_name %>"].ad[0].pres1 * <%= 1 / pa_lbf_ft2 %> 
+EXPORTCOL colHead="<%= zone_b_air_pressure %>" colVal=@izXfer["<%= link_name %>"].ad[0].pres2 * <%= 1 / pa_lbf_ft2 %> 
 
 <%
 end
