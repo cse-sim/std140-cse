@@ -1,9 +1,22 @@
+from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Dict, List
 
 
 import pandas as pd
+from plotly.subplots import make_subplots
+
+import plotly.graph_objects as go
+
+
+@dataclass
+class PlotDetails:
+    name: str
+    color: str
+    marker_type: str
+    marker_size: int
+    data_frame: pd.DataFrame = field(default_factory=pd.DataFrame)
 
 
 class Variable(Enum):
@@ -48,7 +61,8 @@ for variable in variables_set:
     df_compare[(variable, "Average")] = df_compare[indices].apply(
         lambda x: x[indices].sum() / len(x[indices]), axis=1
     )
-
+    df_compare[(variable, "Max")] = df_compare[indices].max(axis=1)
+    df_compare[(variable, "Min")] = df_compare[indices].min(axis=1)
 data = df.drop(columns=["Month", "Day", "Hour"], axis=1).T[0]
 index_link_absolute_pressures = [
     index for index in data.index if ("Zone" in index) and ("Link" in index)
@@ -112,6 +126,74 @@ data_link_pressures = data[index_link_absolute_pressures]
 
 link_pressures_restructured_data: Dict[str, List[float]] = {"Zone A": [], "Zone B": []}
 indices = []
+
+fig = make_subplots(
+    rows=2,
+    cols=2,
+    subplot_titles=(
+        "Zone Pressure",
+        "Link Pressure",
+        "Zone Flow Rate",
+        "Link Flow Rate",
+    ),
+)
+
+plot_details = {
+    "CSE": PlotDetails(
+        name="CSE",
+        color="red",
+        marker_type="circle",
+        marker_size=8,
+    ),
+    "Max": PlotDetails(
+        name="Bounds",
+        color="black",
+        marker_type="line-ew-open",
+        marker_size=12,
+    ),
+    "Min": PlotDetails(
+        name="Bounds",
+        color="black",
+        marker_type="line-ew-open",
+        marker_size=12,
+    ),
+}
+
+show_legend_group = []
+
+for column_index, zone_or_link in enumerate(["Zone", "Link"]):
+    df_plot = df_compare[df_compare.index.str.contains(zone_or_link)]
+    for row_index, variable in enumerate(variables_set):
+        plot_details["CSE"].data_frame = df_plot[(variable, "CSE")]
+        plot_details["Min"].data_frame = df_plot[(variable, "Min")]
+        plot_details["Max"].data_frame = df_plot[(variable, "Max")]
+        for plot_detail in plot_details.values():
+            if plot_detail.name not in show_legend_group:
+                show_legend = True
+                show_legend_group.append(plot_detail.name)
+            else:
+                show_legend = False
+            data_frame = plot_detail.data_frame
+            fig.add_trace(
+                go.Scatter(
+                    name=plot_detail.name,
+                    x=data_frame.index,
+                    y=data_frame.values,
+                    mode="markers",
+                    showlegend=show_legend,
+                    marker={
+                        "color": plot_detail.color,
+                        "size": plot_detail.marker_size,
+                        "symbol": plot_detail.marker_type,
+                    },
+                ),
+                row=row_index + 1,
+                col=column_index + 1,
+            )
+fig.update_yaxes(title_text="Pressure [Pa]", row=1, col=1)
+fig.update_yaxes(title_text="Flow Rate [kg/s]", row=2, col=1)
+fig.write_html("nist-infiltration-results.html")
+
 
 for index in list(data_link_pressures.index):
     substrings = index.split("_")
