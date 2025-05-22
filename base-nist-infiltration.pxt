@@ -26,7 +26,7 @@ ambient_temperature = 32 # degF
 air_density_standard_conditions = 1.225 # kg/m3
 delta_P = 4 # Pa
 wind_speed = 1 # m/s (wind speed does not matter)
-wind_speed_mph = wind_speed * m_s_mph
+wind_speed_mph = wind_speed * m_s_mph # mph
 %>
 
 wfName = "weather/nist-infiltration/CAN_QC_Montreal-Mirabel.Intl.AP.CAN002_TMYx.2009-2023.epw"
