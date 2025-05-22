@@ -2,3 +2,4 @@ output/
 ~*.xls*
 ~*.doc*
 docs/nist-infiltration/frontier/
+output/
