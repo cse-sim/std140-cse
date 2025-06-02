@@ -33,6 +33,7 @@ compare_results_path = Path("docs", "nist-infiltration", "test_description_table
 df = pd.read_csv(input_file_path)
 df_compare = pd.read_csv(compare_results_path)
 df_compare.set_index(keys="Name", drop=True, inplace=True)
+df_compare = abs(df_compare)
 
 substrings = [
     column.split("_") for column in df_compare.columns if len(column.split("_")) == 2
@@ -103,6 +104,7 @@ for original_column, name_number in column_map.items():
 cse_df = pd.DataFrame(
     data=restructured_data, index=[Variable.PRESSURE.value, Variable.FLOW_RATE.value]
 ).T
+cse_df = abs(cse_df)
 
 for variable in variables_set:
     variable_average = df_compare[(variable, "Average")]
