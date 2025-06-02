@@ -215,6 +215,18 @@ ZONE <%= zone_name %>
 
   <% end %>
 
+  <% if zone_azimuth == 0 %>
+    SURFACE <%= "Level" + level.to_s + "InteriorWall"  %>
+        sfType = "WALL"
+        sfArea = <%= wall_surface_area %>
+        sfAzm = <%= zone_azimuth %>
+        sfCon = "Exterior Wall"
+        sfModel = "FORWARD_DIFFERENCE"
+        sfExCnd = "ADJZN"
+        sfAdjZn = <%= "Zone" + index.to_s %>
+
+  <% end %>
+
   <% 
   for surface in surfaces
     zone_azimuth = surface[:azimuth]
