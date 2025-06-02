@@ -100,14 +100,14 @@ CONSTRUCTION "Slab-On-Grade Adiabatic"
 
 <%
 links = [ # If a link is connected to the exterior, then zone2 must be "ambient", and wind_pressure must be defined.
-    {:zone1=>1,:zone2=>"Ambient",:flow_coefficient=>0.005,:n=>0.65,:height=>2.0 * m_ft + zone_height,:wind_pressure=>11},
-    {:zone1=>3,:zone2=>"Ambient",:flow_coefficient=>0.008,:n=>0.65,:height=>1.0 * m_ft,:wind_pressure=>3.7},
+    {:zone1=>1,:zone2=>"Ambient",:flow_coefficient=>0.005,:n=>0.65,:height=>2.0 * m_ft + zone_height,:wind_pressure=>11.0},
+    {:zone1=>3,:zone2=>"Ambient",:flow_coefficient=>0.008,:n=>0.65,:height=>1.0 * m_ft,              :wind_pressure=> 3.7},
     {:zone1=>2,:zone2=>"Ambient",:flow_coefficient=>0.007,:n=>0.65,:height=>2.0 * m_ft + zone_height,:wind_pressure=>-7.3},
-    {:zone1=>4,:zone2=>"Ambient",:flow_coefficient=>0.009,:n=>0.65,:height=>2.0 * m_ft,:wind_pressure=>-4.9},
-    {:zone1=>1,:zone2=>2,        :flow_coefficient=>0.015,:n=>0.50,:height=>2.5 * m_ft + zone_height},
-    {:zone1=>1,:zone2=>3,        :flow_coefficient=>0.020,:n=>0.50,:height=>0.0 * m_ft + zone_height},
-    {:zone1=>2,:zone2=>4,        :flow_coefficient=>0.020,:n=>0.50,:height=>0.0 * m_ft + zone_height},
-    {:zone1=>3,:zone2=>4,        :flow_coefficient=>0.015,:n=>0.50,:height=>1.5 * m_ft},
+    {:zone1=>4,:zone2=>"Ambient",:flow_coefficient=>0.009,:n=>0.65,:height=>2.0 * m_ft,              :wind_pressure=>-4.9},
+    {:zone1=>1,:zone2=>2,        :flow_coefficient=>0.015,:n=>0.50,:height=>2.5 * m_ft + zone_height                     },
+    {:zone1=>1,:zone2=>3,        :flow_coefficient=>0.020,:n=>0.50,:height=>0.0 * m_ft + zone_height                     },
+    {:zone1=>2,:zone2=>4,        :flow_coefficient=>0.020,:n=>0.50,:height=>0.0 * m_ft + zone_height                     },
+    {:zone1=>3,:zone2=>4,        :flow_coefficient=>0.015,:n=>0.50,:height=>1.5 * m_ft                                   },
 ]
 zones = [
     {:azimuth=>180,:level=>2,:zone_temp_C=>23},
