@@ -570,7 +570,6 @@ CONSTRUCTION "WindowsPath3"
 <% end %>
 
 #define INHCMODEL UNIFIED
-#define INHCCOMBMETH EnergyPlusLinearCombination
 #define INHCCOEFFSFLOOR  3.873/5.678, 0.082/5.678, 0.98
 #define INHCCOEFFSWALL  1.208/5.678, 1.012/5.678, 0.604
 #define INHCCOEFFSCEILING  2.234/5.678, 4.099/5.678, 0.503
@@ -647,13 +646,10 @@ window_azimuths = [
     sfInHcModel = <%= $convection_model %>
 <% if !constant_interior_coefficients %>
   <% if (surface[:name] == "CeilingPath1") | (surface[:name] == "CeilingPath2") %>  
-    sfInHcCombinationMethod = INHCCOMBMETH
     sfinHCFrcCoeffs = INHCCOEFFSWALL
   <% elsif (surface[:name] == "FloorPath1") | (surface[:name] == "FloorPath2") | (surface[:name] == "FloorPath3") %>
-    sfInHcCombinationMethod = INHCCOMBMETH
     sfinHCFrcCoeffs = INHCCOEFFSFLOOR
   <% else %>
-    sfInHcCombinationMethod = INHCCOMBMETH
     sfinHCFrcCoeffs = INHCCOEFFSWALL
   <% end %>
 <% end %>
