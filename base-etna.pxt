@@ -133,6 +133,9 @@ if cell == "A"
 
       # ET100A3
       $convection_model = "INHCMODEL"
+      %>
+      inHcCombinationMethod = Weighted 
+      <%
 
     end
 
@@ -240,6 +243,9 @@ elsif cell == "B"
 
       # ET100B3
       $convection_model = "INHCMODEL"
+      %>
+      inHcCombinationMethod = Weighted 
+      <%
 
     end
 
