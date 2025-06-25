@@ -51,7 +51,7 @@ tarp_conv = false
 
 %>
 
-wfName = "weather/section-5/725650TMY3.epw"
+wfName = "weather/section-7/725650TMY3.epw"
 nSubSteps = <%= nsteps %>
 DT = No
 bldgAzm = <%= orientation %>
