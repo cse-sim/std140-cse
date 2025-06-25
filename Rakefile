@@ -34,7 +34,7 @@ def sim(c, tests)
   output_dir = 'output/' + tests + '/' + file_base
 
   src = [output_dir + '/in.cse']
-  if tests == 'section-5'
+  if tests == 'section-7'
   target = [output_dir + '/in.rep', output_dir + '/DETAILED.csv']
   elsif tests == 'weather-drivers'
   target = [output_dir + '/in.rep', output_dir + '/HOURLY.csv']
@@ -56,7 +56,7 @@ end
 
 def write_report(tests)
   src = Dir['output/#{tests}/*/DETAILED.csv'] + ["scripts/#{tests}/write-results.py", "reports/#{tests}/S140outNotes-Template.txt"]
-  if tests == 'section-5'
+  if tests == 'section-7'
     target = ['reports/#{tests}/Sec5-2Aout.xlsx', 'reports/#{tests}/S140outNotes.txt']
   elsif tests == 'weather-drivers'
     target = ['reports/#{tests}/WeatherDriversResultsSubmittal.xlsx', 'reports/#{tests}/S140outNotes.txt']
@@ -77,8 +77,8 @@ def write_report(tests)
 end
 
 task :sim, [:filter] do |t, args|
-  args.with_defaults(:filter=>'section-5')
-  tests = args.fetch(:filter) # 'section-5', 'weather-drivers'
+  args.with_defaults(:filter=>'section-7')
+  tests = args.fetch(:filter) # 'section-7', 'weather-drivers'
   cases = Dir['cases/' + tests + '/*.*']
   for c in cases
     if !compose(c, tests)
