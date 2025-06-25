@@ -3,3 +3,4 @@ output/
 ~*.doc*
 docs/nist-infiltration/frontier/
 output/
+*.pyc
