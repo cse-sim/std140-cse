@@ -245,7 +245,7 @@ ZONE "Main Zone"
 <% if !free_float %>
   znTH = select( $hour == 8, <%= c_f(heat_sb) %> + ($subhour/<%= nsteps %>.0)*<%= c_f(heat_sp) - c_f(heat_sb) %> , $hour > 8 && $hour <= 23, <%= c_f(heat_sp) %>, default <%= c_f(heat_sb) %>)
   znQMxH = <%= 1000000*w_btu %>
-  znTC = <%= c_f(cool_sp) %>
+  znTC = <%= c_f(cool_sp)  + 0.00001 %>
   znQMxC = <%= -1000000*w_btu %>
 <% end %>
   znHcAirX = 0.0 // Remove +4.8 ACH assumed for non-RSYS zones
