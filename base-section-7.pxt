@@ -247,6 +247,9 @@ ZONE "Main Zone"
   znQMxH = <%= 1000000*w_btu %>
   znTC = <%= c_f(cool_sp)  + 0.00001 %>
   znQMxC = <%= -1000000*w_btu %>
+<% else %>
+  znTH = 1
+  znTC = 200
 <% end %>
   znHcAirX = 0.0 // Remove +4.8 ACH assumed for non-RSYS zones
   infAC = <%= ach %>
@@ -426,6 +429,8 @@ ZONE "Sun Zone"
   znFloorZ = 0.0
   znCeilingHt = <%= height %>
   znEaveZ = <%= height %>
+  znTH = 1
+  znTC = 200
 
   <% for surface in surfaces[-5..-1] %>
   SURFACE "<%= surface[:name] %>"
