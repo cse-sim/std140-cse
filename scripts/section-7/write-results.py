@@ -12,7 +12,9 @@ import os
 # %matplotlib inline
 
 tests = "section-7"
-wb = xl.load_workbook(filename="../../reports/" + tests + "/Sec7-2Aout-Template.xlsx")
+wb = xl.load_workbook(
+    filename="../../reports/" + tests + "/Std140_TF_Output-Template.xlsx"
+)
 A = wb["A"]
 TMPBIN = wb["TMPBIN"]
 
@@ -522,7 +524,7 @@ for row in range(row_ff_beg, row_ff_end + 1):
                 "Zone Temp [C]"
             ].mean()
 
-wb.save(filename="../../reports/" + tests + "/Sec7-2Aout.xlsx")
+wb.save(filename="../../reports/" + tests + "/Std140_TF_Output.xlsx")
 
 with open(
     "../../reports/" + tests + "/S140outNotes-Template.txt", "r"
