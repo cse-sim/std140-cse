@@ -157,9 +157,21 @@ for row in range(row_beg, row_end + 1):
             df["Transmitted Solar [Wh/m2]"].sum() / 1000
         )
 
+    if case == "620":
+        # Transmitted Solar
+        A.cell(column=init_col + 1, row=166).value = (
+            df["Transmitted Solar [Wh/m2]"].sum() / 1000
+        )
+
     if case == "610":
         # Transmitted Solar
         A.cell(column=init_col + 1, row=170).value = (
+            df["Transmitted Solar [Wh/m2]"].sum() / 1000
+        )
+
+    if case == "630":
+        # Transmitted Solar
+        A.cell(column=init_col + 1, row=171).value = (
             df["Transmitted Solar [Wh/m2]"].sum() / 1000
         )
 
