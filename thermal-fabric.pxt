@@ -51,7 +51,7 @@ tarp_conv = false
 
 %>
 
-wfName = "weather/section-7/725650TMY3.epw"
+wfName = "weather/thermal-fabric/725650TMY3.epw"
 nSubSteps = <%= nsteps %>
 DT = No
 bldgAzm = <%= orientation %>

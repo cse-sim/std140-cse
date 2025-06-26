@@ -11,8 +11,8 @@ import os
 
 # %matplotlib inline
 
-tests = "section-7"
-wb = xl.load_workbook(filename="../../reports/" + tests + "/Sec7-2Aout-Template.xlsx")
+tests = "thermal-fabric"
+wb = xl.load_workbook(filename="../../reports/" + tests + "/TF-2Aout-Template.xlsx")
 A = wb["A"]
 TMPBIN = wb["TMPBIN"]
 
