@@ -2,12 +2,10 @@ print("\nInitializing Python...\n")
 import openpyxl as xl
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-from datetime import timedelta, datetime, date
+from datetime import datetime
 import subprocess
 import re
 import mako.template as mk
-import os
 
 # %matplotlib inline
 
