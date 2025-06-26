@@ -11,7 +11,7 @@ import os
 
 # %matplotlib inline
 
-tests = "section-7"
+tests = "thermal-fabric"
 wb = xl.load_workbook(
     filename="../../reports/" + tests + "/Std140_TF_Output-Template.xlsx"
 )
