@@ -238,7 +238,11 @@ ss_vol = ss_area*height
 
 // Zone
 ZONE "Main Zone"
+<% if !free_float %>
   znModel = CZM
+<% else %>
+  znModel = UZM
+<% end %>
   znArea = <%= floor_area %>
   znVol = <%= zone_vol %>
   znCAir = <%= 0.24*0.077*zone_vol %>
@@ -247,9 +251,6 @@ ZONE "Main Zone"
   znQMxH = <%= 1000000*w_btu %>
   znTC = <%= c_f(cool_sp)  + 0.00001 %>
   znQMxC = <%= -1000000*w_btu %>
-<% else %>
-  znTH = 1
-  znTC = 200
 <% end %>
   znHcAirX = 0.0 // Remove +4.8 ACH assumed for non-RSYS zones
   infAC = <%= ach %>
@@ -422,15 +423,13 @@ ALTER ZONE "Main Zone"
   surfaces << {:name=>"Sun Floor",:type=>"Floor",:area=>ss_area,:windows=>0}
   %>
 ZONE "Sun Zone"
-  znModel = CZM
+  znModel = UZM
   znArea = <%= ss_area %>
   znVol = <%= ss_vol %>
   infAC = <%= ach %>
   znFloorZ = 0.0
   znCeilingHt = <%= height %>
   znEaveZ = <%= height %>
-  znTH = 1
-  znTC = 200
 
   <% for surface in surfaces[-5..-1] %>
   SURFACE "<%= surface[:name] %>"
