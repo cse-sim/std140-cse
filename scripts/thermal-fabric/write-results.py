@@ -157,9 +157,9 @@ for row in range(row_beg, row_end + 1):
 
     if case == "620":
         # Transmitted Solar
-        A.cell(column=init_col + 1, row=166).value = (
-            df["Transmitted Solar [Wh/m2]"].sum() / 1000
-        )
+        A.cell(
+            column=init_col + 1, row=166
+        ).value = "N/A"  # CSE (0.926.0) does not have a probe to measure transmitted solar through a single window.
 
     if case == "610":
         # Transmitted Solar
@@ -169,9 +169,9 @@ for row in range(row_beg, row_end + 1):
 
     if case == "630":
         # Transmitted Solar
-        A.cell(column=init_col + 1, row=171).value = (
-            df["Transmitted Solar [Wh/m2]"].sum() / 1000
-        )
+        A.cell(
+            column=init_col + 1, row=171
+        ).value = "N/A"  # CSE (0.926.0) does not have a probe to measure transmitted solar through a single window.
 
     if case == "600" or case == "900":
         # Monthly loads
