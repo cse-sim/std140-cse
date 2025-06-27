@@ -159,7 +159,7 @@ for row in range(row_beg, row_end + 1):
         # Transmitted Solar
         A.cell(
             column=init_col + 1, row=166
-        ).value = "N/A"  # CSE (0.926.0) does not have a probe to measure transmitted solar through a single window.
+        ).value = "N/A"  # CSE (0.926.0) does not have a probe to measure transmitted solar through a single window. https://github.com/cse-sim/cse/issues/15
 
     if case == "610":
         # Transmitted Solar
@@ -171,7 +171,7 @@ for row in range(row_beg, row_end + 1):
         # Transmitted Solar
         A.cell(
             column=init_col + 1, row=171
-        ).value = "N/A"  # CSE (0.926.0) does not have a probe to measure transmitted solar through a single window.
+        ).value = "N/A"  # CSE (0.926.0) does not have a probe to measure transmitted solar through a single window. https://github.com/cse-sim/cse/issues/15
 
     if case == "600" or case == "900":
         # Monthly loads
