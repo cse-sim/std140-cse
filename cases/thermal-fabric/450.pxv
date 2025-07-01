@@ -1,0 +1,5 @@
+:case_name=>"450",
+:int_lw_abs=>0.0,
+:ext_lw_abs=>0.0,
+:h_int=>{:wall=>1.8,:roof=>1.7,:floor=>3.7,:window=>4.5},
+:h_ext=>{:wall=>21.6,:roof=>21.8,:floor=>5.2,:window=>17.8}

@@ -1,0 +1,11 @@
+:case_name=>"310",
+:ach=>0,
+:gain=>0,
+:ext_sol_abs=>0.1,
+:opaque=>false,
+:cool_sp=>20,
+:int_sol_abs=>0.9,
+:south_windows=>0,
+:east_west_windows=>1,
+:overhangs=>true,
+:fins=>true

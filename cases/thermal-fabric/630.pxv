@@ -1,0 +1,5 @@
+:case_name=>"630",
+:south_windows=>0,
+:east_west_windows=>1,
+:overhangs=>true,
+:fins=>true

@@ -1,6 +1,0 @@
-:case_name=>"930",
-:south_windows=>0,
-:east_west_windows=>1,
-:overhangs=>true,
-:fins=>true,
-:construction_mass=>"HIGH"

@@ -1,0 +1,6 @@
+:case_name=>"230",
+:ach=>1.0,
+:gain=>0,
+:ext_sol_abs=>0.1,
+:opaque=>true,
+:cool_sp=>20
