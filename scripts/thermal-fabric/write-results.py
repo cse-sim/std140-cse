@@ -2,17 +2,17 @@ print("\nInitializing Python...\n")
 import openpyxl as xl
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-from datetime import timedelta, datetime, date
+from datetime import datetime
 import subprocess
 import re
 import mako.template as mk
-import os
 
 # %matplotlib inline
 
 tests = "thermal-fabric"
-wb = xl.load_workbook(filename="../../reports/" + tests + "/TF-2Aout-Template.xlsx")
+wb = xl.load_workbook(
+    filename="../../reports/" + tests + "/Std140_TF_Output-Template.xlsx"
+)
 A = wb["A"]
 TMPBIN = wb["TMPBIN"]
 
@@ -155,11 +155,23 @@ for row in range(row_beg, row_end + 1):
             df["Transmitted Solar [Wh/m2]"].sum() / 1000
         )
 
+    if case == "620":
+        # Transmitted Solar
+        A.cell(
+            column=init_col + 1, row=166
+        ).value = "N/A"  # CSE (0.926.0) does not have a probe to measure transmitted solar through a single window. https://github.com/cse-sim/cse/issues/15
+
     if case == "610":
         # Transmitted Solar
         A.cell(column=init_col + 1, row=170).value = (
             df["Transmitted Solar [Wh/m2]"].sum() / 1000
         )
+
+    if case == "630":
+        # Transmitted Solar
+        A.cell(
+            column=init_col + 1, row=171
+        ).value = "N/A"  # CSE (0.926.0) does not have a probe to measure transmitted solar through a single window. https://github.com/cse-sim/cse/issues/15
 
     if case == "600" or case == "900":
         # Monthly loads
@@ -522,7 +534,7 @@ for row in range(row_ff_beg, row_ff_end + 1):
                 "Zone Temp [C]"
             ].mean()
 
-wb.save(filename="../../reports/" + tests + "/Sec7-2Aout.xlsx")
+wb.save(filename="../../reports/" + tests + "/Std140_TF_Output.xlsx")
 
 with open(
     "../../reports/" + tests + "/S140outNotes-Template.txt", "r"

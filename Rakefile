@@ -9,7 +9,7 @@ def compose(c, tests)
     FileUtils.mkdir_p(output_dir)
   end
 
-  src = ['base-#{tests}.pxt', 'CSE.exe', 'DRYCOLD_CSW2.csv', c]
+  src = ['#{tests}.pxt', 'CSE.exe', 'DRYCOLD_CSW2.csv', c]
   target = output_dir + '/in.cse'
 
   puts "================="
@@ -20,7 +20,7 @@ def compose(c, tests)
   success = nil
   if !(FileUtils.uptodate?(target, src))
     puts "\ncomposing...\n\n"
-    success = system(%Q|modelkit template-compose -f "#{c}" -o "#{output_dir + '/in.cse'}"  base-#{tests}.pxt|)
+    success = system(%Q|modelkit template-compose -f "#{c}" -o "#{output_dir + '/in.cse'}"  #{tests}.pxt|)
   else
     puts "  ...input already up-to-date."
     success = true
@@ -34,7 +34,7 @@ def sim(c, tests)
   output_dir = 'output/' + tests + '/' + file_base
 
   src = [output_dir + '/in.cse']
-  if tests == 'section-7'
+  if tests == 'thermal-fabric'
   target = [output_dir + '/in.rep', output_dir + '/DETAILED.csv']
   elsif tests == 'weather-drivers'
   target = [output_dir + '/in.rep', output_dir + '/HOURLY.csv']
@@ -56,8 +56,8 @@ end
 
 def write_report(tests)
   src = Dir['output/#{tests}/*/DETAILED.csv'] + ["scripts/#{tests}/write-results.py", "reports/#{tests}/S140outNotes-Template.txt"]
-  if tests == 'section-7'
-    target = ['reports/#{tests}/Sec5-2Aout.xlsx', 'reports/#{tests}/S140outNotes.txt']
+  if tests == 'thermal-fabric'
+    target = ['reports/#{tests}/Std140_TF_Output.xlsx', 'reports/#{tests}/S140outNotes.txt']
   elsif tests == 'weather-drivers'
     target = ['reports/#{tests}/WeatherDriversResultsSubmittal.xlsx', 'reports/#{tests}/S140outNotes.txt']
   end
@@ -77,8 +77,8 @@ def write_report(tests)
 end
 
 task :sim, [:filter] do |t, args|
-  args.with_defaults(:filter=>'section-7')
-  tests = args.fetch(:filter) # 'section-7', 'weather-drivers'
+  args.with_defaults(:filter=>'thermal-fabric')
+  tests = args.fetch(:filter) # 'thermal-fabric', 'weather-drivers'
   cases = Dir['cases/' + tests + '/*.*']
   for c in cases
     if !compose(c, tests)

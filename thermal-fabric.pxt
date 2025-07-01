@@ -20,7 +20,7 @@
   parameter "heat_sb", :default=>20 # C
   parameter "vent_fan", :default=>false
   parameter "sunspace", :default=>false
-  parameter "ff", :default=>false
+  parameter "free_float", :default=>false
   parameter "opaque", :default=>false
   parameter "h_ext", :default=>nil
   parameter "h_int", :default=>nil
@@ -238,14 +238,18 @@ ss_vol = ss_area*height
 
 // Zone
 ZONE "Main Zone"
+<% if !free_float %>
   znModel = CZM
+<% else %>
+  znModel = UZM
+<% end %>
   znArea = <%= floor_area %>
   znVol = <%= zone_vol %>
   znCAir = <%= 0.24*0.077*zone_vol %>
-<% if !ff %>
+<% if !free_float %>
   znTH = select( $hour == 8, <%= c_f(heat_sb) %> + ($subhour/<%= nsteps %>.0)*<%= c_f(heat_sp) - c_f(heat_sb) %> , $hour > 8 && $hour <= 23, <%= c_f(heat_sp) %>, default <%= c_f(heat_sb) %>)
   znQMxH = <%= 1000000*w_btu %>
-  znTC = <%= c_f(cool_sp) %>
+  znTC = <%= c_f(cool_sp)  + 0.00001 %>
   znQMxC = <%= -1000000*w_btu %>
 <% end %>
   znHcAirX = 0.0 // Remove +4.8 ACH assumed for non-RSYS zones
@@ -419,7 +423,7 @@ ALTER ZONE "Main Zone"
   surfaces << {:name=>"Sun Floor",:type=>"Floor",:area=>ss_area,:windows=>0}
   %>
 ZONE "Sun Zone"
-  znModel = CZM
+  znModel = UZM
   znArea = <%= ss_area %>
   znVol = <%= ss_vol %>
   infAC = <%= ach %>
@@ -512,7 +516,7 @@ IZXFER "Exfiltration"
   izZn1 = "Main Zone"
   izALo = select( $hour > 7 && $hour <= 18, 0.0, default 100)
 
-  <% if !ff %>
+  <% if !free_float %>
 ALTER ZONE "Main Zone"
   znQMxH = 0.0
   znQMxC = select( $hour > 7 && $hour <= 18, <%= -1000000*w_btu %>, default 0.0)
