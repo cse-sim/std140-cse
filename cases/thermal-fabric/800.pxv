@@ -1,6 +1,6 @@
 :case_name=>"800",
 :ach=>0.5,
 :gain=>200,
-:ext_sol_abs=>0.6,
+:exterior_solar_absorptance=>0.6,
 :opaque=>true,
 :construction_mass=>"HIGH"

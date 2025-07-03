@@ -1,2 +1,2 @@
 :case_name=>"440",
-:int_sol_abs=>0.1
+:interior_solar_absorptance=>0.1

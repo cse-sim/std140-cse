@@ -1,9 +1,9 @@
 :case_name=>"300",
 :ach=>0,
 :gain=>0,
-:ext_sol_abs=>0.1,
+:exterior_solar_absorptance=>0.1,
 :opaque=>false,
 :cool_sp=>20,
-:int_sol_abs=>0.9,
+:interior_solar_absorptance=>0.9,
 :south_windows=>0,
 :east_west_windows=>1

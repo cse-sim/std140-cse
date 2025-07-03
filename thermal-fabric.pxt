@@ -7,7 +7,7 @@
   parameter "construction_mass", :default=>"LOW" # LOW | LOW-EFF | HIGH
   parameter "orientation", :default=>0.0
   parameter "gain", :default=>200 # W
-  parameter "ext_sol_abs", :default=>0.6
+  parameter "exterior_solar_absorptance", :default=>0.6
   parameter "int_sol_abs", :default=>0.6
   parameter "ext_lw_abs", :default=>0.9
   parameter "int_lw_abs", :default=>0.9
@@ -295,7 +295,7 @@ window_area = 0.0
     sfArea = <%= surface[:area] %>
     sfExCnd = Ambient
     sfModel = forward_difference
-    sfExAbs = <%= ext_sol_abs %>
+    sfExAbs = <%= exterior_solar_absorptance %>
     sfInAbs = <%= int_sol_abs %>
     sfExEpsLW = <%= ext_lw_abs %>
     sfInEpsLW = <%= int_lw_abs %>
@@ -398,7 +398,7 @@ window_area = 0.0
       drModel = forward_difference
       drExRf = 1.0
       drCon = "Opaque Window"
-      drExAbs = <%= ext_sol_abs %>
+      drExAbs = <%= exterior_solar_absorptance %>
       drInAbs = <%= int_sol_abs %>
       drExEpsLW = <%= ext_lw_abs %>
       drInEpsLW = <%= int_lw_abs %>
@@ -447,7 +447,7 @@ ZONE "Sun Zone"
     sfArea = <%= surface[:area] %>
     sfExCnd = Ambient
     sfModel = forward_difference
-    sfExAbs = <%= ext_sol_abs %>
+    sfExAbs = <%= exterior_solar_absorptance %>
     sfInAbs = <%= int_sol_abs %>
     sfExEpsLW = <%= ext_lw_abs %>
     sfInEpsLW = <%= int_lw_abs %>
