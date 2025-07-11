@@ -1,0 +1,3 @@
+:weather_file=>"CE200",
+:sensible_internal_gains=>6120,
+:latent_internal_gains=>1817

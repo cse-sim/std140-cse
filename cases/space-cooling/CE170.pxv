@@ -1,0 +1,3 @@
+:weather_file=>"CE110",
+:sensible_internal_gains=>2100,
+:latent_internal_gains=>1100
