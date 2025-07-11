@@ -1,0 +1,516 @@
+
+MODELING NOTES FOR ASHRAE STANDARD 140 - EXAMPLES
+
+===============================================================================
+OVERVIEW
+===============================================================================
+This document contains examples of modeling notes entered in the 
+S140outNotes.txt file.  Examples are provided to guide in filling out 
+the S140outNotes.txt file.
+
+Note that in this file sample notes refer to different sections of Standard 
+140.  In an actual S140outNotes.txt file the notes would only 
+address one set of tests within Standard 140 (e.g., the building thermal and 
+fabric load tests of Sections 7.2).
+
+
+===============================================================================
+INTRODUCTION
+===============================================================================
+This document shall include supplemental information about the ASHRAE Standard 
+140 tests performed.  One S140outNotes document shall be provided for each 
+set of tests (e.g. one for the building thermal and fabric load tests of 
+Sections 7.2; one for the space cooling equipment analytical
+verification tests of Sections 9.2; etc.)  The types of information 
+listed below shall be provided in this document, each in a separate section:
+
+a. Software information
+b. Alternative modeling methods
+c. Equivalent modeling methods
+d. Nonspecified inputs
+e. Omitted test cases and results
+f. Changes made to source code for the purpose of running the tests, where
+   such changes are not available in publicly released versions of the software
+g. Anomalous results
+
+Notes in this document shall be limited to the topics shown above.  Notes must 
+be factual and objective and shall only refer to the software being tested.  
+Notes shall not refer to any other software program.
+
+INFORMATIVE NOTE: Text at the start of each section describes the content of the 
+section for the reader and provides instructions for supplying the content. 
+Sample notes are provided in a separate document (S140outNotes_Examples.TXT).
+
+
+===============================================================================
+A. SOFTWARE INFORMATION
+===============================================================================
+CONTENT: This section shall include reference information for the software - 
+the vendor, name, and version of the software, plus operating system and computer
+hardware requirements.
+
+INSTRUCTIONS: Information for items 1 through 7 below shall be provided. 
+Information for Item 8 shall be permitted, but is not required.
+
+
+1. SOFTWARE VENDOR:   Dummy Software Solutions
+
+2. SOFTWARE NAME:     Building Energy Simulation
+
+3. SOFTWARE VERSION (unique software version identifier):  1.00.039
+
+4. OPERATING SYSTEM REQUIREMENTS:
+                      Windows 98,
+                      Windows NT (Service Pack 4 or later),
+                      Windows 2000 (Service Pack 2 or later), or
+                      Windows XP (Service Pack 2 or later)
+
+5. APPROX HARD DISK SPACE REQUIRED FOR INSTALLATION:
+                      Maximum = 45 MB
+                      Typical = 15 to 17 MB
+
+6. MINIMUM RAM REQUIRED FOR SOFTWARE OPERATION:
+                      128 MB
+
+7. MINIMUM DISPLAY MONITOR REQUIREMENTS:
+                      VGA with 600x800 resolution and 256 colors
+
+8. OTHER HARDWARE OR SOFTWARE-RELATED REQUIREMENTS:
+                      (none)
+
+INFORMATIVE NOTE: Item 8 can be used to supply additional relevant information.
+
+
+===============================================================================
+B. REPORT BLOCK FOR ALTERNATIVE MODELING METHODS
+===============================================================================
+CONTENT: If the software being tested provides alternative modeling methods or 
+algorithms for performing the tests, this section shall describe modeling 
+methods used for the tests.
+
+INSTRUCTIONS:  If alternative modeling methods are applicable, a separate note  
+for each alternative modeling method or algorithm situation shall be provided.  
+The standard format shown below and a separate number and title for each note
+shall be applied.  If alternative modeling methods are not applicable, specify 
+"NONE" in place of the information below.
+
+
+NOTE 1 - Convective Heat Transfer and Radiative Exchange Related to Both 
+         Interior and Exterior Surfaces (Section 7.2)
+---------------------------------------------------------
+1.1 Describe the Effect Being Simulated: 
+    Convective heat transfer and radiative exchange related to both interior
+    and exterior surfaces.
+
+1.2 Optional Settings or Modeling Capabilities:
+
+1.2.1 HEAT BALANCE = 0;
+    Physical Meaning: Interior surface heat transfer calculated using ASHRAE 
+    values for combined convective and radiative coefficient with the radiation 
+    component subtracted out; interior radiative exchange is determined using
+    the balanced mean radiant temperature method. Exterior surface heat 
+    transfer calculated using combined coefficients for convective and 
+    radiative exchange.
+
+1.2.2 HEAT BALANCE = 1;
+    Physical Meaning: Same as Heat Balance = 0, except interior surface 
+    convection is calculated based on zone air and interior surface temperature 
+    difference.
+
+1.2.3 HEAT BALANCE = 2
+    Physical Meaning: Same as Heat Balance = 1, except exterior surface heat 
+    transfer is calculated using separate heat transfer coefficients for 
+    radiative exchange to sky and ground and for convection to ambient air. 
+
+1.3 Setting or Capability Used:
+    HEAT BALANCE = 2
+
+
+NOTE 2 - Interior Transmitted Solar Radiation Distribution
+         (Section 7.2)
+-------------------------------------------------------------------------------
+2.1 Describe the Effect Being Simulated:
+    Interior transmitted solar radiation distribution.
+
+2.2 Optional Settings or Modeling Capabilities:
+
+2.2.1 SOLAR DISTRIBUTION = 0
+    All radiation initially hits the floor. Radiation not initially absorbed by 
+    the floor is diffusely reflected and absorbed by all surfaces in proportion
+    to their area-absorptance products.
+
+2.2.2 SOLAR DISTRIBUTION = 1
+    Beam radiation falling on each surface is calculated by ray tracing.  Beam
+    radiation not initially absorbed is diffusely reflected and absorbed by all
+    surfaces in proportion to their area-absorptance products.
+
+2.3 Setting or Capability Used:
+    SOLAR DISTRIBUTION = 1
+
+
+NOTE 3 - Thermal Behavior of Windows
+         (Section 7.2)
+--------------------------------------------------------------------------------
+3.1 Describe the Effect Being Simulated:
+    Thermal behavior of windows.
+
+3.2 Optional Settings or Modeling Capabilities:
+
+3.2.1 "Shading Coefficient"
+    Applies the ASHRAE shading coefficient technique to calculate solar heat 
+    gain (e.g., see 1989 ASHRAE Handbook of Fundamentals, Chp. 27).
+
+3.2.2 GLASS-TYPE-CODE =< 11
+    Applies pre-calculated transmittance and absorptance coefficients based on 
+    specified glass-type-code; the coefficients are used to calculate solar 
+    gain as a function of incidence angle.
+
+3.2.3 GLASS-TYPE-CODE => 1000
+    Window used from the library W4LIB.DAT, where windows are modeled 
+    using thermal and optical properties developed with WINDOW 4.0.  [Window 
+    4.0 (March 1992) LBL-32091 UC-350, Berkeley, CA, Lawrence Berkeley 
+    Laboratory] 
+
+	3.2.3.1 Existing window used from W4LIB.DAT
+    	
+	3.2.3.2 Custom window developed using Window 4.0 and added to W4LIB.DAT
+    
+3.3 Setting or Capability Used:
+    Custom window developed and added to W4LIB.DAT; see 3.2.3.2 above.
+
+
+
+===============================================================================
+C. REPORT BLOCK FOR EQUIVALENT MODELING METHODS
+===============================================================================
+CONTENT: This section shall describe equivalent modeling methods used to perform
+the tests.  When the software does not model an effect exactly as stated in the
+standard or does not permit the input values required, equivalent modeling 
+methods shall be permitted to perform the test.
+
+INSTRUCTIONS:  If equivalent modeling methods are applied, a separate note for 
+each instance of equivalent modeling shall be provided.  The standard format 
+shown below and a separate number and title for each note shall be applied. If
+equivalent modeling methods are not applicable, specify "NONE" in place of the 
+information below.
+
+
+NOTE 1 - Thermal Decoupling of Floor From Ground
+         (Section 7.2.1)
+--------------------------------------------------------------------------------
+1.1 Describe the Effect Being Simulated:
+    Thermal decoupling of floor from ground.
+
+1.2 Section(s) of the Standard where Relevant Inputs are Specified:
+    7.2.1.4 and 7.2.1.5.
+
+
+1.3 Equivalent Input(s) Used:
+    Floor modeled as perfectly decoupled from ground.
+
+
+1.4 Physical, Mathematical or Logical Justification of the Equivalent Input(s) 
+    – provide supporting calculations, if relevant:
+    
+    Logical Justification:  The informative note with Section 7.2.1.5 states that 
+    "To reduce uncertainty regarding testing or other aspects of simulating the 
+    building envelope, the floor insulation has been made very thick to 
+    effectively decouple the floor thermally from the ground."
+
+    It is clear from this statement the intent is to eliminate floor-to-ground
+    heat transfer to reduce the uncertainty in results that it will introduce.
+    The prescribed method of doing this is to model a floor with very high
+    R-value (R=25.374 m2•K/W or U=0.039 W/(m2•K)).  This assumes that a 
+    software program cannot perfectly eliminate floor-to-ground heat transfer 
+    and therefore must minimize the error due to floor-to-ground heat transfer 
+    via use of a large floor R-Value.    
+
+    The subject program cannot comply with the prescribed floor R-value; 
+    however, the subject program can perfectly decouple the floor from the 
+    ground.  Because perfect decoupling is interpreted as meeting the intent of 
+    section 7.2.1.5, perfect decoupling was used as an equivalent modeling 
+    approach.
+
+
+NOTE 2 - Thermostat Control and Equipment Capacity
+         (Section 7.2.1)
+-------------------------------------------------------------------------------
+2.1 Describe the Effect Being Simulated:
+    Thermostat control and equipment capacity
+
+2.2 Section(s) of the Standard where Relevant Inputs are Specified:
+    Sections 7.2.1.13.1 and 7.2.1.13.2
+
+2.3 Equivalent Input(s) Used:
+    Heating Setpoint = 20°C, Throttling Range = 0.1°K, Heating Capacity = 
+    3.935 kW
+    Cooling Setpoint = 27°C, Throttling Range = 0.1°K, Cooling Capacity =
+    3.935 kW
+
+2.4 Physical, Mathematical or Logical Justification of the Equivalent Input(s) 
+    – provide supporting calculations, if relevant:
+
+    Logical Justification:
+
+    Together sections 7.2.1.13.1 and 7.2.1.13.2 require use of a non-
+    proportional thermostat with which the heat extraction rate is effectively 
+    infinite when the zone air temperature exceeds 27°C and the heat addition 
+    rate is effectively infinite when the zone air temperature falls below
+    20°C.The intent of these sections is to establish conditions for which
+    equipment cooling or heating output exactly matches the zone load.  This
+    eliminates system effects and system dynamics that could obscure the focus
+    of this test suite, which is zone thermal loads and not system coil loads.
+
+    In the subject software program, use of the prescribed inputs constitutes 
+    an unstable control system.  For example, the moment the zone air 
+    temperature exceeds 27°C, the system will provide 1000 kW of cooling to the 
+    zone.  This quantity of cooling far exceeds the cooling demand, so the zone 
+    is overcooled pushing the zone air temperature below 20°C.  The moment that 
+    happens, the system provides 1000 kW of heating to the zone.  This quantity 
+    of heating far exceeds the heating demand, so the zone is overheated, 
+    pushing the zone air temperature above 27°C.  A system with this control 
+    will rapidly oscillate between cooling and heating.  The system simulation 
+    algorithm in the subject program will not be able to converge on a solution 
+    state for any hour because of the unstable nature of this control.
+
+    To resolve this problem, a small throttling range was used with the 
+    prescribed setpoints, and the cooling and heating capacities were set to 
+    values close to the peak cooling and heating demands of the zone.  These 
+    inputs were chosen empirically by tuning the inputs until thermostat 
+    control instability was eliminated and differences between the system 
+    cooling coil load and the zone cooling load and between the system heating 
+    coil load and the zone heating load were minimized as much as possible.  
+    This approach meets the intent of sections 7.2.1.13.1 and 7.2.1.13.2.
+
+    Note: In the subject program the 3.935 kW capacity is not specified 
+    directly.  Instead it is indirectly defined via supply airflow rate and 
+    supply temperature.The supply airflow was 565.6 L/s, the cooling supply air
+    temperature was 20°C and the heating supply air temperature was 27°C.  This
+    yields the capacities as follows.  The 0.994 factor is the standard 1.207
+    density x heat capacity x correction factor corrected for site altitude.
+
+    Cooling Capacity = 0.994 x 565.6 L/s x (27°C - 20°C) = 3935 W = 3.935 kW
+    Heating Capacity = 0.994 x 565.6 L/s x (20°C - 27°C) = 3935 W = 3.935 kW
+
+
+===============================================================================
+D. REPORT BLOCK FOR USE OF NON-SPECIFIED INPUTS
+===============================================================================
+CONTENT: This section shall describe nonspecified inputs used to perform
+the tests.  Use of nonspecified inputs shall be permitted only for the 
+following specified sections relating to the following topics: 
+
+* Alternative constant exterior surface coefficients in Sections 7.2.1.9.3,
+  7.2.3.1.4.3, 7.2.3.3.2, and 9.2.1.8
+* Alternative constant interior surface coefficients in Sections 7.2.1.10.3,
+  7.2.3.1.4.4, 7.2.3.2.2, and 9.2.1.9
+* Alternative constant interior solar distribution fractions in Sections
+  7.2.1.12, 7.2.2.1.2.2, 7.2.2.1.6.2, 7.2.2.1.7.2, 7.2.2.2.7.4, 7.2.3.9.3,
+  7.2.3.10.2, and 7.2.3.12.2
+* Air density given at specific altitudes for the space-cooling and space- 
+  heating equipment cases in Sections 9.2.1.4.3, 9.2.3.4.3, and 10.2.1.4.3.
+
+
+INSTRUCTIONS:  If nonspecified inputs are applied, a separate note for each use 
+of nonspecified inputs shall be provided.  The standard format shown below and
+a separate number and title for each note shall be applied. If nonspecified
+inputs are not applied, specify "NONE" in place of the information below.
+
+
+NOTE 1 - Interior Surface Coefficient Example
+-------------------------------------------------------------------------------
+1.1 Describe the Effect Being Simulated:
+
+  Interior combined surface coefficients for space cooling equipment
+  performance tests of Section 9.2.
+
+1.2 Section(s) of the Standard where Relevant Inputs are Specified:
+
+  9.2.1.9.
+
+1.3 Nonspecified Input(s) Used:
+
+  1.2 Btu/(h•ft2•F)= 6.81 W/(m2•K)  
+
+  The test specification indicates 8.29 W/(m2•K) for Section 9.2.1.9  
+
+1.4 Physical, Mathematical or Logical Justification for Use of the 
+ Nonspecified Input(s) 
+    – provide supporting calculations, if relevant:
+
+  1.2 Btu/(h•ft2•F) is the recommended default value in the program’s user 
+manual based on recent studies cited there. (Dummy Software Solutions, Building 
+Energy Simulation Program version 1.00.039, posted at 
+www.url.com/usersmanual.pdf, see p. 00. Accessed Mar 2018.) 
+
+
+===============================================================================
+E. REPORT BLOCK FOR OMITTED TEST CASES AND RESULTS
+===============================================================================
+CONTENT: This section shall describe test cases that were omitted and/or 
+individual results of test cases that were omitted along with the reason for
+the omission.
+
+INSTRUCTIONS:  If test cases were omitted a separate note to describe each type 
+of omission shall be provided.  The standard format shown below and a separate
+number and title for each note shall be applied.  If there are no omitted test
+cases, specify "NONE" in place of the information below.
+
+
+NOTE 1 - Light Weight Test Cases
+         (Section 7.2)
+-------------------------------------------------------------------------------
+1.1 List the Case(s) where Results Were Omitted, and which Results Were Omitted
+    for the Case(s):
+
+    600   600FF 230   300   420
+    610   650FF 240   310   430
+    620   195   250   320   440
+    630   200   270   395	
+    640   210   280   400	
+    650   220   290   410	
+
+
+1.2 Explanation for Omitting the Test Case(s) Results:
+
+    These test cases require modeling lightweight building construction
+    (approximately 12 lb/ft2 floor area).  This is residential weight
+    construction.  The subject software program is intended for modeling
+    commercial buildings and consequently the minimum building construction
+    weight is 30 lb/ft2 floor area.  Since the required building construction
+    weight for these test cases  is well outside the range of intended program
+    operation, these test cases cannot be performed.
+
+
+NOTE 2 - Case 960- Sunspace, All Results
+         (Section 7.2.2)
+-------------------------------------------------------------------------------
+2.1 List the Case(s) where Results Were Omitted and which Results Were Omitted
+    for the Case(s):
+
+    Case 960 - Sunspace, all results.
+
+2.2 Explanation for Omitting the Test Case(s) Results:
+
+    The required inputs to model this type of configuration are not available
+    in this software program.  Case 960 models a passive solar sun room using 
+    a thermal storage wall. In order to model this configuration, the 
+    associated algorithm would need to compute:
+
+    a. The hourly proportion of solar radiation absorbed by the individual 
+       sunlit surfaces within the sunlit portion of the thermal storage wall.
+    b. The effect of introducing infiltration in the thermal storage wall 
+       section.
+    c. Adjacent space heat transfer between the thermal storage wall and the
+       interior room.
+
+
+
+===============================================================================
+F. REPORT BLOCK FOR CHANGES TO SOURCE CODE FOR THE PURPOSE OF RUNNING THE 
+   TESTS, WHERE SUCH CHANGES ARE NOT AVAILABLE IN PUBLICLY RELEASED VERSIONS OF 
+   THE SOFTWARE
+===============================================================================
+CONTENT: This section shall describe changes to software source code made to 
+allow the software to run a test, where such changes are not available in a 
+publicly released version of the software.  
+
+INFORMATIVE NOTE: This section addresses special situations where a change to 
+source code is necessary to activate a feature or to permit inputs needed for
+a test when these features are not available in the publicly released version
+of the software.
+
+INSTRUCTIONS:  If changes to source code for the purpose of running a test are
+applied, separate notes to describe each source code modification shall be 
+provided. The standard format shown below and a separate number and title for 
+each note shall be applied. If changes to source code are not applied, specify 
+"NONE" in place of the information below.
+
+
+NOTE 1 - Modification of Scheduling Capabilities
+         (Sections 9.2.3, 9.2.4)
+-------------------------------------------------------------------------------
+1.1 List the Change(s) to the Source Code:
+
+    Include capability for hourly varying schedules, where such schedules may 
+    be varied for any day of the year, for sensible and latent internal gains, 
+    infiltration, outside air and zone thermostat.  Currently for the subject 
+    software’s publicly released version such hourly schedules may only be 
+    varied monthly, beginning on the first day of each month and 
+    continuing through the entire month.
+
+1.2 List the Test Case(s) Relevant to the Change(s) in the Source Code:
+
+    More flexible schedules are needed as follows:
+
+    * Internal Gains: All cases of Sections 9.2.3 and 9.2.4
+      (i.e., Cases CE300 through CE545).
+    * Infiltration and/or Outside Air: Cases CE320, CE330, and CE340 only.
+    * Thermostat: Case CE350 only.
+
+
+1.3 Explanation of Why the Change is Not Included in the Publicly Released 
+    Version of the Software:
+
+    Users of the subject software appear to be satisfied with hourly schedules 
+    limited to monthly variation.  Changing the source code to accommodate 
+    the test cases of Sections 9.2.3 and 9.2.4 for the purpose of testing the
+    calculation engine is justifiable. However, without known demand from 
+    users for additional scheduling flexibility, it is difficult to justify 
+    additional costs related to enhancing the user interface and 
+    revising software documentation.
+
+
+
+===============================================================================
+G. REPORT BLOCK FOR ANOMALOUS RESULTS
+===============================================================================
+CONTENT: Describing anomalous results shall be permitted but is not required.
+If anomalous test results are described, this section shall be used.
+
+INSTRUCTIONS:  If anomalous test results are described, each type of anomalous 
+result shall be described in a separate note.  The standard format shown below 
+and a separate number and title for each note item shall be applied. If
+anomalous results are not discussed, it shall be permiited to specify "NONE" 
+in place of the information below.
+
+  
+NOTE 1 - Zone Air Temperature Variations in Test Cases HE210, HE220, HE230
+         (Section 10.2)
+-------------------------------------------------------------------------------
+1.1 Test Case(s) and Specific Results from the Case(s) that are Anomalous:
+
+    Large differences in minimum/maximum zone air temperatures for test cases
+    HE210, HE220 and HE230 versus reference results.
+
+1.2 Explanation of Reason for the Anomalous Results:
+
+    The default settings in the subject simulation program use a 50%/50% mix of
+    explicit and implicit solution schemes for solving for the unknown zone
+    air temperature of the next time step.
+
+    The explicit solution of a building simulation case tends to become 
+    unstable if the conduction through the walls is relatively large
+    compared to the thermal storage capacity of the zone.  For simulated
+    houses with little or no thermal mass, solving the energy balance to obtain
+    the required furnace output may therefore result in oscillating solutions
+    when the default simulation settings are used.
+
+    The implicit solution however is stable and its zone air temperatures
+    perfectly follow the thermostat settings.
+
+    When a 50%/50% mix of explicit and implicit solutions is used, the zone
+    air temperature is sometimes too high and sometimes too low due to the 
+    effect of the explicit solution.
+
+    If the fully implicit solution scheme is used, the total furnace loads will 
+    only differ slightly from furnace loads predicted using the default 50%/50% 
+    mix of explicit and implicit solutions.  Because HE210, HE220 and HE230 
+    focus on total furnace load rather than on calculated zone temperatures, it 
+    was felt the results using default simulation settings are valid in spite 
+    of the anomaly in zone air temperature results.
+
+
+===============================================================================
+<END OF DOCUMENT>
+===============================================================================
