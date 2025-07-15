@@ -70,8 +70,8 @@ bottom_perimeter_south_plot_details: List[BottomPerimeterSouth] = [
         "kg/m**3",
         [
             ColumnDisplayName("Infiltration mass flow rate [kg/s] b", "Infiltration Mass Flow Rate"),
-                "Infiltration mass flow rate [kg/s] b", "Infiltration Mass Flow Rate"
-            )
+            ColumnDisplayName("Sensible heat transfer rate into the zone due to infiltration [kW] c", "Infiltration Sensible Heat Transfer Rate"),
+            ColumnDisplayName("Latent heat transfer rate into the zone due to infiltration [kW] c", "Infiltration Latent Heat Transfer Rate"),
         ],
     ),
     BottomPerimeterSouth(
