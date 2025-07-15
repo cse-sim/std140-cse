@@ -1,3 +1,4 @@
 output/
 ~*.xls*
 ~*.doc*
+*.pyc
