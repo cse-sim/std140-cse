@@ -1237,15 +1237,15 @@ EXPORTCOL colHead="<%= infiltration_mass_flow_rate %>" colVal=@AFMETER["<%= bott
 
 EXPORTCOL colHead="Air Specific Heat [btu/lb*F]" colVal= @top.airSH
 EXPORTCOL colHead="Outdoor Temp [F]" colVal=@top.tDbOHr
-EXPORTCOL colHead="Indoor Temp [F]" colVal=@znRes[<%= zone_floor_name %>].H.tAir
+EXPORTCOL colHead="Indoor Temp [F]" colVal=@znRes[<%= bottom_perimeter_south %>].H.tAir
 EXPORTCOL colHead="Outdoor Humidity Ratio [kg/kg]" colVal= @top.wOHr
-EXPORTCOL colHead="Indoor Humidity Ratio [kg/kg]" colVal=@znRes[<%= zone_floor_name %>].H.wAir
+EXPORTCOL colHead="Indoor Humidity Ratio [kg/kg]" colVal=@znRes[<%= bottom_perimeter_south %>].H.wAir
 
 EXPORTCOL colHead="<%= infiltration_moisture_added %>" colVal=0
 
 EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].fanEx * <%= $standard_air_density / $kg_lbm / $min_s %> // Ventilation mass flow rate
-EXPORTCOL colHead="Sensible Heat Change [kJ/kg]" colVal= @top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= zone_floor_name %>].H.tAir) // Used to calculate ventilation sensible heat transfer
-EXPORTCOL colHead="Latent Heat Change [kJ/kg]" colVal= <%= $latent_heat_of_evaporation_water * $kg_lbm / $kj_btu %> * (@top.wOHr - @znRes[<%= zone_floor_name %>].H.wAir) // Used to calculate ventilation latent heat transfer
+EXPORTCOL colHead="Sensible Heat Change [kJ/kg]" colVal= @top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= bottom_perimeter_south %>].H.tAir) // Used to calculate ventilation sensible heat transfer
+EXPORTCOL colHead="Latent Heat Change [kJ/kg]" colVal= <%= $latent_heat_of_evaporation_water * $kg_lbm / $kj_btu %> * (@top.wOHr - @znRes[<%= bottom_perimeter_south %>].H.wAir) // Used to calculate ventilation latent heat transfer
 
 EXPORTCOL colHead="<%= ventilation_moisture_added %>" colVal=0
 
