@@ -9,21 +9,16 @@ import pandas as pd
 
 
 def capitalize_and_remove_underscores(string: str):
-    return " ".join(
-        [sub_string.capitalize() for sub_string in string.replace("-", "_").split("_")]
-    )
+    return " ".join([sub_string.capitalize() for sub_string in string.replace("-", "_").split("_")])
 
 
 def get_date_time():
-    date_time = pd.date_range(
-        start=datetime(2000, 1, 1, 0), end=datetime(2000, 12, 31, 23), freq="h"
-    )
+    date_time = pd.date_range(start=datetime(2000, 1, 1, 0), end=datetime(2000, 12, 31, 23), freq="h")
     # pylint: disable=E1101,E1101
     return date_time[~((date_time.month == 2) & (date_time.day == 29))]
 
 
 def get_detailed_data_frame(case: str, excel_tab: str) -> pd.DataFrame:
-
     df = pd.read_excel(
         Path("reports", "std-140", f"Std140_CB_Output_{case}.xlsx"),
         sheet_name=excel_tab,
@@ -39,7 +34,6 @@ def get_detailed_data_frame(case: str, excel_tab: str) -> pd.DataFrame:
 
 @dataclass
 class PlotDetails:
-
     excel_tab: str
     native_units: str
     y_axis_name: str
@@ -60,9 +54,7 @@ class BottomPerimeterSouth:
 
 
 excel_tabs_plots_details = [
-    PlotDetails(
-        "Hourly-ZoneAirTemp", "degC", "Indoor Dry Bulb Temperature", ["Bottom_Core_1"]
-    ),
+    PlotDetails("Hourly-ZoneAirTemp", "degC", "Indoor Dry Bulb Temperature", ["Bottom_Core_1"]),
     PlotDetails(
         "Hourly-PlugLoadPower",
         "kW",
@@ -77,7 +69,7 @@ bottom_perimeter_south_plot_details: List[BottomPerimeterSouth] = [
         "Infiltration Mass Flow Rate",
         "kg/m**3",
         [
-            ColumnDisplayName(
+            ColumnDisplayName("Infiltration mass flow rate [kg/s] b", "Infiltration Mass Flow Rate"),
                 "Infiltration mass flow rate [kg/s] b", "Infiltration Mass Flow Rate"
             )
         ],
@@ -165,9 +157,7 @@ def plot_detailed_data():
             y_axis_name = plot_details.y_axis_name
             native_units = plot_details.native_units
             column_display_names = plot_details.column_display_names
-            plot = DimensionalPlot(
-                list(date_time), title=f"Bottom Perimeter South<br>{y_axis_name}"
-            )
+            plot = DimensionalPlot(list(date_time), title=f"Bottom Perimeter South<br>{y_axis_name}")
             for column_display_name in column_display_names:
                 column_name = column_display_name.column_name
                 display_name = column_display_name.display_name
@@ -181,9 +171,7 @@ def plot_detailed_data():
                         line_properties=LinesOnly(line_width=2),
                     )
                 )
-            plot.write_html_plot(
-                Path(plot_directory, f"{excel_tab}-{y_axis_name}.html")
-            )
+            plot.write_html_plot(Path(plot_directory, f"{excel_tab}-{y_axis_name}.html"))
 
 
 def plot_nsteps_temperature_comparison():
