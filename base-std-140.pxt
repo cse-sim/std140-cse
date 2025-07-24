@@ -1169,6 +1169,8 @@ bottom_perimeter_south_afmeter = "AFMETER_#{bottom_perimeter_south}"
 exterior_wall_surface_name = create_surface_name(bottom_perimeter_south, bottom_perimeter_south_exterior)
 ground_surface_name = create_surface_name(bottom_perimeter_south, ground)
 
+window = "Window_#{bottom_perimeter_south}"
+
 exterior_wall_area = perimeter_ns_length * $floor_height
 slab_area = perimeter_ns_area
 
@@ -1252,8 +1254,8 @@ EXPORTCOL colHead="<%= ventilation_moisture_added %>" colVal=0
 EXPORTCOL colHead="Total Sensible Heat Transfer [kW]" colVal= @znRes["<%= bottom_perimeter_south %>"].H.qsIz * <%= 1 / $kj_btu / $h_s %>
 EXPORTCOL colHead="Total Latent Heat Transfer [kW]" colVal= @znRes["<%= bottom_perimeter_south %>"].H.qlIz * <%= 1 / $kj_btu / $h_s %>
 
-EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %> 
-EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Incident Radiation" %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
+EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@xsurf["<%= window %>"].sbcI.sgTarg.tot * <%= 1 / $kw_btuh %> 
+EXPORTCOL colHead="<%= window_net_heat_transfer_rate %>" colVal=(@xsurf["<%= window %>"].sbcI.hxr * (@xsurf["<%= window %>"].sbcI.txr - @xsurf["<%= window %>"].sbcI.tsrf)) + (@xsurf["<%= window %>"].sbcI.hxa * (@xsurf["<%= window %>"].sbcI.txa - @xsurf["<%= window %>"].sbcI.tsrf)) * <%= $m2_ft2 / $w_btuh %>
 
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qSrf * <%= 1 / $kw_btuh * exterior_wall_area %>
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=(@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.bm + @xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.df) * <%= 1 / $kw_btuh * (exterior_wall_area - $window_area * 7) %> // Number of windows on bottom perimeter south exterior wall is 7
