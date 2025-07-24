@@ -1,0 +1,228 @@
+<%#INTERFACE
+  parameter "weather_file", :default=> "CE100"
+  parameter "set_point", :default=> 72 # degF
+  parameter "sensible_internal_gains", :default=> 5400 # W
+  parameter "latent_internal_gains", :default=>0 # W
+%>
+
+<%
+# Unit Conversions
+m_ft = 3.28084
+m2_ft2 = m_ft*m_ft
+m3_ft3 = m2_ft2*m_ft
+h_min = 60.0
+k_c = 0.5781759824
+rho_c = 0.062428
+cp_c = 0.000239
+$w_btu = 3.412
+$kw_btu = $w_btu * 1000.0
+k_r = 9/5.0
+q_c = $w_btu/m2_ft2
+u_c = q_c/k_r
+ton_btu = 12000.0
+# Internal use
+nsteps = 10
+
+%>
+
+<%
+# Dimensions
+width = 8.0*m_ft
+depth = 6.0*m_ft
+height = 2.7*m_ft
+floor_area = width*depth
+zone_vol = floor_area*height
+
+%>
+
+<%
+# Constants
+
+exterior_solar_absorptance = 0.1
+interior_solar_absorptance = 0.6
+exterior_infrared_emittance = 0.9
+interior_infrared_emittance = 0.9
+
+compressor_power = 26800.0 # btu/h
+indoor_fan_power = 900.0 # cfm
+indoor_fan_flow_rate = 230.0 # W
+$net_rated_total_capacity = 26.8 # kBtu/h @ 95 degF
+
+%>
+
+<%
+# Functions
+def get_capacity_ratio(net_total_capacity)
+  return net_total_capacity / $net_rated_total_capacity
+end
+
+def get_cop(net_total_capacity, compressor_power)
+  return net_total_capacity / compressor_power / $w_btu
+end
+
+%>
+
+begDay = Feb 1
+endDay = Feb 28
+wfName = "<%= "weather/space-cooling/#{weather_file}.epw" %>"
+nSubSteps = <%= nsteps %>
+DT = No
+terrainClass = 2
+wuDays = 31
+skyModel = ANISOTROPIC
+skyModelLW = BERDAHLMARTIN
+
+MATERIAL "Insulation"
+  matCond = <%= 0.010*k_c %>
+  matSpHt = <%= 0*cp_c %>
+  matDens = <%= 0*rho_c %>
+
+CONSTRUCTION "Adiabatic Construction"
+  LAYER lrMat="Insulation" lrThk=<%= 1.0*m_ft %>
+
+
+
+// Zone
+ZONE "Zone"
+  znModel = CZM
+  znArea = <%= floor_area %>
+  znVol = <%= zone_vol %>
+  znCAir = <%= 0.24*0.075*zone_vol %> // Changed from 0.077 to 0.075 (Standard 140-2023 Section 9.2.3.4.3)
+  znHcAirX = 0.0
+  infAC = 0
+  znFloorZ = 0.0
+  znCeilingHt = <%= height %>
+  znEaveZ = <%= height %>
+  znTC = <%= set_point %>
+  znTH = 1
+  znRSys = "Cooling_System"
+
+  GAIN "Sensible Internal Gain"
+    gnPower = <%= sensible_internal_gains*$w_btu %>
+    gnFrRad = 0
+    gnFrLat = 0
+
+<% if latent_internal_gains > 0 %>
+  GAIN "Latent Internal Gain"
+    gnPower = <%= latent_internal_gains*$w_btu %>
+    gnFrRad = 0
+    gnFrLat = 1
+<% end %>
+
+<%
+# Surfaces
+surfaces = [
+  {:name=>"North Wall", :type=>"Wall",  :area=>width*height,    :azm=>0},
+  {:name=>"East Wall",  :type=>"Wall",  :area=>depth*height,    :azm=>90},
+  {:name=>"South Wall", :type=>"Wall",  :area=>width*height,    :azm=>180},
+  {:name=>"West Wall",  :type=>"Wall",  :area=>depth*height,    :azm=>270},
+  {:name=>"Roof",       :type=>"Roof",  :area=>floor_area       },
+  {:name=>"Floor",      :type=>"Floor", :area=>floor_area       }
+]
+%>
+
+<% for surface in surfaces %>
+  SURFACE "<%= surface[:name] %>"
+  <% if surface[:type] == "Wall" %>
+    sfType = Wall
+    sfAzm = <%= surface[:azm] %>
+  <% elsif surface[:type] == "Roof" %>
+    sfType = Ceiling
+  <% elsif surface[:type] == "Floor" %>
+    sfType = Floor
+  <% end %>
+    sfCon = "Adiabatic Construction"
+    sfArea = <%= surface[:area] %>
+    sfExHcModel = UNIFIED
+    sfExCnd = Ambient
+    sfModel = forward_difference
+    sfExAbs = <%= exterior_solar_absorptance %>
+    sfInAbs = <%= interior_solar_absorptance %>
+    sfExEpsLW = <%= exterior_infrared_emittance %>
+    sfInEpsLW = <%= interior_infrared_emittance %>
+    sfExRf = 1.67
+<% end %>
+
+
+PERFORMANCEMAP "Performance_Map_Cooling"
+
+    PMGRIDAXIS "CoolingOutdoorDBT" pmGXType="OutdoorDBT" pmGXValues=85, 90, 95, 100, 105, 115 pmGXRefValue=95
+    PMGRIDAXIS "CoolingSpeed" pmGXType="Speed" pmGXValues=1 pmGXRefValue=1
+
+    // Capacity ratio = net total capacity / net rated total capacity
+    PMLOOKUPDATA LUClgCapRat pmLUType = "CapRat" pmLUValues =
+      <%= get_capacity_ratio(28.4) %>,                       //  85F
+      <%= get_capacity_ratio(27.6) %>,                       //  90F
+      <%= get_capacity_ratio($net_rated_total_capacity) %>,  //  95F
+      <%= get_capacity_ratio(26.0) %>,                       // 100F
+      <%= get_capacity_ratio(25.1) %>,                       // 105F
+      <%= get_capacity_ratio(23.5) %>                        // 115F
+
+    // COP = net total COP
+    PMLOOKUPDATA LUClgCOP pmLUType = "COP" pmLUValues =
+      <%= get_cop(28.4, 1.71) %>,                      //  85F
+      <%= get_cop(27.6, 1.79) %>,                      //  90F
+      <%= get_cop($net_rated_total_capacity, 1.86) %>, //  95F
+      <%= get_cop(26.0, 1.94) %>,                      // 100F
+      <%= get_cop(25.1, 2.02) %>,                      // 105F
+      <%= get_cop(23.5, 2.18) %>                       // 115F
+
+endPERFORMANCEMAP
+
+METER "Total_Cooling_Energy_Consumption"
+LOADMETER "Total_Evaporator_Coil_Load"
+
+RSYS "Cooling_System"
+  rsType = ACPM
+  rsModeCtrl = COOL
+  rsPerfMapClg = "Performance_Map_Cooling"
+  rsSEER = 12.90
+  rsCapC = <%= compressor_power %>
+  rsFanTy = DRAWTHRU
+  rsFanPwrC = <%= indoor_fan_flow_rate / indoor_fan_power %>
+  rsVFPerTon = <%= indoor_fan_power / ( compressor_power / ton_btu ) %>
+  rsElecMtr = "Total_Cooling_Energy_Consumption"
+  rsClgLoadMtr = "Total_Evaporator_Coil_Load"
+
+EXPORTFILE "MONTHLY"
+  xfFileName = "MONTHLY.csv"
+  xfFileStat = OVERWRITE
+
+EXPORT
+  exExportfile = "MONTHLY"
+  exHeader = ColumnsOnly
+  exFooter = No
+  exType = UDT
+  exFreq = MONTH
+  exDayBeg = FEB 1
+  exDayEnd = FEB 28
+
+  EXPORTCOL colHead="Month" colVal=$month
+  EXPORTCOL colHead="Total Cooling Energy Consumption [kWh]" colVal=@meter["Total_Cooling_Energy_Consumption"].M.clg / <%= $kw_btu %>
+  EXPORTCOL colHead="Total Evaporator Coil Load [kWh]" colVal=(@RSYSRes["Cooling_System"].M.qcSen + @RSYSRes["Cooling_System"].M.qcLat) * -1 / <%= $kw_btu %>
+  EXPORTCOL colHead="Sensible Evaporator Coil Load [kWh]" colVal=@RSYSRes["Cooling_System"].M.qcSen * -1 / <%= $kw_btu %>
+  EXPORTCOL colHead="Latent Evaporator Coil Load [kWh]" colVal=@RSYSRes["Cooling_System"].M.qcLat * -1 / <%= $kw_btu %>
+
+EXPORTFILE "HOURLY"
+  xfFileName = "HOURLY.csv"
+  xfFileStat = OVERWRITE
+
+EXPORT
+  exExportfile = "HOURLY"
+  exHeader = ColumnsOnly
+  exFooter = No
+  exType = UDT
+  exFreq = HOUR
+  exDayBeg = FEB 1
+  exDayEnd = FEB 28
+
+  EXPORTCOL colHead="Month" colVal=$month
+  EXPORTCOL colHead="Day" colVal=$dayOfMonth
+  EXPORTCOL colHead="Hour" colVal=$hour
+  EXPORTCOL colHead="Total Evaporator Coil Load [kWh]" colVal=(@RSYSRes["Cooling_System"].H.qcSen + @RSYSRes["Cooling_System"].H.qcLat) * -1 / <%= $kw_btu %>
+  EXPORTCOL colHead="Sensible Evaporator Coil Load [kWh]" colVal=@RSYSRes["Cooling_System"].H.qcSen * -1 / <%= $kw_btu %>
+  EXPORTCOL colHead="Latent Evaporator Coil Load [kWh]" colVal=@RSYSRes["Cooling_System"].H.qcLat * -1 / <%= $kw_btu %>
+  EXPORTCOL colHead="COP" colVal=@RSYSRes["Cooling_System"].H.qcSen / @meter["Total_Cooling_Energy_Consumption"].H.clg * -1
+  EXPORTCOL colHead="Zone Temp [°C]" colVal=@zone["Zone"].tz
+  EXPORTCOL colHead="Humidity Ratio [kg/kg]" colVal=@znRes["Zone"].H.wAir
+RUN
