@@ -202,9 +202,39 @@ def plot_nsteps_temperature_comparison():
                 # is_visible=True if column in visible_zones else False,
             )
         )
-    plot.write_html_plot(Path(plot_directory, f"nsteps.html"))
+    plot.write_html_plot(Path(plot_directory, "nsteps.html"))
+
+
+def plot_output_hourly_data():
+    df = pd.read_csv("output/std-140/CB1000/OUTPUT_HOURLY.CSV")
+
+    columns = [
+        "Total net heat transfer rate through the windows [kW] c,e",
+        "Total net heat transfer rate through the windows [kW] c,e Radiation",
+        "Total net heat transfer rate through the windows [kW] c,e Convection",
+    ]
+    legend_names = ["Net", "Radiation", "Convection"]
+
+    plot = DimensionalPlot(
+        list(date_time),
+        title="Bottom Perimeter South <br>Windows Net Heat Transfer",
+    )
+    for column, legend_name in zip(columns, legend_names):
+        y_values = list(df[column])
+        plot.add_display_data(
+            DisplayData(
+                y_values,
+                name=legend_name,
+                native_units="kW",
+                y_axis_name="Heat Transfer",
+                line_properties=LinesOnly(line_width=2),
+                # is_visible=True if column in visible_zones else False,
+            )
+        )
+    plot.write_html_plot(Path(plot_directory, "Bottom_Perimeter_South_Windows_Net_Heat_Transfer.html"))
 
 
 plot_basic_data()
 plot_detailed_data()
 plot_nsteps_temperature_comparison()
+plot_output_hourly_data()
