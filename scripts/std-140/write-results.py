@@ -43,9 +43,7 @@ test_suite = "std-140"
 if __name__ == "__main__":
     current_directory = os.getcwd()  # Use when running script directly
 else:
-    current_directory = os.path.dirname(
-        os.path.dirname(os.getcwd())
-    )  # Use when called from rakefile
+    current_directory = os.path.dirname(os.path.dirname(os.getcwd()))  # Use when called from rakefile
 template_file_name = f"{template_file_root}_Template_R1.xlsx"
 template_file_path = Path(f"{current_directory}/docs/{test_suite}/{template_file_name}")
 
@@ -69,33 +67,19 @@ hourly_sheets = [
 zone_sheet = "Hourly-Bottom_Perimeter_South"
 
 infiltration_mass_flow_rate = "Infiltration mass flow rate [kg/s] b"
-infiltration_sensible_heat_transfer_rate = (
-    "Sensible heat transfer rate into the zone due to infiltration [kW] c"
-)
-infiltration_moisture_added = (
-    "Moisture added to the zone due to the infiltration [kg water/kg dry air]"
-)
-infiltration_latent_heat_transfer_rate = (
-    "Latent heat transfer rate into the zone due to infiltration [kW] c"
-)
+infiltration_sensible_heat_transfer_rate = "Sensible heat transfer rate into the zone due to infiltration [kW] c"
+infiltration_moisture_added = "Moisture added to the zone due to the infiltration [kg water/kg dry air]"
+infiltration_latent_heat_transfer_rate = "Latent heat transfer rate into the zone due to infiltration [kW] c"
 ventilation_mass_flow_rate = "Ventilation mass flow rate [kg/s] b"
-ventilation_sensible_heat_transfer_rate = (
-    "Sensible heat transfer rate into the zone due to ventilation [kW] c"
-)
-ventilation_moisture_added = (
-    "Moisture added to the zone due to the ventilation [kg water/kg dry air]"
-)
-ventilation_latent_heat_transfer_rate = (
-    "Latent heat transfer rate into the zone due to ventilation [kW] c"
-)
+ventilation_sensible_heat_transfer_rate = "Sensible heat transfer rate into the zone due to ventilation [kW] c"
+ventilation_moisture_added = "Moisture added to the zone due to the ventilation [kg water/kg dry air]"
+ventilation_latent_heat_transfer_rate = "Latent heat transfer rate into the zone due to ventilation [kW] c"
 
-window_net_heat_transfer_rate = (
-    "Total net heat transfer rate through the windows [kW] c,e"
-)
-window_net_heat_transfer_rate_conduction = f"{window_net_heat_transfer_rate} Conduction"
-window_net_heat_transfer_rate_radiation = (
-    f"{window_net_heat_transfer_rate} Incident Radiation"
-)
+window_net_heat_transfer_rate = "Total net heat transfer rate through the windows [kW] c,e"
+# window_net_heat_transfer_rate_conduction = f"{window_net_heat_transfer_rate} Conduction"
+# window_net_heat_transfer_rate_radiation = (
+#     f"{window_net_heat_transfer_rate} Incident Radiation"
+# )
 
 zone_columns = [
     "Outdoor air density a [kg/m3]",
@@ -119,45 +103,26 @@ sub_hourly_average = [
     "Dry Air Mass",
     "ACH",
     "Moist Air Density [kg/m3]",
-    window_net_heat_transfer_rate_conduction,
     "Total Sensible Heat Transfer [kW] qIzSh",
 ]
 
 
 def post_processing(df_hourly: pd.DataFrame, df_sub_hourly: pd.DataFrame):
     df_sub_hourly["Minute"] = (df_sub_hourly["SubHour"] - 1) * 10
-    df_sub_hourly["Datetime"] = pd.to_datetime(
-        df_sub_hourly[["Month", "Day", "Hour", "Minute"]].assign(year=2024)
-    )
-    df_hourly["Datetime"] = pd.to_datetime(
-        df_hourly[["Month", "Day", "Hour"]].assign(year=2024)
-    )
+    df_sub_hourly["Datetime"] = pd.to_datetime(df_sub_hourly[["Month", "Day", "Hour", "Minute"]].assign(year=2024))
+    df_hourly["Datetime"] = pd.to_datetime(df_hourly[["Month", "Day", "Hour"]].assign(year=2024))
     df_sub_hourly.index = df_sub_hourly["Datetime"]
     df_hourly.index = df_hourly["Datetime"]
     for column in df_sub_hourly.columns:
         if column in sub_hourly_average:
             df_hourly[column] = df_sub_hourly[column].resample("h").mean()
 
-    df_hourly[ventilation_sensible_heat_transfer_rate] = (
-        df_hourly[ventilation_mass_flow_rate]
-        * df_hourly["Sensible Heat Change [kJ/kg]"]
-    )
-    df_hourly[ventilation_latent_heat_transfer_rate] = (
-        df_hourly[ventilation_mass_flow_rate] * df_hourly["Latent Heat Change [kJ/kg]"]
-    )
+    df_hourly[ventilation_sensible_heat_transfer_rate] = df_hourly[ventilation_mass_flow_rate] * df_hourly["Sensible Heat Change [kJ/kg]"]
+    df_hourly[ventilation_latent_heat_transfer_rate] = df_hourly[ventilation_mass_flow_rate] * df_hourly["Latent Heat Change [kJ/kg]"]
 
-    df_hourly[infiltration_sensible_heat_transfer_rate] = (
-        df_hourly[infiltration_mass_flow_rate]
-        * df_hourly["Sensible Heat Change [kJ/kg]"]
-    )
-    df_hourly[infiltration_latent_heat_transfer_rate] = (
-        df_hourly[infiltration_mass_flow_rate] * df_hourly["Latent Heat Change [kJ/kg]"]
-    )
+    df_hourly[infiltration_sensible_heat_transfer_rate] = df_hourly[infiltration_mass_flow_rate] * df_hourly["Sensible Heat Change [kJ/kg]"]
+    df_hourly[infiltration_latent_heat_transfer_rate] = df_hourly[infiltration_mass_flow_rate] * df_hourly["Latent Heat Change [kJ/kg]"]
 
-    df_hourly[window_net_heat_transfer_rate] = (
-        df_hourly[window_net_heat_transfer_rate_conduction]
-        + df_hourly[window_net_heat_transfer_rate_radiation]
-    )
     df_hourly.index = [value for value in range(8760)]
     return df_hourly
 
@@ -178,15 +143,11 @@ for case in cases:
     information_sheet.cell(row=7, column=2, value=todays_date)
 
     output_file_name = f"{template_file_root}_{case}.xlsx"
-    output_file_path = Path(
-        f"{current_directory}/reports/{test_suite}/{output_file_name}"
-    )
+    output_file_path = Path(f"{current_directory}/reports/{test_suite}/{output_file_name}")
     delete_output_file(output_file_path)
 
     hourly_results_file_path = Path(results_directory, case, hourly_results_file_name)
-    sub_hourly_results_file_path = Path(
-        results_directory, case, sub_hourly_results_file_name
-    )
+    sub_hourly_results_file_path = Path(results_directory, case, sub_hourly_results_file_name)
 
     df_case_data_hourly = pd.read_csv(hourly_results_file_path)
     df_case_data_sub_hourly = pd.read_csv(sub_hourly_results_file_path)
@@ -203,12 +164,8 @@ for case in cases:
             case_data_column = f"{hourly_sheet}_{column}"
             df_sheet[column] = df_case_data_hourly[case_data_column]
 
-        sheet = template[
-            hourly_sheet_name
-        ]  # Access the corresponding sheet in the template
-        for row_idx, row in enumerate(
-            dataframe_to_rows(df_sheet, index=False, header=False), start=2
-        ):
+        sheet = template[hourly_sheet_name]  # Access the corresponding sheet in the template
+        for row_idx, row in enumerate(dataframe_to_rows(df_sheet, index=False, header=False), start=2):
             for col_idx, value in enumerate(row, start=1):
                 sheet.cell(row=row_idx + 1, column=col_idx, value=value)
         print("Data successfully added to the XLSX file.")
@@ -227,9 +184,7 @@ for case in cases:
             df_sheet[zone_column] = df_case_data_hourly[zone_column]
 
     sheet = template[zone_sheet]  # Access the corresponding sheet in the template
-    for row_idx, row in enumerate(
-        dataframe_to_rows(df_sheet, index=False, header=False), start=3
-    ):
+    for row_idx, row in enumerate(dataframe_to_rows(df_sheet, index=False, header=False), start=3):
         for col_idx, value in enumerate(row, start=1):
             sheet.cell(row=row_idx + 1, column=col_idx, value=value)
 
