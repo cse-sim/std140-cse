@@ -1,5 +1,5 @@
 <%#INTERFACE
-  parameter "weather_file", :default=> "CE100"
+  parameter "weather_file", :default=> "CE300"
   parameter "set_point", :default=> 72 # degF
   parameter "sensible_internal_gains", :default=> 5400 # W
   parameter "latent_internal_gains", :default=>0 # W
