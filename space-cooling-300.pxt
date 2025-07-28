@@ -62,9 +62,7 @@ end
 
 %>
 
-begDay = Feb 1
-endDay = Feb 28
-wfName = "<%= "weather/space-cooling-300/#{weather_file}.epw" %>"
+wfName = "<%= "weather/space-cooling/#{weather_file}.epw" %>"
 nSubSteps = <%= nsteps %>
 DT = No
 terrainClass = 2
