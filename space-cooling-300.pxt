@@ -27,9 +27,9 @@ nsteps = 10
 
 <%
 # Dimensions
-width = 8.0*m_ft
-depth = 6.0*m_ft
-height = 2.7*m_ft
+width = 14.0*m_ft
+depth = 14.0*m_ft
+height = 3.0*m_ft
 floor_area = width*depth
 zone_vol = floor_area*height
 
