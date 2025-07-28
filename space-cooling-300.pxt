@@ -73,7 +73,7 @@ skyModel = ANISOTROPIC
 skyModelLW = BERDAHLMARTIN
 
 MATERIAL "Insulation"
-  matCond = <%= 0.010*k_c %>
+  matCond = <%= 0.00308*k_c %>
   matSpHt = <%= 0*cp_c %>
   matDens = <%= 0*rho_c %>
 
