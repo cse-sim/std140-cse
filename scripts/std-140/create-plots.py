@@ -250,5 +250,5 @@ def plot_output_hourly_data():
 
 plot_basic_data()
 plot_detailed_data()
-plot_nsteps_temperature_comparison()
-plot_output_hourly_data()
+# plot_nsteps_temperature_comparison()
+# plot_output_hourly_data()
