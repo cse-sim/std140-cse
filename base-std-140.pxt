@@ -76,7 +76,7 @@ $frame_area_multiplier = 1 - (window_frame_area / $window_area)
 door_width = 0.9144 * $m_ft
 door_height = 2.1336 * $m_ft
 
-zone_air_capacity_constant = 0.000001 # Since items in zone are defined (interior partitions, furniture), zone air capacity is set to near-zero
+zone_air_capacity_constant = 0.000001 # Since items in zone are defined (interior partitions, furniture), zone air capacity is set to near-zero.
 
 $two_door_area = door_width * door_height * 2 # TODO: can two doors be combined into a single door with double area in DOOR object?
 
