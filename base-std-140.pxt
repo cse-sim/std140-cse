@@ -1021,7 +1021,7 @@ for zone in zones
           sfModel = FORWARD_DIFFERENCE
       <% end %>
       <% if internal_mass_surface_area > 0 # interal mass surface %>
-        SURFACE <%= "#{zone_floor_name}_Internal_Mass" %> // TODO: is it appropriate to create a surface for internal mass?
+        SURFACE <%= "#{zone_floor_name}_Internal_Mass" %>
           sfType = "WALL" 
           sfCon = "Furniture"
           sfArea = <%= internal_mass_surface_area %>
