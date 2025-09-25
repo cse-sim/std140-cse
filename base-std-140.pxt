@@ -1014,7 +1014,7 @@ for zone in zones
     SURFACE <%= "#{zone_floor_name}_Internal_Partition" %>
           sfType = "WALL" 
           sfCon = "Interior Wall"
-          sfArea = <%= internal_partition_surface_area %>
+          sfArea = <%= internal_partition_surface_area / 2.0 %>
           sfAzm = 0
           sfExCnd = "ADJZN"
           sfAdjZn = <%= zone_floor_name %>
@@ -1024,7 +1024,7 @@ for zone in zones
         SURFACE <%= "#{zone_floor_name}_Internal_Mass" %>
           sfType = "WALL" 
           sfCon = "Furniture"
-          sfArea = <%= internal_mass_surface_area %>
+          sfArea = <%= internal_mass_surface_area / 2.0 %>
           sfAzm = 0
           sfExCnd = "ADJZN"
           sfAdjZn = <%= zone_floor_name %>
