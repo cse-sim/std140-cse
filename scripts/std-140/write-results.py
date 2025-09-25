@@ -123,6 +123,12 @@ def post_processing(df_hourly: pd.DataFrame, df_sub_hourly: pd.DataFrame):
     df_hourly[infiltration_sensible_heat_transfer_rate] = df_hourly[infiltration_mass_flow_rate] * df_hourly["Sensible Heat Change [kJ/kg]"]
     df_hourly[infiltration_latent_heat_transfer_rate] = df_hourly[infiltration_mass_flow_rate] * df_hourly["Latent Heat Change [kJ/kg]"]
 
+    df_hourly[window_net_heat_transfer_rate] = (
+        df_hourly["Total window transmitted solar radiation rate [kW] c,d"]
+        + df_hourly[f"{window_net_heat_transfer_rate} LW Radiation"]
+        + df_hourly[f"{window_net_heat_transfer_rate} Convection"]
+    )
+
     df_hourly.index = [value for value in range(8760)]
     return df_hourly
 

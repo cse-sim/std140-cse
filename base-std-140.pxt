@@ -1176,6 +1176,12 @@ slab_area = perimeter_ns_area
 
 %>
 
+ACCUMULATOR "GlazeT"
+  acmValue = @xsurf["<%= window %>"].glzTrans
+
+ACCUMULATOR "GlazeI"
+  acmValue = @xsurf["<%= window %>"].glzInward
+
 EXPORTFILE "OUTPUT_SUB_HOURLY"
   xfFileName = "OUTPUT_SUB_HOURLY.csv"
   xfFileStat = OVERWRITE
@@ -1254,8 +1260,9 @@ EXPORTCOL colHead="<%= ventilation_moisture_added %>" colVal=0
 EXPORTCOL colHead="Total Sensible Heat Transfer [kW]" colVal= @znRes["<%= bottom_perimeter_south %>"].H.qsIz * <%= 1 / $kj_btu / $h_s %>
 EXPORTCOL colHead="Total Latent Heat Transfer [kW]" colVal= @znRes["<%= bottom_perimeter_south %>"].H.qlIz * <%= 1 / $kj_btu / $h_s %>
 
-EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@znRes["<%= bottom_perimeter_south %>"].H.qSlr * <%= 1 / $kw_btuh %>
-EXPORTCOL colHead="<%= window_net_heat_transfer_rate %>" colVal=(@xsurf["<%= window %>"].sbcI.hxr * (@xsurf["<%= window %>"].sbcI.txr - @xsurf["<%= window %>"].sbcI.tsrf)) + (@xsurf["<%= window %>"].sbcI.hxa * (@xsurf["<%= window %>"].sbcI.txa - @xsurf["<%= window %>"].sbcI.tsrf)) * <%= $m2_ft2 / $w_btuh %>
+EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@xsurf["<%= window %>"].areaGlz * @accumulator["GlazeT"].H.acmMean * <%= 1 / $kw_btuh %>
+EXPORTCOL colHead="<%= window_net_heat_transfer_rate %> LW Radiation" colVal=@window["<%= window %>"].area  * (@xsurf["<%= window %>"].sbcI.hxr * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txr)) * <%= 1 / $kw_btuh %> // Do we need to add in the frame separately
+EXPORTCOL colHead="<%= window_net_heat_transfer_rate %> Convection" colVal=@window["<%= window %>"].area  * (@xsurf["<%= window %>"].sbcI.hxa * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txa)) * <%= 1 / $kw_btuh %> // Do we need to add in the frame separately
 
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qSrf * <%= 1 / $kw_btuh * exterior_wall_area %>
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=(@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.bm + @xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.df) * <%= 1 / $kw_btuh * (exterior_wall_area - $window_area * 7) %> // Number of windows on bottom perimeter south exterior wall is 7
