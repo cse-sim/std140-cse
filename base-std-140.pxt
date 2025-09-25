@@ -1015,7 +1015,7 @@ for zone in zones
           sfType = "WALL" 
           sfCon = "Interior Wall"
           sfArea = <%= internal_partition_surface_area %>
-          sfAzm = 0 // TODO: is this important for internal walls?
+          sfAzm = 0
           sfExCnd = "ADJZN"
           sfAdjZn = <%= zone_floor_name %>
           sfModel = FORWARD_DIFFERENCE
@@ -1025,7 +1025,7 @@ for zone in zones
           sfType = "WALL" 
           sfCon = "Furniture"
           sfArea = <%= internal_mass_surface_area %>
-          sfAzm = 0 // TODO: is this important for internal mass?
+          sfAzm = 0
           sfExCnd = "ADJZN"
           sfAdjZn = <%= zone_floor_name %>
           sfModel = FORWARD_DIFFERENCE
