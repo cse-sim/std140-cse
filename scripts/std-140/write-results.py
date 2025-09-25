@@ -1,32 +1,32 @@
 print("\nInitializing Python...\n")
 
 from datetime import datetime
-import glob
-import os
+from glob import glob
+from os import getcwd, remove
+from os.path import dirname
 from pathlib import Path
 
 
-import openpyxl as xl
 from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
-import pandas as pd
-import pytz
+from pandas import DataFrame, read_csv, read_excel
+from pytz import timezone
 
 
 def call_csv(path):
-    data = pd.read_csv(path)
-    return pd.DataFrame(data)
+    data = read_csv(path)
+    return DataFrame(data)
 
 
 # delete output file
 def delete_output_file(path):
-    for file in glob.glob(f"{path}*"):
-        os.remove(file)
+    for file in glob(f"{path}*"):
+        remove(file)
 
 
 # prints date and time with time zone on each plot
 def find_todays_date():
-    utc_timezone = pytz.timezone("America/Denver")
+    utc_timezone = timezone("America/Denver")
     current_date_time = datetime.now(utc_timezone)
     return current_date_time.strftime("%b %d, %Y")
 
@@ -41,9 +41,9 @@ south_perimeter_volume = 40.7643 * 4.5732 * 2.7432
 template_file_root = "Std140_CB_Output"
 test_suite = "std-140"
 if __name__ == "__main__":
-    current_directory = os.getcwd()  # Use when running script directly
+    current_directory = getcwd()  # Use when running script directly
 else:
-    current_directory = os.path.dirname(os.path.dirname(os.getcwd()))  # Use when called from rakefile
+    current_directory = dirname(dirname(getcwd()))  # Use when called from rakefile
 template_file_name = f"{template_file_root}_Template_R1.xlsx"
 template_file_path = Path(f"{current_directory}/docs/{test_suite}/{template_file_name}")
 
