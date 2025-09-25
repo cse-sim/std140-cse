@@ -1178,45 +1178,26 @@ slab_area = perimeter_ns_area
 
 %>
 
+ACCUMULATOR "<%= infiltration_mass_flow_rate %>"
+  acmValue = @AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].infEx * <%= $standard_air_density / $kg_lbm / $min_s %>
+
+ACCUMULATOR "<%= ventilation_mass_flow_rate %>"
+  acmValue = @AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].fanEx * <%= $standard_air_density / $kg_lbm / $min_s %>
+
+ACCUMULATOR "<%= sensible_heat_change %>"
+  acmValue =  @top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= bottom_perimeter_south %>].H.tAir)
+
+ACCUMULATOR "<%= latent_heat_change %>"
+   acmValue = <%= $latent_heat_of_evaporation_water * $kg_lbm / $kj_btu %> * (@top.wOHr - @znRes[<%= bottom_perimeter_south %>].H.wAir)
+
 ACCUMULATOR "GlazeT"
   acmValue = @xsurf["<%= window %>"].glzTrans * <%= 1 / $kw_btuh %>
 
-ACCUMULATOR "GlazeI"
-  acmValue = @xsurf["<%= window %>"].glzInward * <%= 1 / $kw_btuh %>
-
 ACCUMULATOR "<%= window_net_heat_transfer_rate %> LW Radiation"
-  acmValue = @window["<%= window %>"].area  * (@xsurf["<%= window %>"].sbcI.hxr * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txr)) * <%= 1 / $kw_btuh %> // Do we need to add in the frame separately
+  acmValue = @window["<%= window %>"].area  * (@xsurf["<%= window %>"].sbcI.hxr * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txr)) * <%= 1 / $kw_btuh %>
 
 ACCUMULATOR "<%= window_net_heat_transfer_rate %> Convection"
-  acmValue = @window["<%= window %>"].area  * (@xsurf["<%= window %>"].sbcI.hxa * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txa)) * <%= 1 / $kw_btuh %> // Do we need to add in the frame separately
-
-EXPORTFILE "OUTPUT_SUB_HOURLY"
-  xfFileName = "OUTPUT_SUB_HOURLY.csv"
-  xfFileStat = OVERWRITE
-
-EXPORT
-  exExportfile = "OUTPUT_SUB_HOURLY"
-  exHeader = ColumnsOnly
-  exFooter = No
-  exType = UDT
-  exFreq = SUBHOUR
-  exDayBeg = JAN 1
-  exDayEnd = DEC 31
-
-EXPORTCOL colHead="Month" colVal=$month
-EXPORTCOL colHead="Day" colVal=$dayOfMonth
-EXPORTCOL colHead="Hour" colVal=$hour
-EXPORTCOL colHead="SubHour" colVal=$subhour
-
-EXPORTCOL colHead="Dry Air Mass" colVal = @zone["<%= bottom_perimeter_south %>"].dryAirMass * <%= 1 / $kg_lbm %>
-EXPORTCOL colHead="ACH" colVal = @zone["<%= bottom_perimeter_south %>"].ivAirX
-EXPORTCOL colHead="Moist Air Density [kg/m3]" colVal = @zone["<%= bottom_perimeter_south %>"].rho * <%= $m3_ft3 / $kg_lbm %>
-
-EXPORTCOL colHead="<%= "#{window_net_heat_transfer_rate} Conduction" %>" colVal= @xsurf["<%= "Window_#{bottom_perimeter_south}" %>"].sbcI.qSrf * <%= -1 * $m2_ft2 * $window_area * 7 / $kw_btuh %>
-
-EXPORTCOL colHead="Total Sensible Heat Transfer [kW] qIzSh" colVal= @zone["<%= bottom_perimeter_south %>"].qIzSh * <%= 1 / $kj_btu / $h_s %>
-
-
+  acmValue = @window["<%= window %>"].area  * (@xsurf["<%= window %>"].sbcI.hxa * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txa)) * <%= 1 / $kw_btuh %>
 
 EXPORTFILE "OUTPUT_HOURLY"
   xfFileName = "OUTPUT_HOURLY.csv"
@@ -1249,33 +1230,19 @@ end %>
 
 EXPORTCOL colHead="<%= outdoor_air_density %>" colVal= @top.rhoMoistOSh * <%= $m3_ft3 / $kg_lbm %>
 
-EXPORTCOL colHead="<%= infiltration_mass_flow_rate %>" colVal=@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].infEx * <%= $standard_air_density / $kg_lbm / $min_s %> // Infiltration mass flow rate
+EXPORTCOL colHead="<%= infiltration_mass_flow_rate %>" colVal= @AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].infEx * <%= $standard_air_density / $kg_lbm / $min_s %>
+EXPORTCOL colHead="<%= infiltration_sensible_heat_transfer_rate %>" colVal= (@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].infEx * <%= $standard_air_density / $kg_lbm / $min_s %>) * (@top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= bottom_perimeter_south %>].H.tAir))
+EXPORTCOL colHead="<%= infiltration_latent_heat_transfer_rate %>" colVal= (@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].infEx * <%= $standard_air_density / $kg_lbm / $min_s %>) * (<%= $latent_heat_of_evaporation_water * $kg_lbm / $kj_btu %> * (@top.wOHr - @znRes[<%= bottom_perimeter_south %>].H.wAir))
 
-EXPORTCOL colHead="Air Specific Heat [btu/lb*F]" colVal= @top.airSH
-EXPORTCOL colHead="Outdoor Temp [F]" colVal=@top.tDbOHr
-EXPORTCOL colHead="Indoor Temp [F]" colVal=@znRes[<%= bottom_perimeter_south %>].H.tAir
-EXPORTCOL colHead="Outdoor Humidity Ratio [kg/kg]" colVal= @top.wOHr
-EXPORTCOL colHead="Indoor Humidity Ratio [kg/kg]" colVal=@znRes[<%= bottom_perimeter_south %>].H.wAir
-
-EXPORTCOL colHead="<%= infiltration_moisture_added %>" colVal=0
-
-EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal=@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].fanEx * <%= $standard_air_density / $kg_lbm / $min_s %> // Ventilation mass flow rate
-EXPORTCOL colHead="Sensible Heat Change [kJ/kg]" colVal= @top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= bottom_perimeter_south %>].H.tAir) // Used to calculate ventilation sensible heat transfer
-EXPORTCOL colHead="Latent Heat Change [kJ/kg]" colVal= <%= $latent_heat_of_evaporation_water * $kg_lbm / $kj_btu %> * (@top.wOHr - @znRes[<%= bottom_perimeter_south %>].H.wAir) // Used to calculate ventilation latent heat transfer
-
-EXPORTCOL colHead="<%= ventilation_moisture_added %>" colVal=0
-
-EXPORTCOL colHead="Total Sensible Heat Transfer [kW]" colVal= @znRes["<%= bottom_perimeter_south %>"].H.qsIz * <%= 1 / $kj_btu / $h_s %>
-EXPORTCOL colHead="Total Latent Heat Transfer [kW]" colVal= @znRes["<%= bottom_perimeter_south %>"].H.qlIz * <%= 1 / $kj_btu / $h_s %>
+EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal= @AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].fanEx * <%= $standard_air_density / $kg_lbm / $min_s %>
+EXPORTCOL colHead="<%= ventilation_sensible_heat_transfer_rate %>" colVal= (@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].fanEx * <%= $standard_air_density / $kg_lbm / $min_s %>) * (@top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= bottom_perimeter_south %>].H.tAir))
+EXPORTCOL colHead="<%= ventilation_latent_heat_transfer_rate %>" colVal= (@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].fanEx * <%= $standard_air_density / $kg_lbm / $min_s %>) * (<%= $latent_heat_of_evaporation_water * $kg_lbm / $kj_btu %> * (@top.wOHr - @znRes[<%= bottom_perimeter_south %>].H.wAir))
 
 EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@xsurf["<%= window %>"].areaGlz * @accumulator["GlazeT"].H.acmMean
 EXPORTCOL colHead="<%= window_net_heat_transfer_rate %>" colVal=@xsurf["<%= window %>"].areaGlz * @accumulator["GlazeT"].H.acmMean + @accumulator["<%= window_net_heat_transfer_rate %> LW Radiation"].H.acmMean + @accumulator["<%= window_net_heat_transfer_rate %> Convection"].H.acmMean
 
-EXPORTCOL colHead="<%= exterior_wall_exterior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.qSrf * <%= 1 / $kw_btuh * exterior_wall_area %>
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=(@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.bm + @xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.df) * <%= 1 / $kw_btuh * (exterior_wall_area - $window_area * 7) %> // Number of windows on bottom perimeter south exterior wall is 7
-
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcO.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcO.tsrf) * <%= 1 / $kw_btuh * exterior_wall_area %>
-EXPORTCOL colHead="<%= exterior_wall_interior_surface_conduction_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.qSrf * <%= 1 / $kw_btuh * exterior_wall_area %>
 EXPORTCOL colHead="<%= exterior_wall_interior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcI.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcI.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcI.tsrf) * <%= 1 / $kw_btuh * exterior_wall_area %>
 
 EXPORTCOL colHead="<%= slab_on_grade_interior_surface_convection_rate %>" colVal=@xsurf["<%= ground_surface_name %>"].sbcI.hxa * (@xsurf["<%= ground_surface_name %>"].sbcI.txa - @xsurf["<%= ground_surface_name %>"].sbcI.tsrf) * <%= 1 / $kw_btuh * slab_area %>
