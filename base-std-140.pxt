@@ -177,7 +177,7 @@ MATERIAL "Interior Wall Gypsum Board"
   matDens = <%= 800*$rho_c %>
   matSpHt = <%= 1089*$cp_c %>
 
-MATERIAL "Interior Wall Insulation"
+MATERIAL "Interior Wall Cavity"
   matCond = <%= 0.12*$k_c %>
   matDens = <%= 512*$rho_c %>
   matSpHt = <%= 1383*$cp_c %>
@@ -223,7 +223,7 @@ CONSTRUCTION "Slab-On-Grade Non-Adiabatic"
 
 CONSTRUCTION "Interior Wall"
   LAYER lrMat= "Interior Wall Gypsum Board" lrThk=<%= 0.0127*$m_ft %>
-  LAYER lrMat= "Interior Wall Insulation" lrThk=<%= 0.0889*$m_ft %>
+  LAYER lrMat= "Interior Wall Cavity" lrThk=<%= 0.0889*$m_ft %>
   LAYER lrMat= "Interior Wall Gypsum Board" lrThk=<%= 0.0127*$m_ft %>
 
 CONSTRUCTION "Furniture"
