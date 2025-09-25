@@ -48,7 +48,6 @@ template_file_name = f"{template_file_root}_Template_R1.xlsx"
 template_file_path = Path(f"{current_directory}/docs/{test_suite}/{template_file_name}")
 
 hourly_results_file_name = "OUTPUT_HOURLY.csv"
-sub_hourly_results_file_name = "OUTPUT_SUB_HOURLY.csv"
 
 results_directory = Path(f"{current_directory}/output/{test_suite}")
 
@@ -95,36 +94,8 @@ zone_columns = [
     "Total interior surface convection heat transfer rate [kW] ^",
 ]
 
-sub_hourly_average = [
-    "Dry Air Mass",
-    "ACH",
-    "Moist Air Density [kg/m3]",
-    "Total Sensible Heat Transfer [kW] qIzSh",
-]
-
-
-def post_processing(df_hourly: pd.DataFrame, df_sub_hourly: pd.DataFrame):
-    df_sub_hourly["Minute"] = (df_sub_hourly["SubHour"] - 1) * 10
-    df_sub_hourly["Datetime"] = pd.to_datetime(df_sub_hourly[["Month", "Day", "Hour", "Minute"]].assign(year=2024))
-    df_hourly["Datetime"] = pd.to_datetime(df_hourly[["Month", "Day", "Hour"]].assign(year=2024))
-    df_sub_hourly.index = df_sub_hourly["Datetime"]
-    df_hourly.index = df_hourly["Datetime"]
-    for column in df_sub_hourly.columns:
-        if column in sub_hourly_average:
-            df_hourly[column] = df_sub_hourly[column].resample("h").mean()
-
-    df_hourly[ventilation_sensible_heat_transfer_rate] = df_hourly[ventilation_mass_flow_rate] * df_hourly["Sensible Heat Change [kJ/kg]"]
-    df_hourly[ventilation_latent_heat_transfer_rate] = df_hourly[ventilation_mass_flow_rate] * df_hourly["Latent Heat Change [kJ/kg]"]
-
-    df_hourly[infiltration_sensible_heat_transfer_rate] = df_hourly[infiltration_mass_flow_rate] * df_hourly["Sensible Heat Change [kJ/kg]"]
-    df_hourly[infiltration_latent_heat_transfer_rate] = df_hourly[infiltration_mass_flow_rate] * df_hourly["Latent Heat Change [kJ/kg]"]
-
-    df_hourly.index = [value for value in range(8760)]
-    return df_hourly
-
-
 for case in cases:
-    template = xl.load_workbook(filename=template_file_path)
+    template = load_workbook(filename=template_file_path)
 
     information_sheet = template["Information"]
     information_sheet.cell(row=2, column=2, value=case)
@@ -143,14 +114,10 @@ for case in cases:
     delete_output_file(output_file_path)
 
     hourly_results_file_path = Path(results_directory, case, hourly_results_file_name)
-    sub_hourly_results_file_path = Path(results_directory, case, sub_hourly_results_file_name)
 
-    df_case_data_hourly = pd.read_csv(hourly_results_file_path)
-    df_case_data_sub_hourly = pd.read_csv(sub_hourly_results_file_path)
+    df_case_data_hourly = read_csv(hourly_results_file_path)
 
-    df_case_data_hourly = post_processing(df_case_data_hourly, df_case_data_sub_hourly)
-
-    sheets = pd.read_excel(template, sheet_name=None, engine="openpyxl", header=1)
+    sheets = read_excel(template, sheet_name=None, engine="openpyxl", header=1)
 
     for hourly_sheet in hourly_sheets:
         hourly_sheet_name = f"Hourly-{hourly_sheet}"
