@@ -110,6 +110,20 @@ bottom_perimeter_south_plot_details: List[BottomPerimeterSouth] = [
             ),
         ],
     ),
+    BottomPerimeterSouth(
+        "Total window transmitted solar radiation rate",
+        "kW",
+        [
+            ColumnDisplayName(
+                "Total window transmitted solar radiation rate [kW] c,d",
+                "Total window transmitted solar radiation rate",
+            ),
+            ColumnDisplayName(
+                "Total net heat transfer rate through the windows [kW] c,e",
+                "Total net heat transfer rate through the windows",
+            ),
+        ],
+    ),
 ]
 
 
