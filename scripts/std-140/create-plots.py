@@ -5,7 +5,7 @@ from typing import List
 
 
 from dimes import LinesOnly, DimensionalPlot, DisplayData
-import pandas as pd
+from pandas import DataFrame, date_range, read_csv, read_excel
 
 
 def capitalize_and_remove_underscores(string: str):
@@ -13,13 +13,13 @@ def capitalize_and_remove_underscores(string: str):
 
 
 def get_date_time():
-    date_time = pd.date_range(start=datetime(2000, 1, 1, 0), end=datetime(2000, 12, 31, 23), freq="h")
+    date_time = date_range(start=datetime(2000, 1, 1, 0), end=datetime(2000, 12, 31, 23), freq="h")
     # pylint: disable=E1101,E1101
     return date_time[~((date_time.month == 2) & (date_time.day == 29))]
 
 
-def get_detailed_data_frame(case: str, excel_tab: str) -> pd.DataFrame:
-    df = pd.read_excel(
+def get_detailed_data_frame(case: str, excel_tab: str) -> DataFrame:
+    df = read_excel(
         Path("reports", "std-140", f"Std140_CB_Output_{case}.xlsx"),
         sheet_name=excel_tab,
         skiprows=1,
