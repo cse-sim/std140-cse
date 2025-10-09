@@ -1197,10 +1197,11 @@ ACCUMULATOR "GlazeT"
   acmValue = @xsurf["<%= window %>"].glzTrans * <%= 1 / $kw_btuh %>
 
 ACCUMULATOR "<%= window_net_heat_transfer_rate %> LW Radiation"
-  acmValue = @window["<%= window %>"].area  * (@xsurf["<%= window %>"].sbcI.hxr * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txr)) * <%= 1 / $kw_btuh %>
+  acmValue = @window["<%= window %>"].areaGlz  * (@xsurf["<%= window %>"].sbcI.hxr * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txr)) * <%= 1 / $kw_btuh %>
 
 ACCUMULATOR "<%= window_net_heat_transfer_rate %> Convection"
-  acmValue = @window["<%= window %>"].area  * (@xsurf["<%= window %>"].sbcI.hxa * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txa)) * <%= 1 / $kw_btuh %>
+  acmValue = (@xsurf["<%= window %>"].areaGlz  * (@xsurf["<%= window %>"].sbcI.hxa * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txa)) + ((@window["<%= window %>"].area - @xsurf["<%= window %>"].areaGlz) * (@xsurf["<%= window %>"].frmsbcI.hxa * (@xsurf["<%= window %>"].frmsbcI.tsrf - @xsurf["<%= window %>"].frmsbcI.txa)))) * <%= 1 / $kw_btuh %>
+
 
 EXPORTFILE "OUTPUT_HOURLY"
   xfFileName = "OUTPUT_HOURLY.csv"
