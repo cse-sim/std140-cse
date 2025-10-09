@@ -141,7 +141,7 @@ def plot_basic_data():
             native_units = plot_details.native_units
             y_axis_name = plot_details.y_axis_name
             visible_zones = plot_details.visible_zones
-            df = pd.read_excel(
+            df = read_excel(
                 Path("reports", "std-140", f"Std140_CB_Output_{case}.xlsx"),
                 sheet_name=excel_tab,
                 skiprows=1,
@@ -200,7 +200,7 @@ def plot_nsteps_temperature_comparison():
     for nstep in nsteps:
         nstep_zfill = str(nstep).zfill(3)
         file_name = f"{file_name_substring}{nstep_zfill}.xlsx"
-        df = pd.read_excel(
+        df = read_excel(
             Path(file_name),
             sheet_name="Hourly-ZoneAirTemp",
             skiprows=1,
@@ -220,7 +220,7 @@ def plot_nsteps_temperature_comparison():
 
 
 def plot_output_hourly_data():
-    df = pd.read_csv("output/std-140/CB1000/OUTPUT_HOURLY.CSV")
+    df = read_csv("output/std-140/CB1000/OUTPUT_HOURLY.CSV")
 
     columns = [
         "Total net heat transfer rate through the windows [kW] c,e",
