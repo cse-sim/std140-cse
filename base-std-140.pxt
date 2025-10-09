@@ -947,7 +947,7 @@ for zone in zones
         znModel = "UZM"
         znArea = <%= zone_floor_area %>
         infAC = 0
-        znCAir = <%= 0.000001*zone_floor_area*zone_height %>
+        znCAir = <%= zone_air_capacity_constant*zone_floor_area*zone_height %>
         znHcAirX = 0
         infShld = 1 // No obstructions or local shielding
         znAFMtr = "<%= zone_afmeter %>"
@@ -1004,7 +1004,7 @@ for zone in zones
         <% # TODO: review infiltration inputs %>
         infAC = 0
         <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
-        znCAir = <%= 0.000001*zone_floor_area*get_zone_height(zone_name) %>
+        znCAir = <%= zone_air_capacity_constant*zone_floor_area*get_zone_height(zone_name) %>
         infShld = 1 // No obstructions or local shielding
         znAFMtr = "<%= zone_afmeter %>"
         <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
