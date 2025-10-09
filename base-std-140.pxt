@@ -1202,6 +1202,8 @@ ACCUMULATOR "<%= window_net_heat_transfer_rate %> LW Radiation"
 ACCUMULATOR "<%= window_net_heat_transfer_rate %> Convection"
   acmValue = (@xsurf["<%= window %>"].areaGlz  * (@xsurf["<%= window %>"].sbcI.hxa * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txa)) + ((@window["<%= window %>"].area - @xsurf["<%= window %>"].areaGlz) * (@xsurf["<%= window %>"].frmsbcI.hxa * (@xsurf["<%= window %>"].frmsbcI.tsrf - @xsurf["<%= window %>"].frmsbcI.txa)))) * <%= 1 / $kw_btuh %>
 
+// one accumulator for each column
+// add frame component to convection accumulator for frame area 
 
 EXPORTFILE "OUTPUT_HOURLY"
   xfFileName = "OUTPUT_HOURLY.csv"
