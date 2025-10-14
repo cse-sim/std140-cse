@@ -1194,14 +1194,14 @@ ACCUMULATOR "<%= sensible_heat_change %>"
 ACCUMULATOR "<%= latent_heat_change %>"
    acmValue = <%= $latent_heat_of_evaporation_water * $kg_lbm / $kj_btu %> * (@top.wOHr - @znRes[<%= bottom_perimeter_south %>].H.wAir)
 
-ACCUMULATOR "GlazeT"
-  acmValue = @xsurf["<%= window %>"].glzTrans * <%= 1 / $kw_btuh %>
+ACCUMULATOR "Transmitted Solar"
+  acmValue = @xsurf["<%= window %>"].areaGlz * @xsurf["<%= window %>"].glzTrans * <%= 1 / $kw_btuh %>
 
 ACCUMULATOR "<%= window_net_heat_transfer_rate %> LW Radiation"
-  acmValue = @window["<%= window %>"].areaGlz  * (@xsurf["<%= window %>"].sbcI.hxr * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txr)) * <%= 1 / $kw_btuh %>
+  acmValue = ((@xsurf["<%= window %>"].sbcI.hxr * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txr)) + ((@window["<%= window %>"].area - @xsurf["<%= window %>"].areaGlz) * (@xsurf["<%= window %>"].frmsbcI.hxr * (@xsurf["<%= window %>"].frmsbcI.tsrf - @xsurf["<%= window %>"].frmsbcI.txr)))) * <%= 1 / $kw_btuh %>
 
 ACCUMULATOR "<%= window_net_heat_transfer_rate %> Convection"
-  acmValue = (@xsurf["<%= window %>"].areaGlz  * (@xsurf["<%= window %>"].sbcI.hxa * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txa)) + ((@window["<%= window %>"].area - @xsurf["<%= window %>"].areaGlz) * (@xsurf["<%= window %>"].frmsbcI.hxa * (@xsurf["<%= window %>"].frmsbcI.tsrf - @xsurf["<%= window %>"].frmsbcI.txa)))) * <%= 1 / $kw_btuh %>
+  acmValue = ((@xsurf["<%= window %>"].sbcI.hxa * (@xsurf["<%= window %>"].sbcI.tsrf - @xsurf["<%= window %>"].sbcI.txa)) + ((@window["<%= window %>"].area - @xsurf["<%= window %>"].areaGlz) * (@xsurf["<%= window %>"].frmsbcI.hxa * (@xsurf["<%= window %>"].frmsbcI.tsrf - @xsurf["<%= window %>"].frmsbcI.txa)))) * <%= 1 / $kw_btuh %>
 
 // one accumulator for each column
 // add frame component to convection accumulator for frame area 
@@ -1245,8 +1245,8 @@ EXPORTCOL colHead="<%= ventilation_mass_flow_rate %>" colVal= @AFMETER["<%= bott
 EXPORTCOL colHead="<%= ventilation_sensible_heat_transfer_rate %>" colVal= (@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].fanEx * <%= $standard_air_density / $kg_lbm / $min_s %>) * (@top.airSH * <%= $kg_lbm / $kj_btu %> * (@top.tDbOHr - @znRes[<%= bottom_perimeter_south %>].H.tAir))
 EXPORTCOL colHead="<%= ventilation_latent_heat_transfer_rate %>" colVal= (@AFMETER["<%= bottom_perimeter_south_afmeter %>"].H[0].fanEx * <%= $standard_air_density / $kg_lbm / $min_s %>) * (<%= $latent_heat_of_evaporation_water * $kg_lbm / $kj_btu %> * (@top.wOHr - @znRes[<%= bottom_perimeter_south %>].H.wAir))
 
-EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal=@xsurf["<%= window %>"].areaGlz * @accumulator["GlazeT"].H.acmMean
-EXPORTCOL colHead="<%= window_net_heat_transfer_rate %>" colVal=@xsurf["<%= window %>"].areaGlz * @accumulator["GlazeT"].H.acmMean + @accumulator["<%= window_net_heat_transfer_rate %> LW Radiation"].H.acmMean + @accumulator["<%= window_net_heat_transfer_rate %> Convection"].H.acmMean
+EXPORTCOL colHead="<%= window_solar_radiation_rate %>" colVal= @accumulator["Transmitted Solar"].H.acmMean
+EXPORTCOL colHead="<%= window_net_heat_transfer_rate %>" colVal= @accumulator["Transmitted Solar"].H.acmMean + @accumulator["<%= window_net_heat_transfer_rate %> LW Radiation"].H.acmMean + @accumulator["<%= window_net_heat_transfer_rate %> Convection"].H.acmMean
 
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_incident_solar_rate %>" colVal=(@xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.bm + @xsurf["<%= exterior_wall_surface_name %>"].sbcO.sgTarg.df) * <%= 1 / $kw_btuh * (exterior_wall_area - $window_area * 7) %> // Number of windows on bottom perimeter south exterior wall is 7
 EXPORTCOL colHead="<%= exterior_wall_exterior_surface_convection_rate %>" colVal=@xsurf["<%= exterior_wall_surface_name %>"].sbcO.hxa * (@xsurf["<%= exterior_wall_surface_name %>"].sbcO.txa - @xsurf["<%= exterior_wall_surface_name %>"].sbcO.tsrf) * <%= 1 / $kw_btuh * exterior_wall_area %>
