@@ -76,7 +76,8 @@ $frame_area_multiplier = 1 - (window_frame_area / $window_area)
 door_width = 0.9144 * $m_ft
 door_height = 2.1336 * $m_ft
 
-zone_air_capacity_constant = 0.000001 # Since items in zone are defined (interior partitions, furniture), zone air capacity is set to near-zero.
+air_density = 0.077 # lb/ft3
+air_specific_heat = 0.24 # # btu/(lbm * degF)
 
 $two_door_area = door_width * door_height * 2 # TODO: can two doors be combined into a single door with double area in DOOR object?
 
@@ -947,7 +948,7 @@ for zone in zones
         znModel = "UZM"
         znArea = <%= zone_floor_area %>
         infAC = 0
-        znCAir = <%= zone_air_capacity_constant*zone_floor_area*zone_height %>
+        znCAir = <%= air_density * air_specific_heat * zone_floor_area * zone_height %>
         znHcAirX = 0
         infShld = 1 // No obstructions or local shielding
         znAFMtr = "<%= zone_afmeter %>"
@@ -1004,7 +1005,7 @@ for zone in zones
         <% # TODO: review infiltration inputs %>
         infAC = 0
         <% set_heating_and_cooling_schedules_and_capacities(zone_name) %>
-        znCAir = <%= zone_air_capacity_constant*zone_floor_area*get_zone_height(zone_name) %>
+        znCAir = <%= air_density * air_specific_heat * zone_floor_area * get_zone_height(zone_name) %>
         infShld = 1 // No obstructions or local shielding
         znAFMtr = "<%= zone_afmeter %>"
         <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
