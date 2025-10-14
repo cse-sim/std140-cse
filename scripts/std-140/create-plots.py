@@ -56,10 +56,28 @@ class BottomPerimeterSouth:
 excel_tabs_plots_details = [
     PlotDetails("Hourly-ZoneAirTemp", "degC", "Indoor Dry Bulb Temperature", ["Bottom_Core_1"]),
     PlotDetails(
-        "Hourly-PlugLoadPower",
+        "Hourly-HeatingRate",
         "kW",
-        "Equipment Power",
-        ["Bottom_Core_1", "Bottom_Corner_Northeast"],
+        "Heating Rate",
+        ["Bottom_Core_1"],
+    ),
+    PlotDetails(
+        "Hourly-SensibleCoolingRate",
+        "kW",
+        "Cooling Rate",
+        ["Bottom_Core_1"],
+    ),
+]
+
+
+bottom_perimeter_south_infiltration_heat_transfer_rate: List[BottomPerimeterSouth] = [
+    BottomPerimeterSouth(
+        "Infiltration Heat Transfer Rate",
+        "kW",
+        [
+            ColumnDisplayName("Sensible heat transfer rate into the zone due to infiltration [kW] c", "Infiltration Sensible Heat Transfer Rate"),
+            ColumnDisplayName("Latent heat transfer rate into the zone due to infiltration [kW] c", "Infiltration Latent Heat Transfer Rate"),
+        ],
     ),
 ]
 
@@ -163,8 +181,9 @@ def plot_basic_data():
 
 
 def plot_detailed_data():
+    excel_tab = "Hourly-Bottom_Perimeter_South"
+
     for case in cases:
-        excel_tab = "Hourly-Bottom_Perimeter_South"
         df = get_detailed_data_frame(case=case, excel_tab=excel_tab)
 
         for plot_details in bottom_perimeter_south_plot_details:
@@ -188,67 +207,38 @@ def plot_detailed_data():
             plot.write_html_plot(Path(plot_directory, f"{excel_tab}-{y_axis_name}.html"))
 
 
-def plot_nsteps_temperature_comparison():
-    file_name_substring = "Std140_CB_Output_CB1000-"
-    zone = "Bottom_Core_1"
-    nsteps = [1, 5, 120]
-    plot = DimensionalPlot(
-        list(date_time),
-        title="nSubSteps Impact on Zone Dry Bulb Temperature<br>ASHRAE Standard 140 Full Scale Efficiency Measure Modeling Test Suite<br>Case CB1000 - Zone Bottom Core 1",
-    )
+def plot_hourly_sum():
+    excel_tab = "Hourly-Bottom_Perimeter_South"
 
-    for nstep in nsteps:
-        nstep_zfill = str(nstep).zfill(3)
-        file_name = f"{file_name_substring}{nstep_zfill}.xlsx"
-        df = read_excel(
-            Path(file_name),
-            sheet_name="Hourly-ZoneAirTemp",
-            skiprows=1,
-        )
-        y_values = list(df[zone])
-        plot.add_display_data(
-            DisplayData(
-                y_values,
-                name=f"nsteps = {nstep}",
-                native_units="degC",
-                y_axis_name="Dry Bulb Temperature",
-                line_properties=LinesOnly(line_width=2),
-                # is_visible=True if column in visible_zones else False,
+    for case in cases:
+        df = df = get_detailed_data_frame(case=case, excel_tab=excel_tab)
+
+        for plot_details in bottom_perimeter_south_infiltration_heat_transfer_rate:
+            y_axis_name = plot_details.y_axis_name
+            native_units = plot_details.native_units
+            column_display_names = plot_details.column_display_names
+
+            hourly_sum = [0] * 8760
+
+            for column_data in column_display_names:
+                column = column_data.column_name
+                for index, new_value in enumerate(df[column].tolist()):
+                    hourly_sum[index] += new_value
+
+            plot = DimensionalPlot(list(date_time), title=f"Bottom Perimeter South<br>{y_axis_name}")
+
+            plot.add_display_data(
+                DisplayData(
+                    hourly_sum,
+                    name=y_axis_name,
+                    native_units=native_units,
+                    y_axis_name=y_axis_name,
+                    line_properties=LinesOnly(line_width=2),
+                )
             )
-        )
-    plot.write_html_plot(Path(plot_directory, "nsteps.html"))
-
-
-def plot_output_hourly_data():
-    df = read_csv("output/std-140/CB1000/OUTPUT_HOURLY.CSV")
-
-    columns = [
-        "Total net heat transfer rate through the windows [kW] c,e",
-        "Total net heat transfer rate through the windows [kW] c,e Radiation",
-        "Total net heat transfer rate through the windows [kW] c,e Convection",
-    ]
-    legend_names = ["Net", "Radiation", "Convection"]
-
-    plot = DimensionalPlot(
-        list(date_time),
-        title="Bottom Perimeter South <br>Windows Net Heat Transfer",
-    )
-    for column, legend_name in zip(columns, legend_names):
-        y_values = list(df[column])
-        plot.add_display_data(
-            DisplayData(
-                y_values,
-                name=legend_name,
-                native_units="kW",
-                y_axis_name="Heat Transfer",
-                line_properties=LinesOnly(line_width=2),
-                # is_visible=True if column in visible_zones else False,
-            )
-        )
-    plot.write_html_plot(Path(plot_directory, "Bottom_Perimeter_South_Windows_Net_Heat_Transfer.html"))
+        plot.write_html_plot(Path(plot_directory, f"{excel_tab}-{y_axis_name}.html"))
 
 
 plot_basic_data()
 plot_detailed_data()
-# plot_nsteps_temperature_comparison()
-# plot_output_hourly_data()
+plot_hourly_sum()
