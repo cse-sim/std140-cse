@@ -198,20 +198,20 @@ CONSTRUCTION "Roof"
   LAYER lrMat= "Roof Built-Up Roofing" lrThk=<%= 0.0095*$m_ft %>
 
 CONSTRUCTION "Exterior Wall"
-  LAYER lrMat= "Exterior Wall Gypsum Board" lrThk=<%= 0.16*$m_ft %>
-  LAYER lrMat= "Exterior Wall Insulation" lrThk=<%= 0.062*$m_ft %>
-  LAYER lrMat= "Exterior Wall Gypsum Board" lrThk=<%= 0.16*$m_ft %>
-  LAYER lrMat= "Exterior Wall Stucco" lrThk=<%= 0.72*$m_ft %>
+  LAYER lrMat= "Exterior Wall Gypsum Board" lrThk=<%= 0.0159*$m_ft %>
+  LAYER lrMat= "Exterior Wall Insulation" lrThk=<%= 0.0620*$m_ft %>
+  LAYER lrMat= "Exterior Wall Gypsum Board" lrThk=<%= 0.0159*$m_ft %>
+  LAYER lrMat= "Exterior Wall Stucco" lrThk=<%= 0.0254*$m_ft %>
 
 CONSTRUCTION "Exterior Door"
-  LAYER lrMat= "Exterior Door Opaque Door" lrThk=<%= 0.116*$m_ft %>
+  LAYER lrMat= "Exterior Door Opaque Door" lrThk=<%= 0.0445*$m_ft %>
 
 CONSTRUCTION "Interior Floor"
-  LAYER lrMat= "Carpet" lrThk=<%= 0.08*$m_ft %>
-  LAYER lrMat= "Concrete" lrThk=<%= 2.31*$m_ft %>
+  LAYER lrMat= "Carpet" lrThk=<%= 0.0173*$m_ft %>
+  LAYER lrMat= "Concrete" lrThk=<%= 0.1016*$m_ft %>
 
 CONSTRUCTION "Dropped Ceiling"
-  LAYER lrMat= "Dropped Ceiling Acoustic Tile" lrThk=<%= 0.08*$m_ft %>
+  LAYER lrMat= "Dropped Ceiling Acoustic Tile" lrThk=<%= 0.0127*$m_ft %>
 
 CONSTRUCTION "Slab-On-Grade Adiabatic"
   LAYER lrMat= "Carpet" lrThk=<%= 0.0173*$m_ft %>
