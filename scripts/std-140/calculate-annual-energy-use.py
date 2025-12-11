@@ -71,4 +71,5 @@ for case in cases:
             for software in df.index:
                 df_diff.loc[software, column] = (df.loc[software, column] - df_average[column]) * 100.0 / df_average[column]
 
+        print(f"\n{excel_tab}")
         print(df_diff.loc["F"])
