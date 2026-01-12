@@ -927,14 +927,19 @@ for zone in zones
     end
   end
 end
+%>
 
-for zone in zones
-  floors.each_with_index do |floor_name, floor_index|
+<% for zone in zones %>
+  <% floors.each_with_index do |floor_name, floor_index| %>
+
+    <%
     floor = floor_index + 1
+
     zone_name = zone[:name]
     zone_floor_name = "#{floor_name}_#{zone_name}"
     zone_floor_area = zone[:area]
     zone_height = get_zone_height(zone_name)
+
     zone_floor_lighting_meter = "MtrLighting_#{zone_floor_name}"
     zone_floor_plug_load_meter = "MtrPlugLoad_#{zone_floor_name}"
     zone_afmeter = "AFMETER_#{zone_floor_name}" %>
@@ -952,9 +957,21 @@ for zone in zones
         znHcAirX = 0
         infShld = 1 // No obstructions or local shielding
         znAFMtr = "<%= zone_afmeter %>"
-
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
-      <% if floor == 3 %>
+
+      <% for surface in zone[:surfaces] # Add wall surfaces %>
+        <% adjacent_zone_name = "#{floor_name}_#{surface[:name]}" %>
+        SURFACE <%= create_surface_name(zone_floor_name, adjacent_zone_name) %>
+          sfType = <%= "WALL" %>
+          sfArea = <%= surface[:surface_area] %>
+          sfAzm = <%= surface[:azimuth] %>
+          sfExCnd = "AMBIENT"
+          sfCon = "Exterior Wall"
+          sfModel = FORWARD_DIFFERENCE
+          <% set_common_surface_variables() %>
+      <% end %>
+
+      <% if floor == 3 # Add roof to top plenum %>
         SURFACE <%= create_surface_name(zone_floor_name, "Roof") %>
           sfType = "CEILING"
           sfArea = <%= floor_area %>
@@ -963,28 +980,9 @@ for zone in zones
           sfModel = "FORWARD_DIFFERENCE"
         <% set_common_surface_variables() %>
       <% end %>
-        <% for surface in zone[:surfaces] # Add wall surfaces %>
-        <% adjacent_zone_name = "#{floor_name}_#{surface[:name]}" %>
-        SURFACE <%= create_surface_name(zone_floor_name, adjacent_zone_name) %>
-          sfType = <%= "WALL" %>
-          sfArea = <%= surface[:surface_area] %>
-          sfAzm = <%= surface[:azimuth] %>
+    <% else # Add non-plenum zones %>
 
-          <% if surface[:surface_facing_type] == "Interior" %>
-            sfExCnd = "ADJZN"
-            sfAdjZn = <%= adjacent_zone_name %>
-            sfCon = "Interior Wall"
-            sfModel = FORWARD_DIFFERENCE
-            <% set_common_surface_variables() %>
-          <% else # Exterior wall surface %> 
-            sfExCnd = "AMBIENT"
-            sfCon = "Exterior Wall"
-            sfModel = FORWARD_DIFFERENCE
-            <% set_common_surface_variables() %>
-          <% end %>
-        <% end %>
-    <% else # Add non-plenum zones
-
+      <% 
       exposed_perimeter = zone[:exposed_perimeter]
       internal_partition_surface_area = zone[:internal_partition_surface_area]
       internal_mass_surface_area = zone[:internal_mass_surface_area]
@@ -996,7 +994,8 @@ for zone in zones
       plug_load_power_density = zone[:plug_load_power_density][floor_index]
       ventilation_schedule = zone[:ventilation_schedule]
       people_outdoor_air_rate = zone[:people_outdoor_air_rate][floor_index]
-      area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index] %>
+      area_outdoor_air_rate = zone[:area_outdoor_air_rate][floor_index]
+      %>
 
       ZONE <%= zone_floor_name %>
         znModel = "CZM"
@@ -1011,8 +1010,9 @@ for zone in zones
         <% # number of people × people outdoor air rate + floor area × area outdoor air rate. %>
         <% # TODO: ventilation should be calculated accoridng to 140-2023 Informative Annex B3 %>
         <% set_zone_volume_and_height_dimensions(zone,floor) %>
+
       <% if internal_partition_surface_area > 0 # internal partition surface %>
-    SURFACE <%= "#{zone_floor_name}_Internal_Partition" %>
+        SURFACE <%= "#{zone_floor_name}_Internal_Partition" %>
           sfType = "WALL" 
           sfCon = "Interior Wall"
           sfArea = <%= internal_partition_surface_area / 2.0 %>
@@ -1021,6 +1021,7 @@ for zone in zones
           sfAdjZn = <%= zone_floor_name %>
           sfModel = FORWARD_DIFFERENCE
       <% end %>
+
       <% if internal_mass_surface_area > 0 # interal mass surface %>
         SURFACE <%= "#{zone_floor_name}_Internal_Mass" %>
           sfType = "WALL" 
@@ -1031,6 +1032,7 @@ for zone in zones
           sfAdjZn = <%= zone_floor_name %>
           sfModel = FORWARD_DIFFERENCE
       <% end %>
+
       <% # Set gains for occupancy, lighting, and plug loads %>
       GAIN <%= "OccupancySchedule" + occupancy_schedule %> 
         gnPower = <%= $occupant_power * occupancy %> * <%= set_occupancy_schedule(occupancy_schedule) %>
@@ -1048,12 +1050,14 @@ for zone in zones
         gnFrLat = 0
         gnEndUse = RCP
         gnMeter = <%= zone_floor_plug_load_meter %>
+
       <% for surface in zone[:surfaces] # Add non-plenum adjacent surfaces %>
-      <% adjacent_zone_name = "#{floor_name}_#{surface[:name]}" %>
-      SURFACE <%= create_surface_name(zone_floor_name, adjacent_zone_name) %>
-        sfType = <%= "WALL" %>
-        sfArea = <%= surface[:surface_area] %>
-        sfAzm = <%= surface[:azimuth] %>
+
+        <% adjacent_zone_name = "#{floor_name}_#{surface[:name]}" %>
+        SURFACE <%= create_surface_name(zone_floor_name, adjacent_zone_name) %>
+          sfType = <%= "WALL" %>
+          sfArea = <%= surface[:surface_area] %>
+          sfAzm = <%= surface[:azimuth] %>
 
         <% if surface[:surface_facing_type] == "Interior" # Add non-plenum zone interior surfaces %>
           sfExCnd = "ADJZN"
@@ -1081,22 +1085,19 @@ for zone in zones
             wnFMult = <%= $frame_area_multiplier %>
         <% end %> 
           
-          <% if floor == 1 && if (zone_name == "Perimeter_North" || zone_name == "Perimeter_South") %> 
-          DOOR <%= zone_floor_name %>
-            drArea = <%= $two_door_area %>
-            drModel = "FORWARD_DIFFERENCE"
-            drCon = "Exterior Door"
-            drExAbs = <%= $solar_absorptance %>
-            drInAbs = <%= $solar_absorptance %>
-            drExEpsLW = <%= $infrared_emittance %>
-            drInEpsLW = <%= $infrared_emittance %>
-            drExRf = <%= $rough_surface_value %>
-          <% end %> 
-        <% end %>
-      <% end %> 
-    
-
-
+        <% if floor == 1 && if (zone_name == "Perimeter_North" || zone_name == "Perimeter_South") %> 
+        DOOR <%= zone_floor_name %>
+          drArea = <%= $two_door_area %>
+          drModel = "FORWARD_DIFFERENCE"
+          drCon = "Exterior Door"
+          drExAbs = <%= $solar_absorptance %>
+          drInAbs = <%= $solar_absorptance %>
+          drExEpsLW = <%= $infrared_emittance %>
+          drInEpsLW = <%= $infrared_emittance %>
+          drExRf = <%= $rough_surface_value %>
+        <% end %> 
+      <% end %>
+    <% end %>
 
       <% if floor == 1 # Add ground surface for non-plenum zones on first floor %>
         SURFACE <%= create_surface_name(zone_floor_name, "Ground") %>
