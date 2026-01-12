@@ -75,11 +75,10 @@ $frame_area_multiplier = 1 - (window_frame_area / $window_area)
 
 door_width = 0.9144 * $m_ft
 door_height = 2.1336 * $m_ft
+door_area = door_width * door_height
 
 air_density = 0.077 # lb/ft3
 air_specific_heat = 0.24 # # btu/(lbm * degF)
-
-$two_door_area = door_width * door_height * 2 # TODO: can two doors be combined into a single door with double area in DOOR object?
 
 $occupant_power = 120.0*$w_btuh
 
@@ -100,7 +99,7 @@ wfName = "weather/std-140/725650TY.epw"
 nSubSteps = <%= nsteps %>
 DT = No
 bldgAzm = 0
-elevation = <%= 1650 * $m_ft %> <% # TODO: is there a way to import the elevation from the weather file? %>
+elevation = <%= 1650 * $m_ft %>
 
 terrainClass = 3
 wuDays = 30
@@ -283,7 +282,8 @@ zones = [
         :azimuth => 0,
         :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 1
+        :number_windows => 1,
+        :number_doors => 0
       },
       {
         :name => "Perimeter_North",
@@ -302,7 +302,8 @@ zones = [
         :azimuth => 270,
         :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 1
+        :number_windows => 1,
+        :number_doors => 0
       }
     ]
   },
@@ -329,7 +330,8 @@ zones = [
         :azimuth => 0,
         :surface_area => perimeter_ns_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 7
+        :number_windows => 7,
+        :number_doors => 2
       },
       {
         :name => "Corner_Northeast",
@@ -380,14 +382,16 @@ zones = [
         :azimuth => 0,
         :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 1
+        :number_windows => 1,
+        :number_doors => 0
       },
       {
         :name => "Exterior_East",
         :azimuth => 90,
         :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 1
+        :number_windows => 1,
+        :number_doors => 0
       },
       {
         :name => "Perimeter_East",
@@ -432,7 +436,8 @@ zones = [
         :azimuth => 270,
         :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 4
+        :number_windows => 4,
+        :number_doors => 0
       }
     ]
   },
@@ -555,7 +560,8 @@ zones = [
         :azimuth => 90,
         :surface_area => perimeter_ew_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 4
+        :number_windows => 4,
+        :number_doors => 0
       },
       {
         :name => "Corner_Southeast",
@@ -594,14 +600,16 @@ zones = [
         :azimuth => 180,
         :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 1
+        :number_windows => 1,
+        :number_doors => 0
       },
       {
         :name => "Exterior_West",
         :azimuth => 270,
         :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 1
+        :number_windows => 1,
+        :number_doors => 0
       }
     ]
   },
@@ -634,7 +642,8 @@ zones = [
         :azimuth => 180,
         :surface_area => perimeter_ns_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 7
+        :number_windows => 7,
+        :number_doors => 2
       },
     ]
   },
@@ -661,14 +670,16 @@ zones = [
         :azimuth => 90,
         :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 1
+        :number_windows => 1,
+        :number_doors => 0
       },
       {
         :name => "Exterior_South",
         :azimuth => 180,
         :surface_area => corner_length * $floor_height,
         :surface_facing_type => "Exterior",
-        :number_windows => 1
+        :number_windows => 1,
+        :number_doors => 0
       },
     ]
   },
@@ -1065,7 +1076,13 @@ end
           sfCon = "Interior Wall"
           sfModel = FORWARD_DIFFERENCE
           <% set_common_surface_variables() %>
-        <% else # Add non-plenum zone exterior surfaces %> 
+        <% else # Add non-plenum zone exterior surfaces %>
+
+          <%
+          number_windows = surface[:number_windows]
+          number_doors = surface[:number_doors]
+          %>
+
           sfExCnd = "AMBIENT"
           sfCon = "Exterior Wall"
           sfModel = FORWARD_DIFFERENCE
@@ -1073,7 +1090,7 @@ end
           WINDOW <%= "Window_#{zone_floor_name}" %>
             wnHeight = <%= $window_height %>
             wnWidth = <%= $window_width %>
-            wnMult = <%= surface[:number_windows] %>
+            wnMult = <%= number_windows %>
             wnSHGC = <%= $window_shgc %>
             wnModel = "ASHWAT"
             wnNGlz = 2
@@ -1083,18 +1100,17 @@ end
             wnExEpsLW = <%= $window_infrared_emittance %>
             wnInEpsLW = <%= $window_infrared_emittance %>
             wnFMult = <%= $frame_area_multiplier %>
-        <% end %> 
-          
-        <% if floor == 1 && if (zone_name == "Perimeter_North" || zone_name == "Perimeter_South") %> 
-        DOOR <%= zone_floor_name %>
-          drArea = <%= $two_door_area %>
-          drModel = "FORWARD_DIFFERENCE"
-          drCon = "Exterior Door"
-          drExAbs = <%= $solar_absorptance %>
-          drInAbs = <%= $solar_absorptance %>
-          drExEpsLW = <%= $infrared_emittance %>
-          drInEpsLW = <%= $infrared_emittance %>
-          drExRf = <%= $rough_surface_value %>
+            <% if floor == 1 && number_doors > 0 %> 
+              DOOR <%= "Door_#{zone_floor_name}" %>
+                drArea = <%= door_area * number_doors %>
+                drModel = "FORWARD_DIFFERENCE"
+                drCon = "Exterior Door"
+                drExAbs = <%= $solar_absorptance %>
+                drInAbs = <%= $solar_absorptance %>
+                drExEpsLW = <%= $infrared_emittance %>
+                drInEpsLW = <%= $infrared_emittance %>
+                drExRf = <%= $rough_surface_value %>
+
         <% end %> 
       <% end %>
     <% end %>
