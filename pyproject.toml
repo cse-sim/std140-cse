@@ -12,6 +12,7 @@ openpyxl = "*"
 pandas = "*"
 python = "^3.11"
 pytz = "*"
+seaborn = "*"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.21.2"
