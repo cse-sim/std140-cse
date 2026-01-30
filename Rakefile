@@ -10,11 +10,7 @@ def compose(c, tests)
     FileUtils.mkdir_p(output_dir)
   end
 
-<<<<<<< HEAD
   src = ["base-#{tests}.pxt", 'CSE.exe', c]
-=======
-  src = ['#{tests}.pxt', 'CSE.exe', 'DRYCOLD_CSW2.csv', c]
->>>>>>> origin/main
   target = output_dir + '/in.cse'
 
   puts "================="
@@ -25,7 +21,7 @@ def compose(c, tests)
   success = nil
   if !(FileUtils.uptodate?(target, src))
     puts "\ncomposing...\n\n"
-    success = system(%Q|modelkit template-compose -f "#{c}" -o "#{output_dir + '/in.cse'}"  #{tests}.pxt|)
+    success = system(%Q|modelkit template-compose -f "#{c}" -o "#{output_dir + '/in.cse'}"  base-#{tests}.pxt|)
   else
     puts "  ...input already up-to-date."
     success = true
