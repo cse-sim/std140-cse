@@ -20,7 +20,7 @@ def get_date_time():
 
 def get_detailed_data_frame(case: str, excel_tab: str) -> DataFrame:
     df = read_excel(
-        Path("reports", "std-140", f"Std140_CB_Output_{case}.xlsx"),
+        Path("reports", "efficiency-measure-modeling", f"Std140_CB_Output_{case}.xlsx"),
         sheet_name=excel_tab,
         skiprows=1,
     )
@@ -32,7 +32,7 @@ def get_detailed_data_frame(case: str, excel_tab: str) -> DataFrame:
     return df
 
 
-plot_directory = Path("output", "std-140", "GRAPHS")
+plot_directory = Path("output", "efficiency-measure-modeling", "GRAPHS")
 
 date_time = get_date_time()
 
@@ -43,7 +43,7 @@ for case in cases:
         ["Hourly-SensibleCoolingRate", "Hourly-HeatingRate"], ["annual_software_cooling", "annual_software_heating"]
     ):
         df_cse = read_excel(
-            Path("reports", "std-140", f"Std140_CB_Output_{case}.xlsx"),
+            Path("reports", "efficiency-measure-modeling", f"Std140_CB_Output_{case}.xlsx"),
             sheet_name=excel_tab,
             skiprows=1,
         )
@@ -69,7 +69,9 @@ for case in cases:
 
         for column in df_average.index:
             for software in df.index:
-                df_diff.loc[software, column] = (df.loc[software, column] - df_average[column]) * 100.0 / df_average[column]
+                df_diff.loc[software, column] = (
+                    (df.loc[software, column] - df_average[column]) * 100.0 / df_average[column]
+                )
 
         print(f"\n{excel_tab}")
         print(df_diff.loc["F"])

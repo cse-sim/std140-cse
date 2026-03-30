@@ -20,7 +20,7 @@ def get_date_time():
 
 def get_detailed_data_frame(case: str, excel_tab: str) -> DataFrame:
     df = read_excel(
-        Path("reports", "std-140", f"Std140_CB_Output_{case}.xlsx"),
+        Path("reports", "efficiency-measure-modeling", f"Std140_CB_Output_{case}.xlsx"),
         sheet_name=excel_tab,
         skiprows=1,
     )
@@ -75,8 +75,14 @@ bottom_perimeter_south_infiltration_heat_transfer_rate: List[BottomPerimeterSout
         "Infiltration Heat Transfer Rate",
         "kW",
         [
-            ColumnDisplayName("Sensible heat transfer rate into the zone due to infiltration [kW] c", "Infiltration Sensible Heat Transfer Rate"),
-            ColumnDisplayName("Latent heat transfer rate into the zone due to infiltration [kW] c", "Infiltration Latent Heat Transfer Rate"),
+            ColumnDisplayName(
+                "Sensible heat transfer rate into the zone due to infiltration [kW] c",
+                "Infiltration Sensible Heat Transfer Rate",
+            ),
+            ColumnDisplayName(
+                "Latent heat transfer rate into the zone due to infiltration [kW] c",
+                "Infiltration Latent Heat Transfer Rate",
+            ),
         ],
     ),
 ]
@@ -88,8 +94,14 @@ bottom_perimeter_south_plot_details: List[BottomPerimeterSouth] = [
         "kg/m**3",
         [
             ColumnDisplayName("Infiltration mass flow rate [kg/s] b", "Infiltration Mass Flow Rate"),
-            ColumnDisplayName("Sensible heat transfer rate into the zone due to infiltration [kW] c", "Infiltration Sensible Heat Transfer Rate"),
-            ColumnDisplayName("Latent heat transfer rate into the zone due to infiltration [kW] c", "Infiltration Latent Heat Transfer Rate"),
+            ColumnDisplayName(
+                "Sensible heat transfer rate into the zone due to infiltration [kW] c",
+                "Infiltration Sensible Heat Transfer Rate",
+            ),
+            ColumnDisplayName(
+                "Latent heat transfer rate into the zone due to infiltration [kW] c",
+                "Infiltration Latent Heat Transfer Rate",
+            ),
         ],
     ),
     BottomPerimeterSouth(
@@ -145,7 +157,7 @@ bottom_perimeter_south_plot_details: List[BottomPerimeterSouth] = [
 ]
 
 
-plot_directory = Path("output", "std-140", "GRAPHS")
+plot_directory = Path("output", "efficiency-measure-modeling", "GRAPHS")
 
 date_time = get_date_time()
 
@@ -160,7 +172,7 @@ def plot_basic_data():
             y_axis_name = plot_details.y_axis_name
             visible_zones = plot_details.visible_zones
             df = read_excel(
-                Path("reports", "std-140", f"Std140_CB_Output_{case}.xlsx"),
+                Path("reports", "efficiency-measure-modeling", f"Std140_CB_Output_{case}.xlsx"),
                 sheet_name=excel_tab,
                 skiprows=1,
             )

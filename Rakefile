@@ -38,7 +38,7 @@ def sim(c, tests)
   target = [output_dir + '/in.rep', output_dir + '/DETAILED.csv']
   elsif tests == 'weather-drivers'
   target = [output_dir + '/in.rep', output_dir + '/HOURLY.csv']
-  elsif tests == 'std-140'
+  elsif tests == 'efficiency-measure-modeling'
   target = [output_dir + '/in.rep', output_dir + '/OUTPUT.csv']
   end
 
@@ -62,7 +62,7 @@ def write_report(tests)
     target = ["reports/#{tests}/Sec5-2Aout.xlsx", "reports/#{tests}/S140outNotes.txt"]
   elsif tests == 'weather-drivers'
     target = ["reports/#{tests}/WeatherDriversResultsSubmittal.xlsx", "reports/#{tests}/S140outNotes.txt"]
-  elsif tests == 'std-140'
+  elsif tests == 'efficiency-measure-modeling'
     target = ["reports/#{tests}/ET100series-Output-GMT+1 (071023a).xlsx", "reports/#{tests}/S140outNotes.txt"]
   end
   puts "\n================="
@@ -80,7 +80,7 @@ def write_report(tests)
 end
 
 task :sim, [:filter] do |t, args|
-  args.with_defaults(:filter=>'std-140')
+  args.with_defaults(:filter=>'efficiency-measure-modeling')
   tests = args.fetch(:filter) # 'section-5', 'weather-drivers'
   cases = Dir['cases/' + tests + '/*.*']
   for c in cases

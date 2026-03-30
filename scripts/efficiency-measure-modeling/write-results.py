@@ -39,7 +39,7 @@ m_ft = 3.28084
 south_perimeter_volume = 40.7643 * 4.5732 * 2.7432
 
 template_file_root = "Std140_CB_Output"
-test_suite = "std-140"
+test_suite = "efficiency-measure-modeling"
 if __name__ == "__main__":
     current_directory = getcwd()  # Use when running script directly
 else:
