@@ -161,48 +161,50 @@ plot_directory = Path("output", "efficiency-measure-modeling", "GRAPHS")
 
 date_time = get_date_time()
 
-cases = ["CB1000"]
+cases = ["CB1000", "CB1010", "CB1020", "CB1100"]
 
 
 def plot_basic_data():
-    for case in cases:
-        for plot_details in excel_tabs_plots_details:
-            excel_tab = plot_details.excel_tab
-            native_units = plot_details.native_units
-            y_axis_name = plot_details.y_axis_name
-            visible_zones = plot_details.visible_zones
+    plot = DimensionalPlot(list(date_time))
+
+    for plot_details in excel_tabs_plots_details:
+        excel_tab = plot_details.excel_tab
+        native_units = plot_details.native_units
+        y_axis_name = plot_details.y_axis_name
+        visible_zones = plot_details.visible_zones
+
+        for case in cases:
             df = read_excel(
                 Path("reports", "efficiency-measure-modeling", f"Std140_CB_Output_{case}.xlsx"),
                 sheet_name=excel_tab,
                 skiprows=1,
             )
-            plot = DimensionalPlot(list(date_time))
             for column in df.columns.drop("Date/Time"):
                 y_values = list(df[column])
                 plot.add_display_data(
                     DisplayData(
                         y_values,
-                        name=capitalize_and_remove_underscores(column),
+                        name=f"{case} {capitalize_and_remove_underscores(column)}",
                         native_units=native_units,
                         y_axis_name=y_axis_name,
                         line_properties=LinesOnly(line_width=2),
                         is_visible=True if column in visible_zones else False,
                     )
                 )
-            plot.write_html_plot(Path(plot_directory, f"{excel_tab}.html"))
+        plot.write_html_plot(Path(plot_directory, f"{excel_tab}.html"))
 
 
 def plot_detailed_data():
     excel_tab = "Hourly-Bottom_Perimeter_South"
 
-    for case in cases:
-        df = get_detailed_data_frame(case=case, excel_tab=excel_tab)
+    for plot_details in bottom_perimeter_south_plot_details:
+        y_axis_name = plot_details.y_axis_name
+        native_units = plot_details.native_units
+        column_display_names = plot_details.column_display_names
+        plot = DimensionalPlot(list(date_time), title=f"Bottom Perimeter South<br>{y_axis_name}")
+        for case in cases:
+            df = get_detailed_data_frame(case=case, excel_tab=excel_tab)
 
-        for plot_details in bottom_perimeter_south_plot_details:
-            y_axis_name = plot_details.y_axis_name
-            native_units = plot_details.native_units
-            column_display_names = plot_details.column_display_names
-            plot = DimensionalPlot(list(date_time), title=f"Bottom Perimeter South<br>{y_axis_name}")
             for column_display_name in column_display_names:
                 column_name = column_display_name.column_name
                 display_name = column_display_name.display_name
@@ -210,20 +212,20 @@ def plot_detailed_data():
                 plot.add_display_data(
                     DisplayData(
                         y_values,
-                        name=display_name,
+                        name=f"{case}-{display_name}",
                         native_units=native_units,
                         y_axis_name=y_axis_name,
                         line_properties=LinesOnly(line_width=2),
                     )
                 )
-            plot.write_html_plot(Path(plot_directory, f"{excel_tab}-{y_axis_name}.html"))
+        plot.write_html_plot(Path(plot_directory, f"{excel_tab}-{y_axis_name}.html"))
 
 
 def plot_hourly_sum():
     excel_tab = "Hourly-Bottom_Perimeter_South"
 
     for case in cases:
-        df = df = get_detailed_data_frame(case=case, excel_tab=excel_tab)
+        df = get_detailed_data_frame(case=case, excel_tab=excel_tab)
 
         for plot_details in bottom_perimeter_south_infiltration_heat_transfer_rate:
             y_axis_name = plot_details.y_axis_name
@@ -242,7 +244,7 @@ def plot_hourly_sum():
             plot.add_display_data(
                 DisplayData(
                     hourly_sum,
-                    name=y_axis_name,
+                    name=f"{case}-{y_axis_name}",
                     native_units=native_units,
                     y_axis_name=y_axis_name,
                     line_properties=LinesOnly(line_width=2),
@@ -253,4 +255,4 @@ def plot_hourly_sum():
 
 plot_basic_data()
 plot_detailed_data()
-plot_hourly_sum()
+# plot_hourly_sum()

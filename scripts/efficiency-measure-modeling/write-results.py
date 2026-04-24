@@ -53,10 +53,7 @@ results_directory = Path(f"{current_directory}/output/{test_suite}")
 
 todays_date = find_todays_date()
 
-cases = [
-    "CB1000",
-    #  "CB1010", "CB1020", "CB1100"
-]
+cases = ["CB1000", "CB1010", "CB1020", "CB1100"]
 
 annual_tab = "AnnualOutputs"
 hourly_sheets = [
